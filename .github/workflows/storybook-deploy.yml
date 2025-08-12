@@ -1,0 +1,36 @@
+name: Deploy Storybook to Vercel
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    container: pandoc/latex
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install mustache (to update the date)
+        run: apk add ruby && gem install mustache
+
+      - name: Build Storybook
+        run: sh ./build-storybook.sh
+
+      - name: Push Storybook to deployment repository
+        id: push_directory
+        uses: cpina/github-action-push-to-another-repository@main
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.SECRET_ACCESS_KEY }} # secret 변수(토큰)
+        with:
+          source-directory: "storybook-output"
+          destination-github-username: 78-artilleryman # 개인 레포 주인 username
+          destination-repository-name: zighang-storybook # Storybook 배포용 레포
+          user-email: ${{ secrets.AUTO_EMAIL }} # secret 변수(이메일)
+          commit-message: "📚 Deploy Storybook: ${{ github.event.commits[0].message }}"
+          target-branch: main # Vercel과 연동된 브랜치
+
+      - name: Test get variable exported by push-to-another-repository
+        run: echo $DESTINATION_CLONED_DIRECTORY

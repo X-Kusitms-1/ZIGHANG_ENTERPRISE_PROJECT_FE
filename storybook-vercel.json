@@ -1,0 +1,20 @@
+{
+  "version": 2,
+  "name": "zighang-storybook",
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "buildCommand": "pnpm build-storybook",
+        "outputDirectory": "storybook-static"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/$1"
+    }
+  ]
+}
