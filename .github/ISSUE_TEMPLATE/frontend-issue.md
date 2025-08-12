@@ -2,7 +2,7 @@
 name: Frontend Issue
 about: 프론트엔드 관련 이슈 및 개발 요청 (UI/UX, 컴포넌트, 페이지 등)
 title: "[FE]"
-labels: ''
+labels: bug, feature, refactor
 assignees: ''
 
 ---
