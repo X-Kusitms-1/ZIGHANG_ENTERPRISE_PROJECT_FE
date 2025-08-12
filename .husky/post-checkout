@@ -1,6 +1,3 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
-
 # $1: 이전 HEAD의 ref
 # $2: 새로운 HEAD의 ref  
 # $3: 브랜치 체크아웃인지 파일 체크아웃인지 구분 (1: 브랜치, 0: 파일)
