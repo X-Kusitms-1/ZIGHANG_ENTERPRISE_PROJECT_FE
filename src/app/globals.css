@@ -30,9 +30,9 @@
   --color-red-400: #e57570;
   --color-red-500: #e1574e;
   --color-red-600: #cd4f47;
-/* generated-color-tokens:end */
+  /* generated-color-tokens:end */
 
-/* generated-text-tokens:start */
+  /* generated-text-tokens:start */
   --text-heading-font-family: pretendard;
   --text-heading-font-weight-regular: 400;
   --text-heading-font-weight-medium: 500;
@@ -80,18 +80,18 @@
   --text-caption-md-line-height: 16px;
   --text-caption-sm-font-size: 12px;
   --text-caption-sm-line-height: 16px;
-/* generated-text-tokens:end */
+  /* generated-text-tokens:end */
 }
 
 @theme inline {
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-pretendard);
   --font-mono: var(--font-geist-mono);
 
   /* generated-semantic-tokens:start */
   --color-bg-interactive-primary: var(--color-blue-500);
-/* generated-semantic-tokens:end */
+  /* generated-semantic-tokens:end */
 
-/* generated-typography-tokens:start */
+  /* generated-typography-tokens:start */
   --font-heading: var(--text-heading-font-family);
   --text-heading-3xl: var(--text-heading-3xl-font-size);
   --leading-heading-3xl: var(--text-heading-3xl-line-height);
@@ -131,7 +131,7 @@
   --leading-caption-md: var(--text-caption-md-line-height);
   --text-caption-sm: var(--text-caption-sm-font-size);
   --leading-caption-sm: var(--text-caption-sm-line-height);
-/* generated-typography-tokens:end */
+  /* generated-typography-tokens:end */
 }
 
 @media (prefers-color-scheme: dark) {
