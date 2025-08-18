@@ -11,16 +11,18 @@ const buttonVariants = cva(
       variant: {
         primary:
           "bg-primary text-primary-foreground shadow-xs hover:bg-primary/90",
-        circle:
-          "bg-destructive text-white shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20",
+        circle: "shadow-xs !rounded-full",
         secondary:
           "bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80",
       },
       appearance: {
-        fill: "bg-blue-500 text-white [&_img]:brightness-0 [&_img]:invert",
-        outline: "border border-gray-200 text-gray-500",
-        transparent: "bg-transparent text-gray-500",
-        invers: "bg-gray-500 text-white [&_img]:brightness-0 [&_img]:invert",
+        fill: "active:ring-2 active:ring-bg-interactive-primary active:ring-offset-2",
+        outline:
+          "active:ring-2 active:ring-bg-interactive-primary active:ring-offset-2",
+        transparent:
+          "active:ring-2 active:ring-bg-interactive-primary active:ring-offset-2",
+        invers:
+          "active:ring-2 active:ring-bg-interactive-primary active:ring-offset-2",
       },
       size: {
         sm: "w-6 h-6 rounded-sm p-1 [&_img]:w-4 [&_img]:h-4",
@@ -36,38 +38,69 @@ const buttonVariants = cva(
     compoundVariants: [
       {
         variant: "primary",
+        appearance: "fill",
+        class:
+          "bg-bg-interactive-primary hover:bg-bg-interactive-primary-hovered active:bg-bg-interactive-primary text-white border border-transparent [&_img]:brightness-0 [&_img]:invert",
+      },
+      {
+        variant: "primary",
         appearance: "outline",
-        class: "[&_img]:invert",
+        class:
+          "bg-bg-interactive-base hover:bg-bg-interactive-base-hovered active:bg-bg-interactive-base border-1 border-blue-500 [&_img]:brightness-0 [&_img]:invert",
+      },
+      {
+        variant: "primary",
+        appearance: "transparent",
+        class:
+          "bg-transparent hover:bg-bg-transparent-dark active:bg-transparent",
+      },
+      {
+        variant: "primary",
+        appearance: "invers",
+        class:
+          "bg-transparent hover:bg-bg-interactive-base-hovered active:bg-transparent",
+      },
+      {
+        variant: "secondary",
+        appearance: "fill",
+        class:
+          "bg-bg-interactive-secondary hover:bg-bg-interactive-secondary-hovered active:bg-bg-interactive-secondary [&_img]:brightness-0 [&_img]:invert",
       },
       {
         variant: "secondary",
         appearance: "outline",
-        class: "[&_img]:opacity-50",
+        class:
+          "bg-bg-interactive-base hover:bg-bg-interactive-base-hovered active:bg-bg-interactive-base border-1 border-border-primary",
       },
       {
         variant: "secondary",
         appearance: "transparent",
-        class: "",
+        class:
+          "bg-transparent hover:bg-bg-transparent-dark active:bg-transparent",
       },
       {
         variant: "secondary",
         appearance: "invers",
-        class: "",
+        class:
+          "bg-transparent hover:bg-bg-interactive-base-hovered active:bg-transparent",
       },
       {
         variant: "circle",
         appearance: "outline",
-        class: "",
+        class:
+          "bg-bg-interactive-base hover:bg-bg-interactive-base-hovered active:bg-bg-interactive-base border-1 border-border-secondary",
       },
       {
         variant: "circle",
         appearance: "transparent",
-        class: "[&_img]:brightness-0 [&_img]:invert",
+        class:
+          "bg-bg-transparent-dark hover:bg-bg-transparent-semi-darker active:bg-bg-transparent-dark ",
       },
       {
         variant: "circle",
         appearance: "invers",
-        class: "[&_img]:brightness-0 [&_img]:invert",
+        class:
+          "bg-bg-transparent-light hover:bg-bg-transparent-lighter active:bg-bg-transparent-light ",
       },
     ],
   }
