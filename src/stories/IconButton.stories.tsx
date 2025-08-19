@@ -39,7 +39,7 @@ const meta = {
   // Use `fn` to spy on the onClick arg, which will appear in the actions panel once invoked: https://storybook.js.org/docs/essentials/actions#action-args
   args: {
     onClick: fn(),
-    iconSrc: "/iconButton.svg",
+    iconSrc: "/icons/storybook/iconButton.svg",
     variant: "primaryFill",
     size: "md",
   },
@@ -51,28 +51,28 @@ type Story = StoryObj<typeof meta>;
 // More on writing stories with args: https://storybook.js.org/docs/writing-stories/args
 export const Default: Story = {
   args: {
-    iconSrc: "/iconButton.svg",
+    iconSrc: "/icons/storybook/iconButtonColor.svg",
     variant: "primaryFill",
   },
 };
 
 export const PrimaryFill: Story = {
   args: {
-    iconSrc: "/iconButton.svg",
+    iconSrc: "/icons/storybook/iconButton.svg",
     variant: "primaryFill",
   },
 };
 
 export const SecondaryFill: Story = {
   args: {
-    iconSrc: "/iconButton.svg",
+    iconSrc: "/icons/storybook/iconButton.svg",
     variant: "secondaryFill",
   },
 };
 
 export const CircleOutline: Story = {
   args: {
-    iconSrc: "/iconButton.svg",
+    iconSrc: "/icons/storybook/iconButton.svg",
     variant: "circleOutline",
   },
 };
@@ -83,47 +83,80 @@ export const AllVariants = {
     <div className="grid grid-cols-4 gap-4 p-4">
       <div className="text-center">
         <p className="mb-2 text-xs">Primary Fill</p>
-        <IconButton iconSrc="/iconButton.svg" variant="primaryFill" />
+        <IconButton
+          iconSrc="/icons/storybook/iconButton.svg"
+          variant="primaryFill"
+        />
       </div>
       <div className="text-center">
         <p className="mb-2 text-xs">Primary Outline</p>
-        <IconButton iconSrc="/iconButton.svg" variant="primaryOutline" />
+        <IconButton
+          iconSrc="/icons/storybook/iconButtonColor.svg"
+          variant="primaryOutline"
+        />
       </div>
       <div className="text-center">
         <p className="mb-2 text-xs">Primary Transparent</p>
-        <IconButton iconSrc="/iconButton.svg" variant="primaryTransparent" />
+        <IconButton
+          iconSrc="/icons/storybook/iconButtonColor.svg"
+          variant="primaryTransparent"
+        />
       </div>
       <div className="text-center">
         <p className="mb-2 text-xs">Primary Invers</p>
-        <IconButton iconSrc="/iconButton.svg" variant="primaryInvers" />
+        <IconButton
+          iconSrc="/icons/storybook/iconButtonColor.svg"
+          variant="primaryInvers"
+        />
       </div>
       <div className="text-center">
         <p className="mb-2 text-xs">Secondary Fill</p>
-        <IconButton iconSrc="/iconButton.svg" variant="secondaryFill" />
+        <IconButton
+          iconSrc="/icons/storybook/iconButton.svg"
+          variant="secondaryFill"
+        />
       </div>
       <div className="text-center">
         <p className="mb-2 text-xs">Secondary Outline</p>
-        <IconButton iconSrc="/iconButton.svg" variant="secondaryOutline" />
+        <IconButton
+          iconSrc="/icons/storybook/iconButton.svg"
+          variant="secondaryOutline"
+        />
       </div>
       <div className="text-center">
         <p className="mb-2 text-xs">Secondary Transparent</p>
-        <IconButton iconSrc="/iconButton.svg" variant="secondaryTransparent" />
+        <IconButton
+          iconSrc="/icons/storybook/iconButton.svg"
+          variant="secondaryTransparent"
+        />
       </div>
       <div className="text-center">
         <p className="mb-2 text-xs">Secondary Invers</p>
-        <IconButton iconSrc="/iconButton.svg" variant="secondaryInvers" />
+        <IconButton
+          iconSrc="/icons/storybook/iconButton.svg"
+          variant="secondaryInvers"
+        />
       </div>
       <div className="text-center">
         <p className="mb-2 text-xs">Circle Outline</p>
-        <IconButton iconSrc="/iconButton.svg" variant="circleOutline" />
+        <IconButton
+          iconSrc="/icons/storybook/iconButton.svg"
+          variant="circleOutline"
+        />
       </div>
       <div className="text-center">
         <p className="mb-2 text-xs">Circle Transparent</p>
-        <IconButton iconSrc="/iconButton.svg" variant="circleTransparent" />
+        <IconButton
+          iconSrc="/icons/storybook/iconButton.svg"
+          variant="circleTransparent"
+        />
       </div>
       <div className="text-center">
         <p className="mb-2 text-xs">Circle Invers</p>
-        <IconButton iconSrc="/iconButton.svg" variant="circleInvers" />
+        <IconButton
+          iconSrc="/icons/storybook/iconButton.svg"
+          variant="circleInvers"
+        />
       </div>
     </div>
   ),
