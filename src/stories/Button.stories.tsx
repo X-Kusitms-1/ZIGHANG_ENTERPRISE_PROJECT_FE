@@ -24,9 +24,8 @@ const meta: Meta<typeof Button> = {
     shape: { control: "radio", options: ["default", "rounded"], description: "모양" },
     leftIcon: { control: "boolean", description: "왼쪽 아이콘 표시 (StarIcon 사용)" },
     rightIcon: { control: "boolean", description: "오른쪽 아이콘 표시 (StarIcon 사용)" },
-    iconSize: { control: "text", description: "아이콘 크기 (e.g., 20px)" },
     disabled: { control: "boolean", description: "비활성화" },
-    loading: { control: "boolean", description: "로딩 상태 (React 19 useTransition과 결합)" },
+  // ...existing code...
     children: { control: "text", defaultValue: "Button" },
   },
   tags: ["autodocs"], // 자동 문서화 활성화 (Storybook 8+ 베스트 프랙티스)
@@ -113,9 +112,9 @@ export const WithIcons: Story = {
   },
   render: (args) => (
     <div className="flex gap-4">
-      <Button {...args} leftIcon={true} rightIcon={true} iconSize="16px">Small Icon</Button>
-      <Button {...args} leftIcon={true} rightIcon={true} iconSize="20px">Default Icon</Button>
-      <Button {...args} leftIcon={true} rightIcon={true} iconSize="24px">Large Icon</Button>
+  <Button {...args} leftIcon={true} rightIcon={true}>Small Icon</Button>
+  <Button {...args} leftIcon={true} rightIcon={true}>Default Icon</Button>
+  <Button {...args} leftIcon={true} rightIcon={true}>Large Icon</Button>
     </div>
   ),
 };
@@ -143,15 +142,7 @@ export const Disabled: Story = {
   },
 };
 
-export const Loading: Story = {
-  args: {
-    loading: true,
-    children: "Loading",
-  },
-  parameters: {
-    docs: { description: { story: "로딩 상태: aria-busy=true, React 19 useTransition과 결합 추천." } },
-  },
-};
+// ...existing code...
 
 export const AllButtons: Story = {
   render: () => {
@@ -175,7 +166,7 @@ export const AllButtons: Story = {
               </Button>
             ))}
             <Button variant="primary-filled" disabled>Disabled</Button>
-            <Button variant="primary-filled" loading>Loading</Button>
+            {/* <Button variant="primary-filled" loading>Loading</Button> */}
           </div>
         </div>
 
@@ -184,12 +175,12 @@ export const AllButtons: Story = {
           <h3 className="mb-2 font-bold">Variants (With Left + Right Icons)</h3>
           <div className="grid grid-cols-5 gap-4">
             {variants.map(variant => (
-              <Button key={variant} variant={variant} leftIcon={true} rightIcon={true} iconSize="20px">
+          <Button key={variant} variant={variant} leftIcon={true} rightIcon={true}>
                 {variant}
               </Button>
             ))}
-            <Button variant="primary-filled" disabled leftIcon={true} rightIcon={true} iconSize="20px">Disabled Icons</Button>
-            <Button variant="primary-filled" loading leftIcon={true} rightIcon={true} iconSize="20px">Loading Icons</Button>
+        <Button variant="primary-filled" disabled leftIcon={true} rightIcon={true}>Disabled Icons</Button>
+            {/* <Button variant="primary-filled" loading leftIcon={true} rightIcon={true} iconSize="20px">Loading Icons</Button> */}
           </div>
         </div>
 
@@ -198,7 +189,7 @@ export const AllButtons: Story = {
           <h3 className="mb-2 font-bold">Variants (Left Icon Only)</h3>
           <div className="grid grid-cols-5 gap-4">
             {variants.map(variant => (
-              <Button key={variant} variant={variant} leftIcon={true} iconSize="20px">
+          <Button key={variant} variant={variant} leftIcon={true}>
                 {variant}
               </Button>
             ))}
@@ -210,7 +201,7 @@ export const AllButtons: Story = {
           <h3 className="mb-2 font-bold">Variants (Right Icon Only)</h3>
           <div className="grid grid-cols-5 gap-4">
             {variants.map(variant => (
-              <Button key={variant} variant={variant} rightIcon={true} iconSize="20px">
+          <Button key={variant} variant={variant} rightIcon={true}>
                 {variant}
               </Button>
             ))}
@@ -224,11 +215,11 @@ export const AllButtons: Story = {
             {sizes.map(size => (
               <div key={size} className="flex gap-4">
                 <Button size={size}>No Icon {size}</Button>
-                <Button size={size} leftIcon={true} iconSize={size === "sm" ? "16px" : size === "md" ? "20px" : "24px"}>Left Icon {size}</Button>
-                <Button size={size} rightIcon={true} iconSize={size === "sm" ? "16px" : size === "md" ? "20px" : "24px"}>Right Icon {size}</Button>
-                <Button size={size} leftIcon={true} rightIcon={true} iconSize={size === "sm" ? "16px" : size === "md" ? "20px" : "24px"}>Both Icons {size}</Button>
+                <Button size={size} leftIcon={true}>Left Icon {size}</Button>
+                <Button size={size} rightIcon={true}>Right Icon {size}</Button>
+                <Button size={size} leftIcon={true} rightIcon={true}>Both Icons {size}</Button>
                 <Button size={size} disabled>Disabled {size}</Button>
-                <Button size={size} loading>Loading {size}</Button>
+                {/* <Button size={size} loading>Loading {size}</Button> */}
               </div>
             ))}
           </div>
@@ -241,11 +232,11 @@ export const AllButtons: Story = {
             {shapes.map(shape => (
               <div key={shape} className="flex gap-4">
                 <Button shape={shape}>No Icon {shape}</Button>
-                <Button shape={shape} leftIcon={true} iconSize="20px">Left Icon {shape}</Button>
-                <Button shape={shape} rightIcon={true} iconSize="20px">Right Icon {shape}</Button>
-                <Button shape={shape} leftIcon={true} rightIcon={true} iconSize="20px">Both Icons {shape}</Button>
+                <Button shape={shape} leftIcon={true}>Left Icon {shape}</Button>
+                <Button shape={shape} rightIcon={true}>Right Icon {shape}</Button>
+                <Button shape={shape} leftIcon={true} rightIcon={true}>Both Icons {shape}</Button>
                 <Button shape={shape} disabled>Disabled {shape}</Button>
-                <Button shape={shape} loading>Loading {shape}</Button>
+                {/* <Button shape={shape} loading>Loading {shape}</Button> */}
               </div>
             ))}
           </div>
@@ -255,11 +246,11 @@ export const AllButtons: Story = {
         <div>
           <h3 className="mb-2 font-bold">Mixed Combinations</h3>
           <div className="flex flex-wrap gap-4">
-            <Button variant="secondary-outlined" size="sm" shape="rounded" leftIcon={true} iconSize="16px">Small Rounded Outlined Left</Button>
-            <Button variant="primary-transparent" size="lg" shape="default" rightIcon={true} iconSize="24px">Large Default Transparent Right</Button>
-            <Button variant="secondary-translucent" size="md" shape="rounded" leftIcon={true} rightIcon={true} iconSize="20px">Medium Rounded Translucent Both</Button>
+            <Button variant="secondary-outlined" size="sm" shape="rounded" leftIcon={true}>Small Rounded Outlined Left</Button>
+            <Button variant="primary-transparent" size="lg" shape="default" rightIcon={true}>Large Default Transparent Right</Button>
+            <Button variant="secondary-translucent" size="md" shape="rounded" leftIcon={true} rightIcon={true}>Medium Rounded Translucent Both</Button>
             <Button variant="primary-inversed" size="sm" shape="default" disabled>Small Default Inversed Disabled</Button>
-            <Button variant="secondary-neutral" size="lg" shape="rounded" loading>Large Rounded Neutral Loading</Button>
+            {/* <Button variant="secondary-neutral" size="lg" shape="rounded" loading>Large Rounded Neutral Loading</Button> */}
           </div>
         </div>
       </div>
