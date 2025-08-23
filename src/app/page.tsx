@@ -1,27 +1,50 @@
 import Link from "next/link";
+import { ChevronRight } from "lucide-react";
 import Header from "@/components/widgets/Header";
 import SearchInput from "@/components/widgets/SearchInput";
+import JobCategoryGrid from "@/components/widgets/JobCategoryGrid";
+import Footer from "@/components/widgets/Footer";
 
 export default function Home() {
   return (
-    <main className="flex flex-col items-center justify-center">
+    <main className="tablet:px-6 flex flex-col items-center justify-center px-4">
       <Header />
-      <div className="my-10 flex w-full flex-col items-center">
-        <h1 className="text-[22px] font-bold">
-          대기업 및 유니콘 채용 공고를
-          <span className="text-[#6F00B6]"> 빠짐없이 모두</span>
-          모았어요
-        </h1>
+      <div className="my-6 flex w-full flex-col items-center">
+        <div className="tablet:flex-row tablet:text-[22px] flex flex-col items-center gap-1 text-[18px] font-bold">
+          <span>대기업 및 유니콘 채용 공고를</span>
+          <div className="flex items-center">
+            <span className="text-[#6F00B6]">빠짐없이 모두</span>
+            <span>&nbsp;모았어요.</span>
+          </div>
+        </div>
         <SearchInput />
-        <div className="flex items-center gap-4">
-          <Link href="/" className="text-primary">
-            <span className="text-[#6F00B6]">33,764개 기업</span> 전체 보기 &gt;
+        <div className="tablet:gap-4 relative inline-flex items-center gap-2">
+          <Link
+            href="/company"
+            className="relative inline-flex flex-[0_0_auto] cursor-pointer items-center gap-1"
+          >
+            <p className="tablet:text-base relative w-fit text-sm leading-[normal] font-semibold tracking-[0] whitespace-nowrap">
+              <span className="text-[#6F00B6]">33764개 기업</span>
+              <span className="text-[#646464]"> 전체 보기</span>
+            </p>
+            <ChevronRight className="h-4 w-4 text-[#646464]" />
           </Link>
-          <Link href="/" className="text-primary">
-            <span className="text-[#6F00B6]">999,973개 공고</span> 전체보기 &gt;
+          <Link
+            href="/all"
+            className="relative inline-flex flex-[0_0_auto] cursor-pointer items-center gap-1"
+          >
+            <p className="tablet:text-base relative w-fit text-sm leading-[normal] font-semibold tracking-[0] whitespace-nowrap">
+              <span className="text-[#6F00B6]">99968개 공고</span>
+              <span className="text-[#646464]"> 전체 보기</span>
+            </p>
+            <ChevronRight className="h-4 w-4 text-[#646464]" />
           </Link>
         </div>
       </div>
+      <JobCategoryGrid />
+
+      <div className="my-8 h-[140px] w-full bg-[#E5E5E5]" />
+      <Footer />
     </main>
   );
 }
