@@ -662,6 +662,13 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+@theme {
+  /* 커스텀 브레이크포인트 설정 */
+  --breakpoint-mobile: 0px; /* 모바일: 0px ~ 767px */
+  --breakpoint-tablet: 768px; /* 태블릿: 768px ~ 1023px */
+  --breakpoint-pc: 1024px; /* PC: 1024px 이상 */
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
