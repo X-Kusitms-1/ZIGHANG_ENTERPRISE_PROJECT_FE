@@ -4,6 +4,7 @@ import Header from "@/components/widgets/Header";
 import SearchInput from "@/components/widgets/SearchInput";
 import JobCategoryGrid from "@/components/widgets/JobCategoryGrid";
 import Footer from "@/components/widgets/Footer";
+import Banner from "@/components/widgets/Banner";
 
 export default function Home() {
   return (
@@ -42,8 +43,7 @@ export default function Home() {
         </div>
       </div>
       <JobCategoryGrid />
-
-      <div className="my-8 h-[140px] w-full bg-[#E5E5E5]" />
+      <Banner />
       <Footer />
     </main>
   );
