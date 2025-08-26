@@ -1,5 +1,5 @@
 /**
- * Service 모듈의 메인 export 파일
+ * Axios 모듈 메인 export 파일
  */
 
 // API 클라이언트
