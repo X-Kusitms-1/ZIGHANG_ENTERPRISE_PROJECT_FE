@@ -373,8 +373,6 @@ export * from './configuration';
     let content = "";
 
     // 헤더
-    content += "/* eslint-disable */\n";
-    content += "/* tslint:disable */\n";
     content += "// 자동 생성된 API 함수들\n";
     content +=
       "// 이 파일은 자동으로 생성됩니다. 수동으로 편집하지 마세요.\n\n";

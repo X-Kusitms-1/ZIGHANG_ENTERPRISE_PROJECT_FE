@@ -1,5 +1,3 @@
-/* eslint-disable */
-/* tslint:disable */
 // 자동 생성된 API 함수들
 // 이 파일은 자동으로 생성됩니다. 수동으로 편집하지 마세요.
 
