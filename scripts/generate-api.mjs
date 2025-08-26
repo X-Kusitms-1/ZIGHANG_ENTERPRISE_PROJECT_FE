@@ -298,6 +298,12 @@ export * from './configuration';
         // 작은 따옴표를 큰 따옴표로 변경 (단, 문자열 내부의 따옴표는 제외)
         content = content.replace(/'/g, '"');
 
+        // ESLint/TSLint 비활성화 주석 제거
+        content = content.replace(/^\/\* tslint:disable \*\/\n?/gm, "");
+        content = content.replace(/^\/\* eslint-disable \*\/\n?/gm, "");
+        // 빈 줄로만 남은 경우도 정리
+        content = content.replace(/^\n+/, "");
+
         fs.writeFileSync(filePath, content);
       }
     };
@@ -385,21 +391,22 @@ export * from './configuration';
       content += `import { ${api.className} } from "./generated/api/${apiFileName}";\n`;
     });
 
-    // 실제로 사용되는 타입만 import
+    // 타입 imports
     const usedTypes = this.getUsedTypes(apis);
     if (usedTypes.length > 0) {
       content += "import type {\n";
-      usedTypes.forEach((type, index) => {
-        content += `  ${type}${index < usedTypes.length - 1 ? "," : ""}\n`;
+      usedTypes.forEach((type) => {
+        content += `  ${type},\n`;
       });
-      content += '} from "./generated/models";\n\n';
+      content += '} from "./generated/models";\n';
     }
+    content += "\n";
 
     // 인터페이스
     content += "export interface ApiRequestOptions {\n";
     content += "  token?: string;\n";
     content += "  headers?: Record<string, string>;\n";
-    content += "  cache?: RequestCache;\n";
+    content += '  cache?: "force-cache" | "no-store";\n';
     content += "  revalidate?: number | false;\n";
     content += "  tags?: string[];\n";
     content += "}\n\n";

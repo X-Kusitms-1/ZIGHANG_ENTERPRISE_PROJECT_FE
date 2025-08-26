@@ -4,13 +4,13 @@
 import { apiClient } from "./axios";
 import { UserControllerApi } from "./generated/api/user-controller-api";
 import type {
-  PostUserOnboardingDto
+  PostUserOnboardingDto,
 } from "./generated/models";
 
 export interface ApiRequestOptions {
   token?: string;
   headers?: Record<string, string>;
-  cache?: RequestCache;
+  cache?: "force-cache" | "no-store";
   revalidate?: number | false;
   tags?: string[];
 }
