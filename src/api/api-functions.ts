@@ -2,10 +2,8 @@
 // 이 파일은 자동으로 생성됩니다. 수동으로 편집하지 마세요.
 
 import { apiClient } from "./axios";
-import { UserControllerApi } from "./generated/api/user-controller-api";
-import type {
-  PostUserOnboardingDto,
-} from "./generated/models";
+import { UserControllerApi } from "./generated";
+import type { PostUserOnboardingDto } from "./generated";
 
 export interface ApiRequestOptions {
   token?: string;
@@ -46,8 +44,8 @@ export async function userOnboardingInfo(
 ) {
   const client = createApiClient(options);
   const api = new UserControllerApi(undefined, undefined, client);
-  const response = await api.postUserOnboardingInfo(params.userOnboardingInfoDto);
+  const response = await api.postUserOnboardingInfo(
+    params.userOnboardingInfoDto
+  );
   return response.data;
 }
-
-
