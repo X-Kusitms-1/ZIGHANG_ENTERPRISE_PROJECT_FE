@@ -30,7 +30,7 @@
   --color-orange-50: #fff4f0;
   --color-orange-100: #fee2d8;
   --color-orange-200: #fcbea6;
-  --color-orange-300: #fba1ㅎ햣7f;
+  --color-orange-300: #fba17f;
   --color-orange-400: #f98052;
   --color-orange-500: #f85f26;
   --color-orange-600: #de4207;
@@ -134,6 +134,12 @@
 @theme inline {
   --font-sans: var(--font-pretendard);
   --font-mono: var(--font-geist-mono);
+
+  /* base color tokens required for Tailwind v4 utilities */
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --ring: oklch(0.708 0 0);
+  --border: oklch(0.922 0 0);
 
   /* generated-semantic-tokens:start */
   --color-bg-primary: var(--color-purple-600);
@@ -556,9 +562,11 @@
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    border-color: var(--border);
+    outline-color: oklch(from var(--ring) l c h / 0.5);
   }
   body {
-    @apply bg-background text-foreground;
+    background-color: var(--background);
+    color: var(--foreground);
   }
 }
