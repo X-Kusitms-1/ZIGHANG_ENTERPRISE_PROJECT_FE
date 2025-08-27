@@ -10,7 +10,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "prepare": "husky",
-    "storybook": "storybook dev -p 6006",
+    "st": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "tokens": "node scripts/generate-color-tokens.mjs",
     "codegen": "node scripts/generate-api.mjs",

@@ -106,22 +106,7 @@ function resolveReferenceValue(value, pathToVarMap) {
 }
 
 // Map common weight names to numeric values
-const FONT_WEIGHT_MAP = {
-  thin: 100,
-  extralight: 200,
-  ultralight: 200,
-  light: 300,
-  normal: 400,
-  regular: 400,
-  book: 400,
-  medium: 500,
-  semibold: 600,
-  demibold: 600,
-  bold: 700,
-  extrabold: 800,
-  ultrabold: 800,
-  black: 900,
-};
+
 
 function toPx(value) {
   if (typeof value === "number") return `${value}px`;
@@ -133,81 +118,83 @@ function toPx(value) {
 function collectTextPrimitives(primitiveRoot) {
   const textRoot = {};
   if (!isPlainObject(primitiveRoot)) return textRoot;
-  for (const [groupKey, groupVal] of Object.entries(primitiveRoot)) {
-    if (groupKey.toLowerCase() === "color") continue;
-    if (!isPlainObject(groupVal)) continue;
-    const groupName = toKebabCase(groupKey); // heading, body, title, caption
-    const groupOut = (textRoot[groupName] = {});
+  
+  const fontRoot = primitiveRoot.Font;
+  if (!isPlainObject(fontRoot)) return textRoot;
 
-    // font family
-    if (isPlainObject(groupVal["font family"])) {
-      const famVal = groupVal["font family"].value;
-      if (famVal) groupOut.fontFamily = famVal;
-    }
+  // Extract font family
+  const fontFamily = fontRoot["font family"]?.primary?.value;
+  if (fontFamily) {
+    textRoot.font = { fontFamily };
+  }
 
-    // font weights
-    if (isPlainObject(groupVal["font weight"])) {
-      const weights = {};
-      for (const [wKey, wVal] of Object.entries(groupVal["font weight"])) {
-        if (!isPlainObject(wVal)) continue;
-        const raw = String(wVal.value || "").toLowerCase();
-        const mapped = FONT_WEIGHT_MAP[raw] ?? raw;
-        weights[toKebabCase(wKey)] = mapped;
+  // Extract font weights
+  const fontWeights = {};
+  if (isPlainObject(fontRoot.weight)) {
+    for (const [wKey, wVal] of Object.entries(fontRoot.weight)) {
+      if (isTypedToken(wVal)) {
+        fontWeights[wKey] = wVal.value;
       }
-      if (Object.keys(weights).length) groupOut.fontWeight = weights;
-    }
-
-    // sizes (e.g., 3xl, 2xl, xl, lg, md, sm, read)
-    for (const [sizeKey, sizeObj] of Object.entries(groupVal)) {
-      if (["font family", "font weight"].includes(sizeKey)) continue;
-      if (!isPlainObject(sizeObj)) continue;
-      const fontSize = isPlainObject(sizeObj["font size"])
-        ? sizeObj["font size"].value
-        : undefined;
-      const lineHeight = isPlainObject(sizeObj["line height"])
-        ? sizeObj["line height"].value
-        : undefined;
-      const letterSpacing = isPlainObject(sizeObj["letter spacing"])
-        ? sizeObj["letter spacing"].value
-        : undefined;
-      if (fontSize == null && lineHeight == null && letterSpacing == null)
-        continue;
-      const sizeName = toKebabCase(sizeKey);
-      groupOut[sizeName] = {};
-      if (fontSize != null) groupOut[sizeName].fontSize = toPx(fontSize);
-      if (lineHeight != null) groupOut[sizeName].lineHeight = toPx(lineHeight);
-      if (letterSpacing != null)
-        groupOut[sizeName].letterSpacing = toPx(letterSpacing);
     }
   }
+
+  // Extract sizes and line heights
+  const sizes = fontRoot.size || {};
+  const lineHeights = fontRoot["line height"] || {};
+  const letterSpacings = fontRoot["letter spacing"] || {};
+
+  // Create font tokens for each size
+  for (const [sizeKey, sizeObj] of Object.entries(sizes)) {
+    if (!isTypedToken(sizeObj)) continue;
+    
+    const sizeValue = sizeObj.value;
+    const lineHeightObj = lineHeights[sizeKey];
+    const letterSpacingObj = letterSpacings[sizeKey];
+    
+    const sizeName = `size-${sizeKey}`;
+    textRoot[sizeName] = {
+      fontSize: toPx(sizeValue)
+    };
+    
+    if (isTypedToken(lineHeightObj)) {
+      textRoot[sizeName].lineHeight = toPx(lineHeightObj.value);
+    }
+    
+    if (isTypedToken(letterSpacingObj)) {
+      textRoot[sizeName].letterSpacing = toPx(letterSpacingObj.value);
+    }
+  }
+
+  // Add font weights to textRoot
+  if (Object.keys(fontWeights).length > 0) {
+    textRoot.weight = { fontWeight: fontWeights };
+  }
+
   return textRoot;
 }
 
 function buildTextRootCss(textRoot) {
   const lines = [];
   for (const [groupName, groupVal] of Object.entries(textRoot)) {
-    if (groupVal.fontFamily) {
-      lines.push(`  --text-${groupName}-font-family: ${groupVal.fontFamily};`);
+    if (groupName === "font" && groupVal.fontFamily) {
+      lines.push(`  --font-family-primary: ${groupVal.fontFamily};`);
     }
-    if (groupVal.fontWeight) {
+    if (groupName === "weight" && groupVal.fontWeight) {
       for (const [wKey, wVal] of Object.entries(groupVal.fontWeight)) {
-        lines.push(`  --text-${groupName}-font-weight-${wKey}: ${wVal};`);
+        lines.push(`  --font-weight-${wKey}: ${wVal};`);
       }
     }
-    for (const [sizeName, sizeObj] of Object.entries(groupVal)) {
-      if (sizeName === "fontFamily" || sizeName === "fontWeight") continue;
-      if (sizeObj.fontSize)
-        lines.push(
-          `  --text-${groupName}-${sizeName}-font-size: ${sizeObj.fontSize};`
-        );
-      if (sizeObj.lineHeight)
-        lines.push(
-          `  --text-${groupName}-${sizeName}-line-height: ${sizeObj.lineHeight};`
-        );
-      if (sizeObj.letterSpacing)
-        lines.push(
-          `  --text-${groupName}-${sizeName}-letter-spacing: ${sizeObj.letterSpacing};`
-        );
+    if (groupName.startsWith("size-")) {
+      const sizeKey = groupName.replace("size-", "");
+      if (groupVal.fontSize) {
+        lines.push(`  --font-size-${sizeKey}: ${groupVal.fontSize};`);
+      }
+      if (groupVal.lineHeight) {
+        lines.push(`  --line-height-${sizeKey}: ${groupVal.lineHeight};`);
+      }
+      if (groupVal.letterSpacing) {
+        lines.push(`  --letter-spacing-${sizeKey}: ${groupVal.letterSpacing};`);
+      }
     }
   }
   return lines;
@@ -216,25 +203,20 @@ function buildTextRootCss(textRoot) {
 function buildTextThemeCss(textRoot) {
   const lines = [];
   for (const [groupName, groupVal] of Object.entries(textRoot)) {
-    if (groupVal.fontFamily) {
-      lines.push(
-        `  --font-${groupName}: var(--text-${groupName}-font-family);`
-      );
+    if (groupName === "font" && groupVal.fontFamily) {
+      lines.push(`  --font-primary: var(--font-family-primary);`);
     }
-    for (const [sizeName, sizeObj] of Object.entries(groupVal)) {
-      if (sizeName === "fontFamily" || sizeName === "fontWeight") continue;
-      if (sizeObj.fontSize)
-        lines.push(
-          `  --text-${groupName}-${sizeName}: var(--text-${groupName}-${sizeName}-font-size);`
-        );
-      if (sizeObj.lineHeight)
-        lines.push(
-          `  --leading-${groupName}-${sizeName}: var(--text-${groupName}-${sizeName}-line-height);`
-        );
-      if (sizeObj.letterSpacing)
-        lines.push(
-          `  --tracking-${groupName}-${sizeName}: var(--text-${groupName}-${sizeName}-letter-spacing);`
-        );
+    if (groupName.startsWith("size-")) {
+      const sizeKey = groupName.replace("size-", "");
+      if (groupVal.fontSize) {
+        lines.push(`  --text-${sizeKey}: var(--font-size-${sizeKey});`);
+      }
+      if (groupVal.lineHeight) {
+        lines.push(`  --leading-${sizeKey}: var(--line-height-${sizeKey});`);
+      }
+      if (groupVal.letterSpacing) {
+        lines.push(`  --tracking-${sizeKey}: var(--letter-spacing-${sizeKey});`);
+      }
     }
   }
   return lines;
@@ -245,35 +227,45 @@ function buildTypographyUtilitiesCss(textRoot) {
   const start = "/* generated-typography-utilities:start */";
   const end = "/* generated-typography-utilities:end */";
   lines.push(start);
+  
+  const weights = textRoot.weight?.fontWeight || {};
+  const hasFamily = Boolean(textRoot.font?.fontFamily);
+  
   for (const [groupName, groupVal] of Object.entries(textRoot)) {
-    const hasFamily = Boolean(groupVal.fontFamily);
-    const weights = groupVal.fontWeight || {};
-    for (const [sizeName, sizeObj] of Object.entries(groupVal)) {
-      if (sizeName === "fontFamily" || sizeName === "fontWeight") continue;
-      const classBase = `${groupName}-${sizeName}`; // e.g., body-2xl
-      const props = [];
-      if (sizeObj.fontSize)
-        props.push(`  font-size: var(--text-${groupName}-${sizeName});`);
-      if (sizeObj.lineHeight)
-        props.push(`  line-height: var(--leading-${groupName}-${sizeName});`);
-      if (hasFamily)
-        props.push(`  font-family: var(--text-${groupName}-font-family);`);
-      // base utility without explicit weight
-      lines.push(`@utility ${classBase} {`);
+    if (!groupName.startsWith("size-")) continue;
+    
+    const sizeKey = groupName.replace("size-", "");
+    const classBase = `text-${sizeKey}`;
+    const props = [];
+    
+    if (groupVal.fontSize) {
+      props.push(`  font-size: var(--text-${sizeKey});`);
+    }
+    if (groupVal.lineHeight) {
+      props.push(`  line-height: var(--leading-${sizeKey});`);
+    }
+    if (hasFamily) {
+      props.push(`  font-family: var(--font-primary);`);
+    }
+    if (groupVal.letterSpacing) {
+      props.push(`  letter-spacing: var(--tracking-${sizeKey});`);
+    }
+    
+    // base utility without explicit weight
+    lines.push(`@utility ${classBase} {`);
+    lines.push(...props);
+    lines.push(`}`);
+    
+    // utilities per weight
+    for (const [weightName] of Object.entries(weights)) {
+      const className = `${classBase}-${weightName}`;
+      lines.push(`@utility ${className} {`);
       lines.push(...props);
+      lines.push(`  font-weight: var(--font-weight-${weightName});`);
       lines.push(`}`);
-      // utilities per weight
-      for (const [weightName] of Object.entries(weights)) {
-        const className = `${classBase}-${weightName}`; // e.g., body-2xl-semibold
-        lines.push(`@utility ${className} {`);
-        lines.push(...props);
-        lines.push(
-          `  font-weight: var(--text-${groupName}-font-weight-${weightName});`
-        );
-        lines.push(`}`);
-      }
     }
   }
+  
   lines.push(end);
   return lines;
 }
@@ -303,7 +295,8 @@ async function main() {
     []
   );
 
-  const semanticRoot = tokens["semantic/Mode 1"];
+  // Use semantic/Desktop as the main semantic tokens
+  const semanticRoot = tokens["semantic/Desktop"];
   const semanticTokens = semanticRoot
     ? flattenSemanticTokens(semanticRoot)
     : [];
@@ -530,3 +523,4 @@ main().catch((err) => {
   console.error(err);
   process.exit(1);
 });
+
