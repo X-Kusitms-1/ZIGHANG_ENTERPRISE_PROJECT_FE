@@ -2,8 +2,11 @@
 // 이 파일은 자동으로 생성됩니다. 수동으로 편집하지 마세요.
 
 import { apiClient } from "./axios";
-import { UserControllerApi } from "./generated";
-import type { PostUserOnboardingDto } from "./generated";
+import { KakaoLoginControllerApi } from "./generated/api/kakao-login-controller-api";
+import { UserControllerApi } from "./generated/api/user-controller-api";
+import type {
+  PostUserOnboardingDto,
+} from "./generated/models";
 
 export interface ApiRequestOptions {
   token?: string;
@@ -34,6 +37,21 @@ function createApiClient(options: ApiRequestOptions = {}) {
   return client;
 }
 
+// KakaoLoginControllerApi 함수들
+/**
+ * *
+ */
+export async function kakaoLogin(
+  params: { code: string },
+  options: ApiRequestOptions = {}
+) {
+  const client = createApiClient(options);
+  const api = new KakaoLoginControllerApi(undefined, undefined, client);
+  const response = await api.kakaoLogin(params.code);
+  return response.data;
+}
+
+
 // UserControllerApi 함수들
 /**
  * *
@@ -44,8 +62,8 @@ export async function userOnboardingInfo(
 ) {
   const client = createApiClient(options);
   const api = new UserControllerApi(undefined, undefined, client);
-  const response = await api.postUserOnboardingInfo(
-    params.userOnboardingInfoDto
-  );
+  const response = await api.postUserOnboardingInfo(params.userOnboardingInfoDto);
   return response.data;
 }
+
+

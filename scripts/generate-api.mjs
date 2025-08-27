@@ -110,17 +110,7 @@ export * from './configuration';
         fs.writeFileSync(indexPath, indexContent);
       }
 
-      // .gitignore 파일 생성
-      const gitignorePath = path.join(this.outputDir, ".gitignore");
-      const gitignoreContent = `# 이 폴더의 파일들은 자동 생성됩니다
-# 수동으로 편집하지 마세요
-
-# 모든 파일을 git에서 추적하되, 수정 사항은 무시
-*
-!.gitignore
-!README.md
-`;
-      fs.writeFileSync(gitignorePath, gitignoreContent);
+      // .gitignore 파일은 생성하지 않음 (git에서 추적하도록 함)
 
       // 생성된 API 분석 및 문서화
       this.generateDocumentation();
@@ -342,7 +332,8 @@ export * from './configuration';
         if (parameterName) {
           // 매개변수 이름에서 타입 추출 (예: userOnboardingInfoDto -> PostUserOnboardingDto)
           const typeName = this.parameterNameToTypeName(parameterName);
-          if (typeName) {
+          if (typeName && typeName !== "string") {
+            // TypeScript 기본 타입은 import하지 않음
             usedTypes.add(typeName);
           }
         }
@@ -364,6 +355,10 @@ export * from './configuration';
       // camelCase를 PascalCase로 변환하고 Post 접두사 추가
       const pascalCase = baseName.charAt(0).toUpperCase() + baseName.slice(1);
       return "Post" + pascalCase + "Dto";
+    }
+    // code 파라미터는 string 타입
+    if (parameterName === "code") {
+      return "string";
     }
     return null;
   }
@@ -509,6 +504,10 @@ export * from './configuration';
     if (methodName.startsWith("post")) {
       const baseName = methodName.replace(/^post/, "");
       return baseName.charAt(0).toLowerCase() + baseName.slice(1) + "Dto";
+    }
+    // kakaoLogin은 code 파라미터가 필요
+    if (methodName === "kakaoLogin") {
+      return "code";
     }
     // 다른 메소드들은 일단 null (매개변수 없음)
     return null;
