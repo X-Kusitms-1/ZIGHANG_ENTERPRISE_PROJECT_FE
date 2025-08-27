@@ -10,17 +10,17 @@ const StarIcon = (props: React.SVGProps<SVGSVGElement>) => (
 );
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 font-medium whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bg-border-focus-ring focus-visible:ring-offset-2 disabled:pointer-events-none",
+  "inline-flex items-center justify-center gap-2 font-medium whitespace-nowrap transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--color-border-focus-ring)] focus:ring-offset-2 disabled:pointer-events-none",
   {
     variants: {
       variant: {
         primaryFilled: "bg-bg-interactive-primary text-text-interactive-inverse hover:bg-text-interactive-primary-hovered",
-        primaryNeutral: "bg-bg-tertiary-light text-text-info hover:text-text-interactive-primary-hovered hover:bg-bg-interactive-base-hovered-darker",
+        primaryNeutral: "bg-bg-tertiary-light text-text-info hover:text-text-interactive-primary-hovered hover:bg-bg-interactive-base-hovered-darker focus:border focus:border-border-brand focus:bg-bg-info-subtle",
         primaryTransparent: "bg-transparent text-text-interactive-primary hover:text-text-interactive-primary-hovered hover:bg-bg-transparent-dark",
         primaryInversed: "bg-bg-interactive-base text-text-interactive-primary hover:text-text-interactive-primary-hovered hover:bg-bg-interactive-base-hovered",
         secondaryFilled: "bg-bg-interactive-secondary text-text-interactive-inverse hover:text-text-interactive-inverse hover:bg-bg-interactive-secondary-hovered",
-        secondaryInversed: "bg-text-interactive-base text-text-primary hover:bg-bg-interactive-base-hovered",
-        secondaryNeutral: "bg-bg-tertiary-light text-text-primary hover:bg-bg-interactive-base-hovered-darker",
+        secondaryInversed: "bg-text-interactive-base text-text-primary hover:bg-bg-interactive-base-hovered focus:bg-bg-interactive-base",
+        secondaryNeutral: "bg-bg-tertiary-light text-text-primary hover:bg-bg-interactive-base-hovered-darker focus:border focus:border-[#000] focus:bg-bg-interactive-base",
         secondaryOutlined: "bg-transparent text-text-primary border border-border-tertiary hover:bg-bg-interactive-base-hovered",
         secondaryTransparent: "bg-transparent text-text-interactive-secondary hover:bg-bg-transparent-dark hover:text-text-interactive-secondary-hovered",
         secondaryTranslucent: "bg-bg-transparent-dark text-text-interactive-secondary hover:bg-bg-transparent-semi-darker hover:text-text-interactive-secondary-hovered",
