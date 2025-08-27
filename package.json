@@ -12,7 +12,10 @@
     "prepare": "husky",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "tokens": "node scripts/generate-color-tokens.mjs"
+    "tokens": "node scripts/generate-color-tokens.mjs",
+    "codegen": "node scripts/generate-api.mjs",
+    "api:generate": "pnpm run codegen",
+    "api:update": "pnpm run codegen"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.15",
@@ -32,6 +35,7 @@
   "devDependencies": {
     "@chromatic-com/storybook": "^4.1.0",
     "@eslint/eslintrc": "^3",
+    "@openapitools/openapi-generator-cli": "^2.23.1",
     "@storybook/addon-a11y": "^9.1.2",
     "@storybook/addon-docs": "^9.1.2",
     "@storybook/addon-onboarding": "^9.1.2",
