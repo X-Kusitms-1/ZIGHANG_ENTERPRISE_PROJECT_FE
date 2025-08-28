@@ -19,10 +19,10 @@ const meta: Meta<typeof Button> = {
     variant: {
       control: "select",
       options: [
-        "primaryFilled",
-        "primaryNeutral",
-        "primaryOutlined",
-        "primaryInversed",
+        "filled",
+        "neutral",
+        "outlined",
+        "inversed",
         "disabled",
       ],
       description: "버튼 테마",
@@ -60,19 +60,7 @@ export const Default: Story = {
 };
 
 
-export const PrimaryVariants: Story = {
-  render: () => (
-    <div className="flex flex-wrap gap-4">
-      <Button variant="primaryFilled">Filled</Button>
-      <Button variant="primaryNeutral">Neutral</Button>
-      <Button variant="primaryOutlined">Outlined</Button>
-      <Button variant="primaryInversed">Inversed</Button>
-      <Button variant="primaryFilled" disabled>
-        Disabled Filled
-      </Button>
-    </div>
-  ),
-};
+// ...existing code...
 
 export const Sizes: Story = {
   render: () => (
@@ -119,10 +107,10 @@ export const Disabled: Story = {
 export const AllButtons: Story = {
   render: () => {
     const variants = [
-      "primaryFilled",
-      "primaryNeutral",
-      "primaryOutlined",
-      "primaryInversed",
+      "filled",
+      "neutral",
+      "outlined",
+      "inversed",
     ] as const;
     const sizes = ["sm", "md", "lg"] as const;
 
@@ -139,7 +127,7 @@ export const AllButtons: Story = {
                 {variant}
               </Button>
             ))}
-            <Button variant="primaryFilled" disabled={true}>
+            <Button variant="filled" disabled={true}>
               Disabled
             </Button>
           </div>
@@ -187,10 +175,10 @@ export const AllButtons: Story = {
 export const AllButtonsWithIcons: Story = {
   render: () => {
     const variants = [
-      "primaryFilled",
-      "primaryNeutral",
-      "primaryOutlined",
-      "primaryInversed",
+      "filled",
+      "neutral",
+      "outlined",
+      "inversed",
     ] as const;
     const sizes = ["sm", "md", "lg"] as const;
 
