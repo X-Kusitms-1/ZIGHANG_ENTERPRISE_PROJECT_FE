@@ -69,7 +69,7 @@
   --color-alpha-black-25: #11111140;
   --color-alpha-black-50: #11111180;
   --color-alpha-black-75: #111111bf;
-/* generated-color-tokens:end */
+  /* generated-color-tokens:end */
 
   /* generated-text-tokens:start */
   --font-family-primary: Pretendard;
@@ -96,7 +96,7 @@
   --font-weight-500: 500;
   --font-weight-600: 600;
   --font-weight-700: 700;
-/* generated-text-tokens:end */
+  /* generated-text-tokens:end */
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
@@ -183,7 +183,7 @@
   --color-icon-secondary: var(--color-neutral-800);
   --color-icon-danger: var(--color-red-500);
   --color-icon-tertiary: var(--color-neutral-600);
-/* generated-semantic-tokens:end */
+  /* generated-semantic-tokens:end */
 
   /* generated-typography-tokens:start */
   --font-primary: var(--font-family-primary);
@@ -206,7 +206,7 @@
   --leading-40: var(--line-height-40);
   --text-48: var(--font-size-48);
   --leading-48: var(--line-height-48);
-/* generated-typography-tokens:end */
+  /* generated-typography-tokens:end */
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
