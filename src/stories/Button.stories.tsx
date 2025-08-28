@@ -32,11 +32,6 @@ const meta: Meta<typeof Button> = {
       options: ["sm", "md", "lg"],
       description: "크기",
     },
-    shape: {
-      control: "radio",
-      options: ["default", "rounded"],
-      description: "모양",
-    },
     leftIcon: {
       control: "boolean",
       description: "왼쪽 아이콘 표시 (StarIcon 사용)",
@@ -64,23 +59,6 @@ export const Default: Story = {
   },
 };
 
-export const Focused: Story = {
-  render: () => (
-    <div className="flex flex-wrap gap-4">
-      <Button variant="primaryFilled">Primary Filled Focused</Button>
-      <Button variant="primaryOutlined" disabled>
-        Disabled (No Focus)
-      </Button>
-    </div>
-  ),
-  parameters: {
-    docs: {
-      description: {
-        story: "포커스 상태 테스트: Tab 키로 확인. 접근성 강화 (ARIA 속성).",
-      },
-    },
-  },
-};
 
 export const PrimaryVariants: Story = {
   render: () => (
@@ -98,43 +76,14 @@ export const PrimaryVariants: Story = {
 
 export const Sizes: Story = {
   render: () => (
-    <div className="flex gap-4">
-      <Button size="sm">Small</Button>
-      <Button size="md">Medium</Button>
-      <Button size="lg">Large</Button>
+    <div className="flex flex-wrap gap-4">
+      <Button size="sm">sm</Button>
+      <Button size="md">md</Button>
+      <Button size="lg">lg</Button>
     </div>
   ),
 };
 
-export const Shapes: Story = {
-  render: () => (
-    <div className="flex gap-4">
-      <Button shape="default">Default</Button>
-      <Button shape="rounded">Rounded</Button>
-    </div>
-  ),
-};
-
-export const WithIcons: Story = {
-  args: {
-    leftIcon: true,
-    rightIcon: true,
-    children: "With Icons",
-  },
-  render: (args) => (
-    <div className="flex gap-4">
-      <Button {...args} leftIcon={true} rightIcon={true}>
-        Small Icon
-      </Button>
-      <Button {...args} leftIcon={true} rightIcon={true}>
-        Default Icon
-      </Button>
-      <Button {...args} leftIcon={true} rightIcon={true}>
-        Large Icon
-      </Button>
-    </div>
-  ),
-};
 
 export const LeftIconOnly: Story = {
   args: {
@@ -176,7 +125,6 @@ export const AllButtons: Story = {
       "primaryInversed",
     ] as const;
     const sizes = ["sm", "md", "lg"] as const;
-    const shapes = ["default", "rounded"] as const;
 
     return (
       <div className="flex flex-col gap-8">
@@ -222,28 +170,7 @@ export const AllButtons: Story = {
         </div>
 
         {/* Shape별 버튼 (기본 variant/primaryFilled, size/md, 아이콘 유무 조합) */}
-        <div>
-          <h3 className="mb-2 font-bold">Shapes (With/Without Icons)</h3>
-          <div className="flex flex-col gap-4">
-            {shapes.map((shape) => (
-              <div key={shape} className="flex flex-wrap gap-4">
-                <Button shape={shape}>No Icon {shape}</Button>
-                <Button shape={shape} leftIcon={true}>
-                  Left Icon {shape}
-                </Button>
-                <Button shape={shape} rightIcon={true}>
-                  Right Icon {shape}
-                </Button>
-                <Button shape={shape} leftIcon={true} rightIcon={true}>
-                  Both Icons {shape}
-                </Button>
-                <Button shape={shape} disabled>
-                  Disabled {shape}
-                </Button>
-              </div>
-            ))}
-          </div>
-        </div>
+        
       </div>
     );
   },
@@ -266,7 +193,6 @@ export const AllButtonsWithIcons: Story = {
       "primaryInversed",
     ] as const;
     const sizes = ["sm", "md", "lg"] as const;
-    const shapes = ["default", "rounded"] as const;
 
     return (
       <div className="flex flex-col gap-8">
@@ -294,17 +220,6 @@ export const AllButtonsWithIcons: Story = {
           </div>
         </div>
 
-        {/* Shape별 버튼 */}
-        <div>
-          <h3 className="mb-2 font-bold">Shapes</h3>
-          <div className="flex flex-wrap gap-4">
-            {shapes.map((shape) => (
-              <Button key={shape} shape={shape}>
-                {shape}
-              </Button>
-            ))}
-          </div>
-        </div>
 
         {/* 아이콘 포함 버튼 */}
         <div>
