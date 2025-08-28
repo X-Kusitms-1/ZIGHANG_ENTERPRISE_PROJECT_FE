@@ -1,0 +1,23 @@
+{
+  "npmName": "@zighang/api-client",
+  "npmVersion": "1.0.0",
+  "supportsES6": true,
+  "withInterfaces": true,
+  "useSingleRequestParameter": false,
+  "withSeparateModelsAndApi": true,
+  "modelPackage": "models",
+  "apiPackage": "api",
+  "enumNameSuffix": "Enum",
+  "enumPropertyNaming": "PascalCase",
+  "modelPropertyNaming": "camelCase",
+  "paramNaming": "camelCase",
+  "stringEnums": true,
+  "removeOperationIdPrefix": true,
+  "generateAliasAsModel": false,
+  "nullSafeAdditionalProps": true,
+  "sortParamsByRequiredFlag": true,
+  "sortModelPropertiesByRequiredFlag": true,
+  "ensureUniqueParams": true,
+  "allowUnicodeIdentifiers": false,
+  "prependFormOrBodyParameters": true
+}

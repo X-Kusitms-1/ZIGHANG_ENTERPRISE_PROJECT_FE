@@ -17,11 +17,7 @@ const meta = {
   argTypes: {
     variant: {
       control: { type: "select" },
-      options: ["primary", "circle", "secondary"],
-    },
-    appearance: {
-      control: { type: "select" },
-      options: ["fill", "outline", "transparent", "invers"],
+      options: ["outlined", "inversed", "rounded"],
     },
     size: {
       control: { type: "select" },
@@ -31,8 +27,8 @@ const meta = {
   // Use `fn` to spy on the onClick arg, which will appear in the actions panel once invoked: https://storybook.js.org/docs/essentials/actions#action-args
   args: {
     onClick: fn(),
-    iconSrc: "/iconButton.svg",
-    appearance: "fill",
+    iconSrc: "/icons/storybook/iconButtonBlack.svg",
+    variant: "outlined",
     size: "md",
   },
 } satisfies Meta<typeof IconButton>;
@@ -43,47 +39,56 @@ type Story = StoryObj<typeof meta>;
 // More on writing stories with args: https://storybook.js.org/docs/writing-stories/args
 export const Default: Story = {
   args: {
-    iconSrc: "/iconButton.svg",
-    variant: "primary",
+    iconSrc: "/icons/storybook/iconButtonBlack.svg",
+    variant: "outlined",
   },
 };
 
-export const Primary: Story = {
+export const Outlined: Story = {
   args: {
-    iconSrc: "/iconButton.svg",
-    variant: "primary",
+    iconSrc: "/icons/storybook/iconButtonBlack.svg",
+    variant: "outlined",
   },
 };
 
-export const Secondary: Story = {
+export const Inversed: Story = {
   args: {
-    iconSrc: "/iconButton.svg",
-    variant: "secondary",
+    iconSrc: "/icons/storybook/iconButtonColor.svg",
+    variant: "inversed",
   },
 };
 
-export const Circle: Story = {
+export const Rounded: Story = {
   args: {
-    iconSrc: "/iconButton.svg",
-    variant: "circle",
+    iconSrc: "/icons/storybook/iconButtonBlack.svg",
+    variant: "rounded",
   },
 };
 
 // 모든 variant를 보여주는 스토리
 export const AllVariants = {
   render: () => (
-    <div className="flex gap-4 p-4">
+    <div className="grid grid-cols-3 gap-4 p-4">
       <div className="text-center">
-        <p className="mb-2 text-sm">Primary</p>
-        <IconButton iconSrc="/iconButton.svg" variant="primary" />
+        <p className="mb-2 text-xs">Outlined</p>
+        <IconButton
+          iconSrc="/icons/storybook/iconButtonBlack.svg"
+          variant="outlined"
+        />
       </div>
       <div className="text-center">
-        <p className="mb-2 text-sm">Secondary</p>
-        <IconButton iconSrc="/iconButton.svg" variant="secondary" />
+        <p className="mb-2 text-xs">Inversed</p>
+        <IconButton
+          iconSrc="/icons/storybook/iconButtonColor.svg"
+          variant="inversed"
+        />
       </div>
       <div className="text-center">
-        <p className="mb-2 text-sm">Circle</p>
-        <IconButton iconSrc="/iconButton.svg" variant="circle" />
+        <p className="mb-2 text-xs">Rounded</p>
+        <IconButton
+          iconSrc="/icons/storybook/iconButtonBlack.svg"
+          variant="rounded"
+        />
       </div>
     </div>
   ),
