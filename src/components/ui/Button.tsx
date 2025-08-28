@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import Icon from "./Icon";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-1 font-medium whitespace-nowrap transition-colors focus:outline-none disabled:pointer-events-none",
+  "inline-flex items-center justify-center gap-1 font-medium whitespace-nowrap transition-colors focus:outline-none disabled:pointer-events-none font-[500]",
   {
     variants: {
       variant: {
@@ -15,9 +15,9 @@ const buttonVariants = cva(
         disabled: "bg-bg-disabled text-text-disabled cursor-not-allowed",
       },
       size: {
-        sm: "h-11 px-3 py-3 leading-5 body-sm-semibold",
-        md: "h-9 px-4 py-2 leading-4 caption-md semibold",
-        lg: "h-12 px-4 py-3 leading-6 body-lg-semibold",
+        sm: "h-12 px-3 py-2 leading-5",
+        md: "h-11 px-3 py-3 leading-5",
+        lg: "h-12 px-4 py-3 leading-6",
       },
       shape: {
         default: "rounded-lg",
