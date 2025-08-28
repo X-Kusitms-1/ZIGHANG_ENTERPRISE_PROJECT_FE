@@ -8,22 +8,43 @@ const meta: Meta<typeof Button> = {
   component: Button,
   parameters: {
     layout: "centered",
-    docs: { description: { component: "버튼 컴포넌트: primary/secondary variants, size, shape, left/right icon, loading 지원. 접근성(ARIA) 강화." } },
+    docs: {
+      description: {
+        component:
+          "버튼 컴포넌트: primary variants, size, shape, left/right icon, loading 지원. 접근성(ARIA) 강화.",
+      },
+    },
   },
   argTypes: {
     variant: {
       control: "select",
       options: [
-        "primaryFilled", "primaryNeutral", "primaryTransparent", "primaryInversed",
-        "secondaryFilled", "secondaryInversed", "secondaryNeutral", "secondaryOutlined",
-        "secondaryTransparent", "secondaryTranslucent", "disabled",
+        "primaryFilled",
+        "primaryNeutral",
+        "primaryOutlined",
+        "primaryInversed",
+        "disabled",
       ],
       description: "버튼 테마",
     },
-    size: { control: "radio", options: ["sm", "md", "lg"], description: "크기" },
-    shape: { control: "radio", options: ["default", "rounded"], description: "모양" },
-    leftIcon: { control: "boolean", description: "왼쪽 아이콘 표시 (StarIcon 사용)" },
-    rightIcon: { control: "boolean", description: "오른쪽 아이콘 표시 (StarIcon 사용)" },
+    size: {
+      control: "radio",
+      options: ["sm", "md", "lg"],
+      description: "크기",
+    },
+    shape: {
+      control: "radio",
+      options: ["default", "rounded"],
+      description: "모양",
+    },
+    leftIcon: {
+      control: "boolean",
+      description: "왼쪽 아이콘 표시 (StarIcon 사용)",
+    },
+    rightIcon: {
+      control: "boolean",
+      description: "오른쪽 아이콘 표시 (StarIcon 사용)",
+    },
     disabled: { control: "boolean", description: "비활성화" },
     children: { control: "text", defaultValue: "Button" },
   },
@@ -39,7 +60,7 @@ export const Default: Story = {
   },
   play: async () => {
     await userEvent.tab(); // 키보드 포커스 테스트
-    await new Promise(resolve => setTimeout(resolve, 300)); // 지연으로 시각화
+    await new Promise((resolve) => setTimeout(resolve, 300)); // 지연으로 시각화
   },
 };
 
@@ -47,12 +68,17 @@ export const Focused: Story = {
   render: () => (
     <div className="flex flex-wrap gap-4">
       <Button variant="primaryFilled">Primary Filled Focused</Button>
-      <Button variant="secondaryOutlined">Secondary Outlined Focused</Button>
-      <Button variant="primaryTransparent" disabled>Disabled (No Focus)</Button>
+      <Button variant="primaryOutlined" disabled>
+        Disabled (No Focus)
+      </Button>
     </div>
   ),
   parameters: {
-    docs: { description: { story: "포커스 상태 테스트: Tab 키로 확인. 접근성 강화 (ARIA 속성)." } },
+    docs: {
+      description: {
+        story: "포커스 상태 테스트: Tab 키로 확인. 접근성 강화 (ARIA 속성).",
+      },
+    },
   },
 };
 
@@ -61,23 +87,11 @@ export const PrimaryVariants: Story = {
     <div className="flex flex-wrap gap-4">
       <Button variant="primaryFilled">Filled</Button>
       <Button variant="primaryNeutral">Neutral</Button>
-      <Button variant="primaryTransparent">Transparent</Button>
+      <Button variant="primaryOutlined">Outlined</Button>
       <Button variant="primaryInversed">Inversed</Button>
-      <Button variant="primaryFilled" disabled>Disabled Filled</Button>
-    </div>
-  ),
-};
-
-export const SecondaryVariants: Story = {
-  render: () => (
-    <div className="flex flex-wrap gap-4">
-      <Button variant="secondaryFilled">Filled</Button>
-      <Button variant="secondaryInversed">Inversed</Button>
-      <Button variant="secondaryNeutral">Neutral</Button>
-      <Button variant="secondaryOutlined">Outlined</Button>
-      <Button variant="secondaryTransparent">Transparent</Button>
-      <Button variant="secondaryTranslucent">Translucent</Button>
-      <Button variant="secondaryFilled" disabled>Disabled Filled</Button>
+      <Button variant="primaryFilled" disabled>
+        Disabled Filled
+      </Button>
     </div>
   ),
 };
@@ -109,9 +123,15 @@ export const WithIcons: Story = {
   },
   render: (args) => (
     <div className="flex gap-4">
-      <Button {...args} leftIcon={true} rightIcon={true}>Small Icon</Button>
-      <Button {...args} leftIcon={true} rightIcon={true}>Default Icon</Button>
-      <Button {...args} leftIcon={true} rightIcon={true}>Large Icon</Button>
+      <Button {...args} leftIcon={true} rightIcon={true}>
+        Small Icon
+      </Button>
+      <Button {...args} leftIcon={true} rightIcon={true}>
+        Default Icon
+      </Button>
+      <Button {...args} leftIcon={true} rightIcon={true}>
+        Large Icon
+      </Button>
     </div>
   ),
 };
@@ -121,7 +141,11 @@ export const LeftIconOnly: Story = {
     leftIcon: true,
     children: "Left Icon Only",
   },
-  render: (args) => <Button {...args} leftIcon={true}>Left Icon</Button>,
+  render: (args) => (
+    <Button {...args} leftIcon={true}>
+      Left Icon
+    </Button>
+  ),
 };
 
 export const RightIconOnly: Story = {
@@ -129,7 +153,11 @@ export const RightIconOnly: Story = {
     rightIcon: true,
     children: "Right Icon Only",
   },
-  render: (args) => <Button {...args} rightIcon={true}>Right Icon</Button>,
+  render: (args) => (
+    <Button {...args} rightIcon={true}>
+      Right Icon
+    </Button>
+  ),
 };
 
 export const Disabled: Story = {
@@ -142,9 +170,10 @@ export const Disabled: Story = {
 export const AllButtons: Story = {
   render: () => {
     const variants = [
-      "primaryFilled", "primaryNeutral", "primaryTransparent", "primaryInversed",
-      "secondaryFilled", "secondaryInversed", "secondaryNeutral", "secondaryOutlined",
-      "secondaryTransparent", "secondaryTranslucent",
+      "primaryFilled",
+      "primaryNeutral",
+      "primaryOutlined",
+      "primaryInversed",
     ] as const;
     const sizes = ["sm", "md", "lg"] as const;
     const shapes = ["default", "rounded"] as const;
@@ -153,51 +182,18 @@ export const AllButtons: Story = {
       <div className="flex flex-col gap-8">
         {/* Variant별 버튼 (아이콘 없음, 기본 size/md, shape/default) */}
         <div>
-          <h3 className="mb-2 font-bold">Variants (No Icon, Default Size/Shape)</h3>
+          <h3 className="mb-2 font-bold">
+            Variants (No Icon, Default Size/Shape)
+          </h3>
           <div className="flex flex-wrap gap-4">
-            {variants.map(variant => (
+            {variants.map((variant) => (
               <Button key={variant} variant={variant}>
                 {variant}
               </Button>
             ))}
-            <Button variant="primaryFilled" disabled={true}>Disabled</Button>
-          </div>
-        </div>
-
-        {/* Variant별 버튼 (Left + Right Icon, 기본 size/md, shape/default) */}
-        <div>
-          <h3 className="mb-2 font-bold">Variants (With Left + Right Icons)</h3>
-          <div className="flex flex-wrap gap-4">
-            {variants.map(variant => (
-              <Button key={variant} variant={variant} leftIcon={true} rightIcon={true}>
-                {variant}
-              </Button>
-            ))}
-            <Button variant="primaryFilled" disabled leftIcon={true} rightIcon={true}>Disabled Icons</Button>
-          </div>
-        </div>
-
-        {/* Variant별 버튼 (Left Icon Only) */}
-        <div>
-          <h3 className="mb-2 font-bold">Variants (Left Icon Only)</h3>
-          <div className="flex flex-wrap gap-4">
-            {variants.map(variant => (
-              <Button key={variant} variant={variant} leftIcon={true}>
-                {variant}
-              </Button>
-            ))}
-          </div>
-        </div>
-
-        {/* Variant별 버튼 (Right Icon Only) */}
-        <div>
-          <h3 className="mb-2 font-bold">Variants (Right Icon Only)</h3>
-          <div className="flex flex-wrap gap-4">
-            {variants.map(variant => (
-              <Button key={variant} variant={variant} rightIcon={true}>
-                {variant}
-              </Button>
-            ))}
+            <Button variant="primaryFilled" disabled={true}>
+              Disabled
+            </Button>
           </div>
         </div>
 
@@ -205,13 +201,21 @@ export const AllButtons: Story = {
         <div>
           <h3 className="mb-2 font-bold">Sizes (With/Without Icons)</h3>
           <div className="flex flex-col gap-4">
-            {sizes.map(size => (
+            {sizes.map((size) => (
               <div key={size} className="flex flex-wrap gap-4">
                 <Button size={size}>No Icon {size}</Button>
-                <Button size={size} leftIcon={true}>Left Icon {size}</Button>
-                <Button size={size} rightIcon={true}>Right Icon {size}</Button>
-                <Button size={size} leftIcon={true} rightIcon={true}>Both Icons {size}</Button>
-                <Button size={size} disabled>Disabled {size}</Button>
+                <Button size={size} leftIcon={true}>
+                  Left Icon {size}
+                </Button>
+                <Button size={size} rightIcon={true}>
+                  Right Icon {size}
+                </Button>
+                <Button size={size} leftIcon={true} rightIcon={true}>
+                  Both Icons {size}
+                </Button>
+                <Button size={size} disabled>
+                  Disabled {size}
+                </Button>
               </div>
             ))}
           </div>
@@ -221,32 +225,119 @@ export const AllButtons: Story = {
         <div>
           <h3 className="mb-2 font-bold">Shapes (With/Without Icons)</h3>
           <div className="flex flex-col gap-4">
-            {shapes.map(shape => (
+            {shapes.map((shape) => (
               <div key={shape} className="flex flex-wrap gap-4">
                 <Button shape={shape}>No Icon {shape}</Button>
-                <Button shape={shape} leftIcon={true}>Left Icon {shape}</Button>
-                <Button shape={shape} rightIcon={true}>Right Icon {shape}</Button>
-                <Button shape={shape} leftIcon={true} rightIcon={true}>Both Icons {shape}</Button>
-                <Button shape={shape} disabled>Disabled {shape}</Button>
+                <Button shape={shape} leftIcon={true}>
+                  Left Icon {shape}
+                </Button>
+                <Button shape={shape} rightIcon={true}>
+                  Right Icon {shape}
+                </Button>
+                <Button shape={shape} leftIcon={true} rightIcon={true}>
+                  Both Icons {shape}
+                </Button>
+                <Button shape={shape} disabled>
+                  Disabled {shape}
+                </Button>
               </div>
             ))}
-          </div>
-        </div>
-
-        {/* Mixed 조합 예시 */}
-        <div>
-          <h3 className="mb-2 font-bold">Mixed Combinations</h3>
-          <div className="flex flex-wrap gap-4">
-            <Button variant="secondaryOutlined" size="sm" shape="rounded" leftIcon={true}>Small Rounded Outlined Left</Button>
-            <Button variant="primaryTransparent" size="lg" shape="default" rightIcon={true}>Large Default Transparent Right</Button>
-            <Button variant="secondaryTranslucent" size="md" shape="rounded" leftIcon={true} rightIcon={true}>Medium Rounded Translucent Both</Button>
-            <Button variant="primaryInversed" size="sm" shape="default" disabled>Small Default Inversed Disabled</Button>
           </div>
         </div>
       </div>
     );
   },
   parameters: {
-    docs: { description: { story: "모든 경우 커버: variant, size, shape, icons (left/right/both/none), disabled/loading. 카멜케이스 variant 사용." } },
+    docs: {
+      description: {
+        story:
+          "모든 경우 커버: variant, size, shape, icons (left/right/both/none), disabled/loading. 카멜케이스 variant 사용.",
+      },
+    },
+  },
+};
+
+export const AllButtonsWithIcons: Story = {
+  render: () => {
+    const variants = [
+      "primaryFilled",
+      "primaryNeutral",
+      "primaryOutlined",
+      "primaryInversed",
+    ] as const;
+    const sizes = ["sm", "md", "lg"] as const;
+    const shapes = ["default", "rounded"] as const;
+
+    return (
+      <div className="flex flex-col gap-8">
+        {/* Variant별 버튼 */}
+        <div>
+          <h3 className="mb-2 font-bold">Variants</h3>
+          <div className="flex flex-wrap gap-4">
+            {variants.map((variant) => (
+              <Button key={variant} variant={variant}>
+                {variant}
+              </Button>
+            ))}
+          </div>
+        </div>
+
+        {/* Size별 버튼 */}
+        <div>
+          <h3 className="mb-2 font-bold">Sizes</h3>
+          <div className="flex flex-wrap gap-4">
+            {sizes.map((size) => (
+              <Button key={size} size={size}>
+                {size}
+              </Button>
+            ))}
+          </div>
+        </div>
+
+        {/* Shape별 버튼 */}
+        <div>
+          <h3 className="mb-2 font-bold">Shapes</h3>
+          <div className="flex flex-wrap gap-4">
+            {shapes.map((shape) => (
+              <Button key={shape} shape={shape}>
+                {shape}
+              </Button>
+            ))}
+          </div>
+        </div>
+
+        {/* 아이콘 포함 버튼 */}
+        <div>
+          <h3 className="mb-2 font-bold">Buttons with Icons</h3>
+          <div className="flex flex-col gap-8">
+            {sizes.map((size) => (
+              <div key={size} className="flex flex-wrap gap-4">
+                {variants.map((variant) => (
+                  <React.Fragment key={`${size}-${variant}`}>
+                    <Button size={size} variant={variant} leftIcon>
+                      Left Icon
+                    </Button>
+                    <Button size={size} variant={variant} rightIcon>
+                      Right Icon
+                    </Button>
+                    <Button size={size} variant={variant} leftIcon rightIcon>
+                      Both Icons
+                    </Button>
+                  </React.Fragment>
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "모든 버튼 조합을 보여줍니다: variant, size, shape, 그리고 아이콘 조합 (left, right, both).",
+      },
+    },
   },
 };
