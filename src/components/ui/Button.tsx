@@ -1,6 +1,6 @@
 import React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
-import { cn } from "@/utils/classNameMerge";
+import { cn } from "@/lib/utils";
 
 // 기본 아이콘으로 사용자 제공 SVG 사용 – inline 컴포넌트로 변환 (fill="currentColor"로 변경, className으로 색상/크기 오버라이드)
 const StarIcon = (props: React.SVGProps<SVGSVGElement>) => (

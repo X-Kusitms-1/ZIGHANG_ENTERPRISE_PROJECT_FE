@@ -1,6 +1,6 @@
 import React from "react";
 import { userEvent } from "@storybook/test";
-import { Button } from "../app/components/Button";
+import { Button } from "../components/ui/Button";
 import type { StoryObj, Meta } from "@storybook/nextjs";
 
 const meta: Meta<typeof Button> = {
