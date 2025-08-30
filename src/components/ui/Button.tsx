@@ -4,24 +4,24 @@ import { cn } from "@/lib/utils";
 import Icon from "./Icon";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-1 font-medium whitespace-nowrap transition-colors focus:outline-none disabled:pointer-events-none font-[500] rounded-lg",
+  "inline-flex items-center justify-center gap-1 text-14-500 whitespace-nowrap transition-colors active:outline-none disabled:pointer-events-none font-[500] rounded-lg",
   {
     variants: {
       variant: {
         filled:
-          "bg-bg-primary text-text-inverse hover:bg-bg-primary-hovered focus:bg-bg-primary-focused",
+          "bg-bg-primary !text-text-inverse hover:bg-bg-primary-hovered active:bg-bg-primary-focused",
         neutral:
-          "bg-bg-neutral text-text-secondary hover:bg-bg-neutral-hovered focus:bg-bg-neutral-focused",
+          "bg-bg-neutral text-text-secondary hover:bg-bg-neutral-hovered active:bg-bg-neutral-focused",
         outlined:
-          "bg-bg-base text-text-secondary border border-border-inverse hover:bg-bg-base-hovered focus:bg-neutral-100",
+          "bg-bg-base text-text-secondary border border-border-inverse hover:bg-bg-base-hovered active:bg-neutral-100",
         inversed:
-          "bg-bg-base text-text-secondary hover:bg-bg-base-hovered focus:bg-bg-base-focused",
-        disabled: "bg-bg-disabled text-text-disabled cursor-not-allowed",
+          "bg-bg-base text-text-secondary hover:bg-bg-base-hovered active:bg-bg-base-focused",
+        disabled: "bg-bg-disabled !text-text-disabled cursor-not-allowed",
       },
       size: {
-        sm: "h-9 px-3 py-2 leading-5 text-[14px]",
-        md: "h-11 px-3 py-3 leading-5 text-[14px]",
-        lg: "h-12 px-4 py-3 leading-6 text-[16px]",
+        sm: "h-9 px-3 py-2 leading-5",
+        md: "h-11 px-3 py-3 leading-5",
+        lg: "h-12 px-4 py-3 leading-6 text-16-500",
       },
     },
     defaultVariants: {
