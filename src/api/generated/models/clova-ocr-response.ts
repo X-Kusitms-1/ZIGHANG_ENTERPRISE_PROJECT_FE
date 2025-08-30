@@ -11,10 +11,14 @@
  */
 
 
+// May contain unused imports in some cases
+// @ts-ignore
+import type { ImageResult } from "./image-result";
 
-export * from "./api/email-controller-api";
-export * from "./api/image-controller-api";
-export * from "./api/kakao-login-controller-api";
-export * from "./api/ocr-controller-api";
-export * from "./api/user-controller-api";
+export interface ClovaOcrResponse {
+    "version"?: string;
+    "requestId"?: string;
+    "timestamp"?: number;
+    "images"?: Array<ImageResult>;
+}
 

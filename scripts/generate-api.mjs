@@ -330,11 +330,16 @@ export * from './configuration';
       api.methods.forEach((method) => {
         const parameterName = this.getParameterName(method.name);
         if (parameterName) {
-          // 매개변수 이름에서 타입 추출 (예: userOnboardingInfoDto -> PostUserOnboardingDto)
-          const typeName = this.parameterNameToTypeName(parameterName);
-          if (typeName && typeName !== "string") {
-            // TypeScript 기본 타입은 import하지 않음
-            usedTypes.add(typeName);
+          if (Array.isArray(parameterName)) {
+            // 배열인 경우 (예: presignedUrl의 prefix, fileName)는 string 타입이므로 import하지 않음
+            // 아무것도 하지 않음
+          } else {
+            // 단일 매개변수인 경우
+            const typeName = this.parameterNameToTypeName(parameterName);
+            if (typeName && typeName !== "string") {
+              // TypeScript 기본 타입은 import하지 않음
+              usedTypes.add(typeName);
+            }
           }
         }
       });
@@ -454,9 +459,20 @@ export * from './configuration';
     result += "export async function " + functionName + "(\n";
 
     if (parameterName) {
-      const typeName = this.parameterNameToTypeName(parameterName);
-      result +=
-        "  params: { " + parameterName + ": " + (typeName || "any") + " },\n";
+      if (Array.isArray(parameterName)) {
+        // 배열인 경우 (예: presignedUrl의 prefix, fileName)
+        result += "  params: { ";
+        parameterName.forEach((param, index) => {
+          if (index > 0) result += ", ";
+          result += param + ": string";
+        });
+        result += " },\n";
+      } else {
+        // 단일 매개변수인 경우
+        const typeName = this.parameterNameToTypeName(parameterName);
+        result +=
+          "  params: { " + parameterName + ": " + (typeName || "any") + " },\n";
+      }
     }
 
     result += "  options: ApiRequestOptions = {}\n";
@@ -466,12 +482,23 @@ export * from './configuration';
       "  const api = new " + apiClassName + "(undefined, undefined, client);\n";
 
     if (parameterName) {
-      result +=
-        "  const response = await api." +
-        method.name +
-        "(params." +
-        parameterName +
-        ");\n";
+      if (Array.isArray(parameterName)) {
+        // 배열인 경우
+        result += "  const response = await api." + method.name + "(";
+        parameterName.forEach((param, index) => {
+          if (index > 0) result += ", ";
+          result += "params." + param;
+        });
+        result += ");\n";
+      } else {
+        // 단일 매개변수인 경우
+        result +=
+          "  const response = await api." +
+          method.name +
+          "(params." +
+          parameterName +
+          ");\n";
+      }
     } else {
       result += "  const response = await api." + method.name + "();\n";
     }
@@ -508,6 +535,14 @@ export * from './configuration';
     // kakaoLogin은 code 파라미터가 필요
     if (methodName === "kakaoLogin") {
       return "code";
+    }
+    // presignedUrl은 prefix와 fileName 파라미터가 필요
+    if (methodName === "presignedUrl") {
+      return ["prefix", "fileName"];
+    }
+    // ocrByUrl과 ocrTextByUrl은 imageUrl 파라미터가 필요
+    if (methodName === "ocrByUrl" || methodName === "ocrTextByUrl") {
+      return "imageUrl";
     }
     // 다른 메소드들은 일단 null (매개변수 없음)
     return null;

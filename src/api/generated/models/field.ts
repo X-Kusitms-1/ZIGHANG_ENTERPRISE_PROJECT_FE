@@ -12,9 +12,11 @@
 
 
 
-export * from "./api/email-controller-api";
-export * from "./api/image-controller-api";
-export * from "./api/kakao-login-controller-api";
-export * from "./api/ocr-controller-api";
-export * from "./api/user-controller-api";
+export interface Field {
+    "valueType"?: string;
+    "inferText"?: string;
+    "inferConfidence"?: number;
+    "type"?: string;
+    "lineBreak"?: boolean;
+}
 

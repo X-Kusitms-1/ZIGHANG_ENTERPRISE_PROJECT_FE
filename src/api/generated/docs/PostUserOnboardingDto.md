@@ -5,10 +5,10 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**userId** | **number** |  | [optional] [default to undefined]
-**career** | **number** |  | [optional] [default to undefined]
-**address** | **string** |  | [optional] [default to undefined]
-**industry** | **string** |  | [optional] [default to undefined]
+**userId** | **number** | 사용자 ID (토큰 구현 전까지 임시 사용) | [optional] [default to undefined]
+**career** | **number** | 경력 연차 (신입: 0, 1년차: 1, 2년차: 2...) | [optional] [default to undefined]
+**addressList** | [**Array&lt;AddressDto&gt;**](AddressDto.md) | 관심 지역 목록 | [optional] [default to undefined]
+**industryList** | [**Array&lt;IndustryDto&gt;**](IndustryDto.md) | 관심 산업/직무 목록 | [optional] [default to undefined]
 
 ## Example
 
@@ -18,8 +18,8 @@ import { PostUserOnboardingDto } from '@zighang/api-client';
 const instance: PostUserOnboardingDto = {
     userId,
     career,
-    address,
-    industry,
+    addressList,
+    industryList,
 };
 ```
 

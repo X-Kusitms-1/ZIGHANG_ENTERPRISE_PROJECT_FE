@@ -13,10 +13,13 @@
 
 // May contain unused imports in some cases
 // @ts-ignore
-import type { TokenDto } from "./token-dto";
+import type { Field } from "./field";
 
-export interface TokenResult {
-    "tokenDto"?: TokenDto;
-    "isNewUser"?: boolean;
+export interface ImageResult {
+    "uid"?: string;
+    "name"?: string;
+    "inferResult"?: string;
+    "message"?: string;
+    "fields"?: Array<Field>;
 }
 
