@@ -8,14 +8,14 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        primaryFilled:
-          "bg-bg-primary text-text-inverse hover:bg-bg-primary-hovered active:bg-bg-primary-focused",
-        primaryNeutral:
-          "bg-bg-neutral text-text-secondary hover:bg-bg-neutral-hovered active:bg-bg-neutral-focused",
-        primaryOutlined:
-          "bg-bg-base text-text-secondary border border-border-inverse hover:bg-bg-base-hovered active:bg-neutral-100",
-        primaryInversed:
-          "bg-bg-base text-text-secondary hover:bg-bg-base-hovered active:bg-bg-base-focused",
+        filled:
+          "bg-bg-primary text-text-inverse hover:bg-bg-primary-hovered focus:bg-bg-primary-focused",
+        neutral:
+          "bg-bg-neutral text-text-secondary hover:bg-bg-neutral-hovered focus:bg-bg-neutral-focused",
+        outlined:
+          "bg-bg-base text-text-secondary border border-border-inverse hover:bg-bg-base-hovered focus:bg-neutral-100",
+        inversed:
+          "bg-bg-base text-text-secondary hover:bg-bg-base-hovered focus:bg-bg-base-focused",
         disabled: "bg-bg-disabled text-text-disabled cursor-not-allowed",
       },
       size: {
@@ -25,7 +25,7 @@ const buttonVariants = cva(
       },
     },
     defaultVariants: {
-      variant: "primaryFilled",
+      variant: "filled",
       size: "md",
     },
   }
@@ -34,10 +34,10 @@ const buttonVariants = cva(
 const iconVariants = cva("", {
   variants: {
     variant: {
-      primaryFilled: "text-icon-inverse",
-      primaryNeutral: "text-icon-secondary",
-      primaryOutlined: "text-icon-secondary",
-      primaryInversed: "text-icon-secondary",
+      filled: "text-icon-inverse",
+      neutral: "text-icon-secondary",
+      outlined: "text-icon-secondary",
+      inversed: "text-icon-secondary",
       disabled: "text-icon-disabled",
     },
   },
