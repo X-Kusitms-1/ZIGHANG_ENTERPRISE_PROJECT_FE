@@ -4,18 +4,18 @@ import { cn } from "@/lib/utils";
 import Icon from "./Icon";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-1 font-medium whitespace-nowrap transition-colors focus:outline-none disabled:pointer-events-none font-[500] rounded-lg",
+  "inline-flex items-center justify-center gap-1 font-medium whitespace-nowrap transition-colors active:outline-none disabled:pointer-events-none font-[500] rounded-lg",
   {
     variants: {
       variant: {
         primaryFilled:
-          "bg-bg-primary text-text-inverse hover:bg-bg-primary-hovered focus:bg-bg-primary-focused",
+          "bg-bg-primary text-text-inverse hover:bg-bg-primary-hovered active:bg-bg-primary-focused",
         primaryNeutral:
-          "bg-bg-neutral text-text-secondary hover:bg-bg-neutral-hovered focus:bg-bg-neutral-focused",
+          "bg-bg-neutral text-text-secondary hover:bg-bg-neutral-hovered active:bg-bg-neutral-focused",
         primaryOutlined:
-          "bg-bg-base text-text-secondary border border-border-inverse hover:bg-bg-base-hovered focus:bg-neutral-100",
+          "bg-bg-base text-text-secondary border border-border-inverse hover:bg-bg-base-hovered active:bg-neutral-100",
         primaryInversed:
-          "bg-bg-base text-text-secondary hover:bg-bg-base-hovered focus:bg-bg-base-focused",
+          "bg-bg-base text-text-secondary hover:bg-bg-base-hovered active:bg-bg-base-focused",
         disabled: "bg-bg-disabled text-text-disabled cursor-not-allowed",
       },
       size: {
