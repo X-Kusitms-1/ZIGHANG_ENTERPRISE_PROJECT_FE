@@ -1,5 +1,5 @@
 import React from "react";
-import FilterModal from "../components/filterModal/FilterModal";
+import FilterModal from "../components/widgets/FilterModal";
 import type { Meta, StoryObj } from "@storybook/nextjs";
 
 const meta = {
