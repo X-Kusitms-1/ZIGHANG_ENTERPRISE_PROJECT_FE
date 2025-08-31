@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import Image from "next/image";
@@ -7,14 +9,13 @@ interface NewsCard {
   title: string; // 뉴스제목
   image: string; // 뉴스이미지
   createdAt: string; // 뉴스작성일
-  onClick: () => void; // 클릭 이벤트
 }
 
 const newsCardVariants = cva("news-card", {
   variants: {
     variant: {
-      main: "flex flex-col space-y-4 min-w-[300px] max-w-[300px] max-tablet:min-w-[180px] max-tablet:max-w-[180px]",
-      sub: "flex flex-col max-tablet:items-center space-x-2 space-y-4 min-w-[300px] max-w-[300px] max-tablet:min-w-[365px]  max-tablet:flex-row",
+      main: "flex flex-col space-y-4 w-full max-w-[300px] max-tablet:max-w-[180px]",
+      sub: "flex flex-col max-tablet:items-center space-x-2 space-y-4 w-full max-w-[300px] max-tablet:max-w-[365px]  max-tablet:flex-row",
     },
   },
   defaultVariants: {

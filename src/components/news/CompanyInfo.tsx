@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { ChevronRight, Send, Plus } from "lucide-react";
@@ -10,7 +12,6 @@ interface CompanyInfo {
   logo: string; // 기업로고
   companyType: string; // 기업형태
   isSubscribed: boolean; // 소식 받는 여부
-  onClick: () => void; // 클릭 이벤트
 }
 
 const companyInfoVariants = cva("company-info", {
@@ -74,7 +75,6 @@ function CompanyInfo({ companyInfo, variant }: CompanyInfoProps) {
                 ? "max-tablet:max-w-[92px] max-tablet:h-[36px]"
                 : ""
             } ${variant === "sub" ? "max-tablet:min-w-[360px] max-tablet:min-h-[56px] !text-16-500" : ""} `}
-            onClick={companyInfo.onClick}
           >
             {companyInfo.isSubscribed ? "소식받기" : "소식 받는 중"}
             {companyInfo.isSubscribed ? (

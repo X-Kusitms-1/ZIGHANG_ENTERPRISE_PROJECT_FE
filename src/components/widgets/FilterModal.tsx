@@ -101,7 +101,7 @@ function FilterModal() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <FilterButton variant="filled" size="sm">
+        <FilterButton size="sm">
           <Funnel className="size-3" />
           필터
         </FilterButton>
