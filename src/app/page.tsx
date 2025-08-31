@@ -1,15 +1,12 @@
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
-import Header from "@/components/widgets/Header";
 import SearchInput from "@/components/widgets/SearchInput";
 import JobCategoryGrid from "@/components/widgets/JobCategoryGrid";
-import Footer from "@/components/widgets/Footer";
 import Banner from "@/components/widgets/Banner";
 
 export default function Home() {
   return (
-    <main className="tablet:px-6 flex flex-col items-center justify-center px-4">
-      <Header />
+    <>
       <div className="my-6 flex w-full flex-col items-center">
         <div className="tablet:flex-row tablet:text-[22px] flex flex-col items-center gap-1 text-[18px] font-bold">
           <span>대기업 및 유니콘 채용 공고를</span>
@@ -44,7 +41,6 @@ export default function Home() {
       </div>
       <JobCategoryGrid />
       <Banner />
-      <Footer />
-    </main>
+    </>
   );
 }

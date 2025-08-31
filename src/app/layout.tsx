@@ -1,4 +1,6 @@
 import localFont from "next/font/local";
+import Header from "@/components/widgets/Header";
+import Footer from "@/components/widgets/Footer";
 import type { Metadata } from "next";
 import "./globals.css";
 
@@ -21,7 +23,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className={`${pretendard.variable} antialiased`}>{children}</body>
+      <body className={`${pretendard.variable} antialiased`}>
+        <main className="tablet:px-6 flex flex-col items-center justify-center px-4">
+          <Header />
+          {children}
+          <Footer />
+        </main>
+      </body>
     </html>
   );
 }
