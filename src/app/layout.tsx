@@ -27,8 +27,8 @@ export default function RootLayout({
         <main className="tablet:px-6 flex flex-col items-center justify-center px-4">
           <Header />
           {children}
-          <Footer />
         </main>
+        <Footer />
       </body>
     </html>
   );
