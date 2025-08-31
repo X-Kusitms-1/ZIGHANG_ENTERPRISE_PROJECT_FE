@@ -1,15 +1,32 @@
-"use client";
+import Image from "next/image";
 
 interface LoginSocialProps {
   social: string;
   imageSrc: string;
+  bgColor?: string;
+  borderColor?: string;
+  textColor?: string;
 }
 
-export default function LoginSocial({ social, imageSrc }: LoginSocialProps) {
+export default function LoginSocial({
+  social,
+  imageSrc,
+  bgColor,
+  borderColor,
+  textColor,
+}: LoginSocialProps) {
   return (
-    <div className="flex h-14 w-full cursor-pointer flex-row items-center justify-center rounded-lg border border-[#D5D7DA] bg-white hover:bg-zinc-100/60 active:bg-zinc-100">
-      <div className="mr-4 h-7 w-7">
-        <img
+    <div
+      className={
+        "flex h-12 w-100 cursor-pointer flex-row items-center justify-center rounded-lg hover:bg-zinc-100/60 active:bg-zinc-100"
+      }
+      style={{
+        backgroundColor: bgColor || undefined,
+        border: borderColor ? `1px solid ${borderColor}` : "1px solid #D5D7DA",
+      }}
+    >
+      <div className="mr-4 h-4 w-4">
+        <Image
           src={imageSrc}
           alt={`${social} logo`}
           loading="lazy"
@@ -19,8 +36,11 @@ export default function LoginSocial({ social, imageSrc }: LoginSocialProps) {
           className="rounded-[4px]"
         />
       </div>
-      <div className="text-[16px] font-medium text-[#414651]">
-        {social} 계정으로 계속하기
+      <div
+        className="text-[16px] font-medium"
+        style={textColor ? { color: textColor } : { color: "#414651" }}
+      >
+        {social}로 계속하기
       </div>
     </div>
   );
