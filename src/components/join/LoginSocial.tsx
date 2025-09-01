@@ -22,7 +22,7 @@ export default function LoginSocial({
       }
       style={{
         backgroundColor: bgColor || undefined,
-        border: borderColor ? `1px solid ${borderColor}` : "1px solid #D5D7DA",
+        border: borderColor ? `1px solid ${borderColor}` : "",
       }}
     >
       <div className="mr-4 h-4 w-4">
