@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import Image from "next/image";
-import LoginModal from "@/components/join/LoginModal";
+import LoginOnBoarding from "@/components/join/LoginOnBoarding";
 import NavMenu from "./NavMenu";
 import MenuSidebar from "./MenuSidebar";
 
@@ -40,7 +40,7 @@ const Header = () => {
         </button>
         <MenuSidebar />
       </div>
-      <LoginModal open={open} onOpenChange={setOpen} />
+      <LoginOnBoarding open={open} onOpenChange={setOpen} />
     </header>
   );
 };
