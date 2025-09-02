@@ -5,22 +5,29 @@ import CareerStep from "./CareerStep";
 import JobFieldStep from "./JobFieldStep";
 import LocationStep from "./LocationStep";
 import CareerYear from "./CareerYear";
-
+type JobItem = {
+  jobFamily: string;
+  role: string;
+};
 export default function OnBoardingModal({
   open,
   onOpenChange,
 }: {
   open: boolean;
-  onOpenChange: (open: boolean) => void;
+  onOpenChange: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const [currentStep, setCurrentStep] = useState(0);
   // career: -2(선택안함) -1(경력 선택 시) 0(신입) 또는 n(경력 n년)
   const [career, setCareer] = useState<number>(-2);
   // 경력 연수 범위 상태 추가
   const [careerYear, setCareerYear] = useState<{ min: number; max: number }>({
-    min: -1,
-    max: -1,
+    min: 0,
+    max: 1,
   });
+  // 원하는 직무 분야
+  const [jobList, setJobList] = useState<JobItem[]>([]);
+  // 결정못했을때
+  const [isUndecided, setIsUndecided] = useState(false);
 
   // 모달이 닫힐 때 상태 초기화
   useEffect(() => {
@@ -32,7 +39,7 @@ export default function OnBoardingModal({
 
   const steps = [
     {
-      title: `${name}님, 경력이신가요?`,
+      title: "소현님, 경력이신가요?",
       subtitle: "당신의 경력을 알려주세요",
       content: (
         <CareerStep
@@ -58,7 +65,14 @@ export default function OnBoardingModal({
       title: "희망 직군/직무를 선택해주세요!",
       subtitle:
         "복수 선택할 수 있어요. 선택 내용은 마이페이지에서 언제든지 수정 가능해요.",
-      content: <JobFieldStep />,
+      content: (
+        <JobFieldStep
+          jobList={jobList}
+          setJobList={setJobList}
+          isUndecided={isUndecided}
+          setIsUndecided={setIsUndecided}
+        />
+      ),
     },
     {
       title: "희망 근무 지역을 선택해주세요!",
@@ -67,20 +81,6 @@ export default function OnBoardingModal({
       content: <LocationStep />,
     },
   ];
-
-  const handleNext = () => {
-    if (currentStep < steps.length - 1) {
-      setCurrentStep(currentStep + 1);
-    } else {
-      onOpenChange(false);
-    }
-  };
-
-  const handlePrev = () => {
-    if (currentStep > 0) {
-      setCurrentStep(currentStep - 1);
-    }
-  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
