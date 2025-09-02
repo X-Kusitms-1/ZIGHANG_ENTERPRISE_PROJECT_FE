@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "../ui/Button";
 import RangeSlider from "./RangeSlider";
 
 type CareerYearProps = {
   value: { min: number; max: number };
-  onSelect: (value: { min: number; max: number }) => void;
+  onSelect: React.Dispatch<React.SetStateAction<{ min: number; max: number }>>;
   setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
 };
 
@@ -15,13 +15,15 @@ export default function CareerYear({
 }: CareerYearProps) {
   const [minValue, setMinValue] = useState(value.min >= 0 ? value.min : 0);
   const [maxValue, setMaxValue] = useState(value.max >= 0 ? value.max : 1);
-
-  // 컴포넌트 마운트 시 기본값 설정
-  useState(() => {
-    if (value.min === -1 && value.max === -1) {
-      onSelect({ min: 0, max: 1 });
+  useEffect(() => {
+}, []);
+  // minValue, maxValue 변경 시 onSelect 호출
+  useEffect(() => {
+    if (process.env.NODE_ENV === "development") {
+      console.log("변경되는 최소연수, 최대년수", minValue, maxValue);
     }
-  });
+    onSelect({ min: minValue, max: maxValue });
+  }, [minValue, maxValue, onSelect]);
 
   const handleNext = () => {
     if (value.min === -1 || value.max === -1) {
@@ -47,24 +49,6 @@ export default function CareerYear({
     return `${minText} ~ ${maxText}`;
   };
 
-  const handleMinChange = (newMin: number) => {
-    // 최소값은 최대값-1을 넘을 수 없음
-    const maxAllowed = maxValue - 1;
-    if (newMin <= maxAllowed) {
-      setMinValue(newMin);
-      onSelect({ min: newMin, max: maxValue });
-    }
-  };
-
-  const handleMaxChange = (newMax: number) => {
-    // 최대값은 최소값+1보다 작을 수 없음
-    const minAllowed = minValue + 1;
-    if (newMax >= minAllowed) {
-      setMaxValue(newMax);
-      onSelect({ min: minValue, max: newMax });
-    }
-  };
-
   // 슬라이더 클릭 방지 함수
   const preventClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -81,8 +65,8 @@ export default function CareerYear({
           <RangeSlider
             minValue={minValue}
             maxValue={maxValue}
-            onMinChange={handleMinChange}
-            onMaxChange={handleMaxChange}
+            onMinChange={setMinValue}
+            onMaxChange={setMaxValue}
             getYearText={getYearText}
             preventClick={preventClick}
           />
