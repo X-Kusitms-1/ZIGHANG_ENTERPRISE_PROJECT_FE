@@ -3,10 +3,10 @@ import React, { useRef, useLayoutEffect, useState } from "react";
 interface RangeSliderProps {
   minValue: number;
   maxValue: number;
-  onMinChange: (_value: number) => void;
-  onMaxChange: (_value: number) => void;
-  getYearText: (_year: number) => string;
-  preventClick: (_e: React.MouseEvent) => void;
+  onMinChange: React.Dispatch<React.SetStateAction<number>>;
+  onMaxChange: React.Dispatch<React.SetStateAction<number>>;
+  getYearText: (_value:number) => string;
+  preventClick: (_e:React.MouseEvent) => void;
 }
 
 const RangeSlider: React.FC<RangeSliderProps> = ({
@@ -30,6 +30,22 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
       setMaxTextWidth(maxTextRef.current.offsetWidth);
     }
   }, [minValue, maxValue, getYearText]);
+
+  const handleMinChange = (newMin: number) => {
+    // 최소값은 최대값-1을 넘을 수 없음
+    const maxAllowed = maxValue - 1;
+    if (newMin <= maxAllowed) {
+      onMinChange(newMin);
+    }
+  };
+
+  const handleMaxChange = (newMax: number) => {
+    // 최대값은 최소값+1보다 작을 수 없음
+    const minAllowed = minValue + 1;
+    if (newMax >= minAllowed) {
+      onMaxChange(newMax);
+    }
+  };
 
   return (
     <div className="relative w-[440px]" style={{ padding: "0 10px" }}>
@@ -59,7 +75,7 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
         min="0"
         max="10"
         value={minValue}
-        onChange={(e) => onMinChange(Number(e.target.value))}
+        onChange={(e) => handleMinChange(Number(e.target.value))}
         onClick={preventClick}
         className="slider-min absolute top-0 h-2 w-full cursor-pointer appearance-none bg-transparent"
         style={{
@@ -89,7 +105,7 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
         min="0"
         max="10"
         value={maxValue}
-        onChange={(e) => onMaxChange(Number(e.target.value))}
+        onChange={(e) => handleMaxChange(Number(e.target.value))}
         onClick={preventClick}
         className="slider-max absolute top-0 h-2 w-full cursor-pointer appearance-none bg-transparent"
         style={{
