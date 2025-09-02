@@ -1,7 +1,6 @@
 import Image from "next/image";
-import { Button } from "../ui/Button";
 import { ReactNode } from "react";
-import { useState } from "react";
+import { Button } from "../ui/Button";
 type OnboardingBoxProps = {
   children?: ReactNode;
   selected?: boolean;
@@ -9,7 +8,7 @@ type OnboardingBoxProps = {
 };
 type CareerStepProps = {
   value: number; // -1: 초기값, 0: 신입, 1~n: 경력
-  onSelect: (value: number) => void;
+  onSelect:  React.Dispatch<React.SetStateAction<number>>;
   setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
 };
 function OnboardingBox({
