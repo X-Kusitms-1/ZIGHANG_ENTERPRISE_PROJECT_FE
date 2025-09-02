@@ -16,7 +16,7 @@ class ApiGenerator {
   constructor() {
     this.swaggerUrl =
       process.env.NEXT_PUBLIC_SWAGGER_URL ||
-      "https://stg.next-career.co.kr/v3/api-docs";
+      "https://stg.ilhaeng.cloud/v3/api-docs";
     this.outputDir = path.join(projectRoot, "src/api/generated");
     this.configFile = path.join(projectRoot, "openapi-generator-config.json");
     this.tempSwaggerFile = path.join(projectRoot, "temp-swagger.json");

@@ -16,10 +16,10 @@
 import type { SortObject } from "./sort-object";
 
 export interface PageableObject {
-    "unpaged"?: boolean;
     "pageNumber"?: number;
     "pageSize"?: number;
     "paged"?: boolean;
+    "unpaged"?: boolean;
     "offset"?: number;
     "sort"?: Array<SortObject>;
 }
