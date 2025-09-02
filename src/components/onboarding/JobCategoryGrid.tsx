@@ -1,38 +1,38 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState } from "react";
+import { Scrollbar } from "react-scrollbars-custom";
 import { JOB_CATEGORIES } from "@/constants/JobKind";
 
-interface JobRole {
-  name: string;
-}
-
-interface JobCategory {
-  name: string;
-  roles: JobRole[];
-}
+type JobItem = {
+  jobFamily: string;
+  role: string;
+};
 
 interface JobCategoryGridProps {
-  onSelectionChange?: (
-    selectedCategories: string[],
-    selectedRoles: string[],
-    isUndecided: boolean
-  ) => void;
+  jobList: JobItem[];
+  setJobList: React.Dispatch<React.SetStateAction<JobItem[]>>;
+  isUndecided: boolean;
+  setIsUndecided: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function JobCategoryGrid({
-  onSelectionChange,
-}: JobCategoryGridProps) {
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [selectedRoles, setSelectedRoles] = useState<Set<string>>(new Set());
-  const [isUndecided, setIsUndecided] = useState(false);
+export default function JobCategoryGrid(props: JobCategoryGridProps) {
+  const { jobList, setJobList, isUndecided, setIsUndecided } = props;
+
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(
+    jobList.length > 0 ? jobList[0].jobFamily : null
+  );
+  const [selectedRoles, setSelectedRoles] = useState<Set<string>>(
+    new Set(jobList.map((item) => item.role))
+  );
 
   // 환경변수 대신 상수에서 직무직군 데이터 가져오기
   const jobCategoriesData = JOB_CATEGORIES;
 
   const handleCategoryClick = (categoryName: string) => {
     setSelectedCategory(categoryName);
-    setSelectedRoles(new Set()); // Clear role selections when changing category
+    setSelectedRoles(new Set());
+    setJobList([]);
   };
 
   const handleRoleClick = (roleName: string) => {
@@ -43,27 +43,18 @@ export default function JobCategoryGrid({
       newSelectedRoles.add(roleName);
     }
     setSelectedRoles(newSelectedRoles);
-
-    if (onSelectionChange) {
-      onSelectionChange(
-        selectedCategory ? [selectedCategory] : [],
-        Array.from(newSelectedRoles),
-        isUndecided
-      );
+    if (selectedCategory) {
+      const newJobList = Array.from(newSelectedRoles).map((role) => ({
+        jobFamily: selectedCategory,
+        role,
+      }));
+      setJobList(newJobList);
     }
   };
 
   const handleUndecidedChange = () => {
     const newUndecided = !isUndecided;
     setIsUndecided(newUndecided);
-
-    if (onSelectionChange) {
-      onSelectionChange(
-        selectedCategory ? [selectedCategory] : [],
-        Array.from(selectedRoles),
-        newUndecided
-      );
-    }
   };
 
   const selectedCategoryData = selectedCategory
@@ -71,62 +62,63 @@ export default function JobCategoryGrid({
     : null;
 
   return (
-    <div className="flex flex-col gap-3 pt-6">
+    <div className="flex flex-col gap-3 pt-8">
       {/* 전체 레이아웃 컨테이너 */}
       <div className="flex">
         {/* 카테고리(직군) 영역 */}
-        <div className="flex h-[480px] w-[200px] p-2">
-          <div
-            className="flex w-[172px] flex-col gap-2 overflow-y-auto"
-            style={{
-              scrollbarWidth: "thin",
-              // 배경색 제거, thumb만 지정
-              scrollbarColor: "#E0E5F0 transparent",
-            }}
-          >
-            {/* Tailwind 기반 커스텀 스크롤바 (웹킷) */}
-            <style>{`
-              .job-category-scroll::-webkit-scrollbar {
-                width: 4px;
-                background: transparent;
-                border-radius: 6px;
-              }
-              .job-category-scroll::-webkit-scrollbar-thumb {
-                background: #;
-                min-height: 76px;
-                border-radius: 6px;
-              }
-              .job-category-scroll::-webkit-scrollbar-button {
-                display: none;
-                height: 0;
-                width: 0;
-              }
-            `}</style>
-            <div className="job-category-scroll">
-              {jobCategoriesData.map((category) => (
-                <button
-                  key={category.name}
-                  onClick={() => handleCategoryClick(category.name)}
-                  className={`flex h-[40px] w-[172px] items-center px-5 py-2 text-left transition-colors ${
-                    selectedCategory === category.name
-                      ? "bg-bg-info text-text-info text-16-500 rounded-lg"
-                      : "text-text-tertiary text-16-600 hover:bg-bg-base-hovered"
-                  }`}
-                  style={{
-                    fontFamily: "var(--Font-font-family-primary)",
-                    fontSize: "var(--Font-Size-Body-Body-M)",
-                    fontWeight: "var(--Font-weight-500)",
-                    lineHeight: "var(--Font-Line-height-Body-Body-M)",
-                    letterSpacing: "var(--Font-letter-spacing-0)",
-                  }}
-                >
-                  {category.name}
-                </button>
-              ))}
-            </div>
+        <div className="flex h-[340px] w-[200px] p-2">
+          <div className="flex w-[172px] flex-col gap-2">
+            <Scrollbar
+              style={{ width: "192px", height: "100%" }}
+              thumbXProps={{
+                style: {
+                  display: "none",
+                },
+              }}
+              thumbYProps={{
+                style: {
+                  height: "76px",
+                  background: "#E0E5F0",
+                  width: "4px",
+                  borderRadius: "9999px",
+                  margin: "0 auto",
+                  minHeight: "76px",
+                  top: "0",
+                },
+              }}
+              trackYProps={{
+                style: {
+                  background: "transparent",
+                  width: "20px",
+                  right: "-20px",
+                  top: "0",
+                  paddingTop: "0",
+                },
+              }}
+              trackXProps={{
+                style: {
+                  display: "none",
+                },
+              }}
+            >
+              <div className="flex w-[172px] flex-col gap-2">
+                {jobCategoriesData.map((category) => (
+                  <button
+                    key={category.name}
+                    onClick={() => handleCategoryClick(category.name)}
+                    className={`flex h-[40px]  items-center px-5 py-2 text-left transition-colors ${
+                      selectedCategory === category.name
+                        ? "bg-bg-info text-text-info text-16-500 rounded-lg"
+                        : "text-text-tertiary text-16-600 hover:bg-bg-base-hovered"
+                    }`}
+                  >
+                    {category.name}
+                  </button>
+                ))}
+              </div>
+            </Scrollbar>
           </div>
           {/* 카테고리 오른쪽 구분선 */}
-          <div className="ml-2 h-[76px] w-1 flex-shrink-0 rounded-full bg-[var(--Color-border-tertiary)]" />
         </div>
 
         {/* 역할(직무) 영역 */}
@@ -141,13 +133,6 @@ export default function JobCategoryGrid({
                       (role) => role.name
                     );
                     setSelectedRoles(new Set(allRoleNames));
-                    if (onSelectionChange) {
-                      onSelectionChange(
-                        [selectedCategory!],
-                        allRoleNames,
-                        isUndecided
-                      );
-                    }
                   }}
                   className="text-16-500 flex items-center rounded-lg p-2 pr-4 pl-5 text-left text-[var(--Color-text-disabled)] hover:bg-[var(--Color-bg-neutral-focused)]"
                   style={{
