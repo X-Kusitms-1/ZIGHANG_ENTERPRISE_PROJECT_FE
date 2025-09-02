@@ -6,15 +6,11 @@ interface LoginSocialProps {
   bgColor?: string;
   borderColor?: string;
   textColor?: string;
+  onClick?: () => void;
 }
 
-export default function LoginSocial({
-  social,
-  imageSrc,
-  bgColor,
-  borderColor,
-  textColor,
-}: LoginSocialProps) {
+export default function LoginSocial(props: LoginSocialProps) {
+  const { social, imageSrc, bgColor, borderColor, textColor, onClick } = props;
   return (
     <div
       className={
@@ -24,6 +20,7 @@ export default function LoginSocial({
         backgroundColor: bgColor || undefined,
         border: borderColor ? `1px solid ${borderColor}` : "",
       }}
+      onClick={onClick}
     >
       <div className="mr-4 h-4 w-4">
         <Image

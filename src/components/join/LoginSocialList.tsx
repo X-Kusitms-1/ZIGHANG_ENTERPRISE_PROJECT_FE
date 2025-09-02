@@ -1,7 +1,13 @@
 "use client";
 import LoginSocial from "./LoginSocial";
 
-export default function LoginSocialList() {
+interface LoginSocialListProps {
+  onSocialLogin?: () => void;
+}
+
+export default function LoginSocialList({
+  onSocialLogin,
+}: LoginSocialListProps) {
   const socials = [
     {
       social: "카카오",
@@ -34,6 +40,7 @@ export default function LoginSocialList() {
           bgColor={bgColor}
           borderColor={borderColor}
           textColor={textColor}
+          onClick={onSocialLogin}
         />
       ))}
     </div>
