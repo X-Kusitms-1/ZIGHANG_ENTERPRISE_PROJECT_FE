@@ -1,10 +1,10 @@
 import { useState } from "react";
-import LoginModal from "./LoginModal";
 import OnBoardingModal from "../onboarding/OnBoardingModal";
+import LoginModal from "./LoginModal";
 
 interface LoginOnBoardingProps {
   open: boolean;
-  onOpenChange: (open: boolean) => void;
+  onOpenChange: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function LoginOnBoarding({ open, onOpenChange }: LoginOnBoardingProps) {

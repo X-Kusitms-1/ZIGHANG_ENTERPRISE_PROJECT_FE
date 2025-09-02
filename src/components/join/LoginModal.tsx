@@ -6,7 +6,7 @@ import LoginSocialList from "./LoginSocialList";
 import LoginFooter from "./LoginFooter";
 interface LoginModalProps {
   open: boolean;
-  onOpenChange: (open: boolean) => void;
+  onOpenChange: React.Dispatch<React.SetStateAction<boolean>>;
   handleSocialLogin?: () => void;
 }
 
