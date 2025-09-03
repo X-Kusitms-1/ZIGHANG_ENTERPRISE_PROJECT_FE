@@ -1,7 +1,8 @@
 "use client";
-
 import { useState } from "react";
+import Image from "next/image";
 import { Scrollbar } from "react-scrollbars-custom";
+import { Checkbox } from "@/components/ui/checkbox";
 import { JOB_CATEGORIES } from "@/constants/JobKind";
 
 type JobItem = {
@@ -19,37 +20,48 @@ interface JobCategoryGridProps {
 export default function JobCategoryGrid(props: JobCategoryGridProps) {
   const { jobList, setJobList, isUndecided, setIsUndecided } = props;
 
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(
-    jobList.length > 0 ? jobList[0].jobFamily : null
-  );
-  const [selectedRoles, setSelectedRoles] = useState<Set<string>>(
-    new Set(jobList.map((item) => item.role))
-  );
-
-  // 환경변수 대신 상수에서 직무직군 데이터 가져오기
   const jobCategoriesData = JOB_CATEGORIES;
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(
+    jobCategoriesData.length > 0 ? jobCategoriesData[0].name : null
+  );
+  // 직군별 선택된 직무를 저장하는 객체
+  const [selectedRoles, setSelectedRoles] = useState<{
+    [jobFamily: string]: Set<string>;
+  }>(
+    jobList.length > 0
+      ? jobList.reduce(
+          (acc, item) => {
+            if (!acc[item.jobFamily]) acc[item.jobFamily] = new Set();
+            acc[item.jobFamily].add(item.role);
+            return acc;
+          },
+          {} as { [jobFamily: string]: Set<string> }
+        )
+      : {}
+  );
 
   const handleCategoryClick = (categoryName: string) => {
     setSelectedCategory(categoryName);
-    setSelectedRoles(new Set());
-    setJobList([]);
+    // 직군 변경 시 selectedRoles는 그대로 유지
   };
 
   const handleRoleClick = (roleName: string) => {
-    const newSelectedRoles = new Set(selectedRoles);
-    if (newSelectedRoles.has(roleName)) {
-      newSelectedRoles.delete(roleName);
+    if (!selectedCategory) return;
+    const prev = selectedRoles[selectedCategory] || new Set();
+    const newSet = new Set(prev);
+    if (newSet.has(roleName)) {
+      newSet.delete(roleName);
     } else {
-      newSelectedRoles.add(roleName);
+      newSet.add(roleName);
     }
+    const newSelectedRoles = { ...selectedRoles, [selectedCategory]: newSet };
     setSelectedRoles(newSelectedRoles);
-    if (selectedCategory) {
-      const newJobList = Array.from(newSelectedRoles).map((role) => ({
-        jobFamily: selectedCategory,
-        role,
-      }));
-      setJobList(newJobList);
-    }
+    // 모든 직군의 선택값을 industryList에 반영
+    const allSelected = Object.entries(newSelectedRoles).flatMap(
+      ([jobFamily, roles]) =>
+        Array.from(roles).map((role) => ({ jobFamily, role }))
+    );
+    setJobList(allSelected);
   };
 
   const handleUndecidedChange = () => {
@@ -57,14 +69,14 @@ export default function JobCategoryGrid(props: JobCategoryGridProps) {
     setIsUndecided(newUndecided);
   };
 
-  const selectedCategoryData = selectedCategory
-    ? jobCategoriesData.find((cat) => cat.name === selectedCategory)
-    : null;
+  const selectedCategoryData = jobCategoriesData.find(
+    (cat) => cat.name === selectedCategory
+  );
 
   return (
     <div className="flex flex-col gap-3 pt-8">
       {/* 전체 레이아웃 컨테이너 */}
-      <div className="flex">
+      <div className="border-t-border-line border-b-border-line flex border-t border-b">
         {/* 카테고리(직군) 영역 */}
         <div className="flex h-[340px] w-[200px] p-2">
           <div className="flex w-[172px] flex-col gap-2">
@@ -90,8 +102,9 @@ export default function JobCategoryGrid(props: JobCategoryGridProps) {
                 style: {
                   background: "transparent",
                   width: "20px",
-                  right: "-20px",
+                  right: "0px",
                   top: "0",
+                  height: "324px",
                   paddingTop: "0",
                 },
               }}
@@ -102,122 +115,132 @@ export default function JobCategoryGrid(props: JobCategoryGridProps) {
               }}
             >
               <div className="flex w-[172px] flex-col gap-2">
-                {jobCategoriesData.map((category) => (
-                  <button
-                    key={category.name}
-                    onClick={() => handleCategoryClick(category.name)}
-                    className={`flex h-[40px]  items-center px-5 py-2 text-left transition-colors ${
-                      selectedCategory === category.name
-                        ? "bg-bg-info text-text-info text-16-500 rounded-lg"
-                        : "text-text-tertiary text-16-600 hover:bg-bg-base-hovered"
-                    }`}
-                  >
-                    {category.name}
-                  </button>
-                ))}
+                {jobCategoriesData.map((category) => {
+                  const selectedCount = selectedRoles[category.name]?.size || 0;
+                  const isSelectedCategory = selectedCategory === category.name;
+                  const hasSelectedRoles = selectedCount > 0;
+                  return (
+                    <button
+                      key={category.name}
+                      onClick={() => handleCategoryClick(category.name)}
+                      className={`flex h-[40px] items-center justify-between rounded-lg py-2 pr-4 pl-5 text-left transition-colors ${
+                        isSelectedCategory
+                          ? "bg-bg-info text-text-info text-16-600"
+                          : hasSelectedRoles
+                            ? "text-text-primary text-16-600"
+                            : "text-text-tertiary text-16-500 hover:bg-bg-base-hovered"
+                      }`}
+                      disabled={isUndecided}
+                    >
+                      <span>{category.name}</span>
+                      {hasSelectedRoles && (
+                        <span className="text-16-500 text-text-info">
+                          {selectedCount}
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
               </div>
             </Scrollbar>
           </div>
-          {/* 카테고리 오른쪽 구분선 */}
         </div>
 
         {/* 역할(직무) 영역 */}
-        <div className="flex h-[480px] flex-1 p-2">
-          <div className="flex flex-1 flex-col gap-2 overflow-y-auto">
-            {selectedCategoryData ? (
-              <>
-                <button
-                  onClick={() => {
-                    // Select all roles in category
-                    const allRoleNames = selectedCategoryData.roles.map(
-                      (role) => role.name
-                    );
-                    setSelectedRoles(new Set(allRoleNames));
-                  }}
-                  className="text-16-500 flex items-center rounded-lg p-2 pr-4 pl-5 text-left text-[var(--Color-text-disabled)] hover:bg-[var(--Color-bg-neutral-focused)]"
-                  style={{
-                    fontFamily: "var(--Font-font-family-primary)",
-                    fontSize: "var(--Font-Size-Body-Body-M)",
-                    fontWeight: "var(--Font-weight-500)",
-                    lineHeight: "var(--Font-Line-height-Body-Body-M)",
-                    letterSpacing: "var(--Font-letter-spacing-0)",
-                  }}
-                >
-                  전체
-                </button>
-                {selectedCategoryData.roles.map((role) => (
-                  <button
-                    key={role.name}
-                    onClick={() => handleRoleClick(role.name)}
-                    className={`flex items-center rounded-lg p-2 pr-4 pl-5 text-left transition-colors ${
-                      selectedRoles.has(role.name)
-                        ? "bg-[var(--Color-bg-info)] text-[var(--Color-text-info)]"
-                        : "text-[var(--Color-text-disabled)] hover:bg-[var(--Color-bg-neutral-focused)]"
-                    } text-16-500`}
-                    style={{
-                      fontFamily: "var(--Font-font-family-primary)",
-                      fontSize: "var(--Font-Size-Body-Body-M)",
-                      fontWeight: "var(--Font-weight-500)",
-                      lineHeight: "var(--Font-Line-height-Body-Body-M)",
-                      letterSpacing: "var(--Font-letter-spacing-0)",
-                    }}
-                  >
-                    {role.name}
-                  </button>
-                ))}
-              </>
-            ) : (
-              <div className="text-16-500 p-4 text-center text-[var(--Color-text-disabled)]">
-                직군을 선택해주세요
+        <div className="border-l-border-line flex h-[340px] flex-1 border-l p-2">
+          <div className="flex flex-col gap-2" style={{ width: "272px" }}>
+            <Scrollbar
+              style={{ width: "292px", height: "100%" }}
+              thumbXProps={{
+                style: {
+                  display: "none",
+                },
+              }}
+              thumbYProps={{
+                style: {
+                  height: "76px",
+                  background: "#E0E5F0",
+                  width: "4px",
+                  borderRadius: "9999px",
+                  margin: "0 auto",
+                  minHeight: "76px",
+                  top: "0",
+                },
+              }}
+              trackYProps={{
+                style: {
+                  background: "transparent",
+                  width: "20px",
+                  right: "0px",
+                  top: "0",
+                  height: "324px",
+                  paddingTop: "0",
+                },
+              }}
+              trackXProps={{
+                style: {
+                  display: "none",
+                },
+              }}
+            >
+              <div className="flex w-[272px] flex-col gap-2">
+                {selectedCategoryData && (
+                  <>
+                    {selectedCategoryData.roles.map((role) => {
+                      const isSelected =
+                        selectedCategory !== null &&
+                        selectedRoles[selectedCategory]?.has(role.name);
+                      return (
+                        <button
+                          key={role.name}
+                          onClick={() => handleRoleClick(role.name)}
+                          className={`flex h-10 items-center gap-2 rounded-lg py-2 pr-4 pl-5 text-left transition-colors ${
+                            isSelected
+                              ? "bg-bg-info text-text-info text-16-600"
+                              : "text-text-tertiary hover:bg-bg-base-hovered text-16-500"
+                          } `}
+                          disabled={isUndecided}
+                        >
+                          <span>{role.name}</span>
+                          {isSelected && (
+                            <Image
+                              src="/onboarding/check.svg"
+                              alt="선택됨"
+                              width={20}
+                              height={20}
+                            />
+                          )}
+                        </button>
+                      );
+                    })}
+                  </>
+                )}
               </div>
-            )}
+            </Scrollbar>
           </div>
           {/* 역할 오른쪽 구분선 */}
-          <div className="ml-2 h-[76px] w-1 flex-shrink-0 rounded-full bg-[var(--Color-border-tertiary)]" />
         </div>
       </div>
 
-      {/* 미정(아직 선택하지 않음) 옵션 영역 */}
-      <div className="flex w-[500px] items-center gap-1 rounded-lg p-2">
-        <button
-          onClick={handleUndecidedChange}
-          className="flex h-5 w-5 items-center justify-center rounded-[var(--border-radius-md)] p-[3px]"
-        >
-          <div
-            className={`flex items-center justify-center rounded-[var(--border-radius-md)] ${
-              isUndecided
-                ? "bg-[var(--Color-bg-primary)]"
-                : "bg-[var(--Color-border-tertiary)]"
-            }`}
-          >
-            {isUndecided && (
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 17 16"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-4 w-4"
-              >
-                <path
-                  d="M13.6895 4.93945L6.86654 11.7624L3.31055 8.20638L4.02279 7.49349L6.86654 10.3372L12.9772 4.22656L13.6895 4.93945Z"
-                  fill="white"
-                />
-              </svg>
-            )}
-          </div>
-        </button>
-        <span
-          className="text-14-600 text-[var(--Color-text-primary)]"
-          style={{
-            fontFamily: "var(--Font-font-family-primary)",
-            fontSize: "var(--Font-Size-Body-Body-S)",
-            fontWeight: "var(--Font-weight-600)",
-            lineHeight: "var(--Font-Line-height-Body-Body-S)",
-          }}
+      {/* 미정(아직 선택하지 않음) 옵션 영역 - shadcn Checkbox 사용 */}
+      <div className="flex items-center gap-1 py-2">
+        <Checkbox
+          checked={isUndecided}
+          onCheckedChange={handleUndecidedChange}
+          className="border-border-inverse h-[16px] w-[16px] rounded-[4px] border"
+          id="undecided-checkbox"
+          bgColor="primary"
+        />
+        <label
+          htmlFor="undecided-checkbox"
+          className={`text-14 cursor-pointer ${
+            isUndecided
+              ? "text-text-primary text-14-600"
+              : "text-text-tertiary text-14-500"
+          }`}
         >
           직군/직무를 아직 정하지 못했어요.
-        </span>
+        </label>
       </div>
     </div>
   );
