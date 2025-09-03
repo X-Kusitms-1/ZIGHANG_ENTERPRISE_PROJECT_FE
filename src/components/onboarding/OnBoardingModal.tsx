@@ -9,6 +9,10 @@ type JobItem = {
   jobFamily: string;
   role: string;
 };
+type LocationItem = {
+  city: string;
+  district: string;
+};
 export default function OnBoardingModal({
   open,
   onOpenChange,
@@ -28,14 +32,31 @@ export default function OnBoardingModal({
   const [jobList, setJobList] = useState<JobItem[]>([]);
   // 결정못했을때
   const [isUndecided, setIsUndecided] = useState(false);
+  // 원하는 근무 지역
+  const [locationList, setLocationList] = useState<LocationItem[]>([]);
+  // 결정못했을때
+  const [isLocationUndecided, setIsLocationUndecided] = useState(false);
 
   // 모달이 닫힐 때 상태 초기화
   useEffect(() => {
     if (!open) {
       setCurrentStep(0);
       setCareer(-2);
+      setCareerYear({ min: 0, max: 1 });
+      setJobList([]);
+      setIsUndecided(false);
+      setLocationList([]);
+      setIsLocationUndecided(false);
     }
   }, [open]);
+
+  // career 값이 변경될 때 careerYear 초기화
+  useEffect(() => {
+    if (career === 0 || career === -2) {
+      // 신입이거나 선택안함으로 변경시 careerYear 초기화
+      setCareerYear({ min: 0, max: 1 });
+    }
+  }, [career]);
 
   const steps = [
     {
@@ -71,6 +92,8 @@ export default function OnBoardingModal({
           setJobList={setJobList}
           isUndecided={isUndecided}
           setIsUndecided={setIsUndecided}
+          career={career}
+          setCurrentStep={setCurrentStep}
         />
       ),
     },
@@ -78,7 +101,15 @@ export default function OnBoardingModal({
       title: "희망 근무 지역을 선택해주세요!",
       subtitle:
         "복수 선택할 수 있어요. 선택 내용은 마이페이지에서 언제든지 수정 가능해요.",
-      content: <LocationStep />,
+      content: (
+        <LocationStep
+          locationList={locationList}
+          setLocationList={setLocationList}
+          isUndecided={isLocationUndecided}
+          setIsUndecided={setIsLocationUndecided}
+          setCurrentStep={setCurrentStep}
+        />
+      ),
     },
   ];
 
