@@ -1,35 +1,60 @@
-export default function LocationStep() {
+import { Button } from "../ui/Button";
+import LocationGrid from "./LocationGrid";
+
+type LocationItem = {
+  city: string;
+  district: string;
+};
+
+interface LocationStepProps {
+  locationList: LocationItem[];
+  setLocationList: React.Dispatch<React.SetStateAction<LocationItem[]>>;
+  isUndecided: boolean;
+  setIsUndecided: React.Dispatch<React.SetStateAction<boolean>>;
+  setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
+}
+
+export default function LocationStep({
+  locationList,
+  setLocationList,
+  isUndecided,
+  setIsUndecided,
+  setCurrentStep,
+}: LocationStepProps) {
+  const handlePrevious = () => {
+    setCurrentStep((prev) => prev - 1); // 이전 단계로
+  };
+
+  const handleNext = () => {
+    // 온보딩 완료 또는 다음 단계로
+    console.log("온보딩 완료!");
+  };
+
   return (
-    <div className="flex w-full flex-col items-center">
-      <h3 className="mb-6 text-lg">희망 근무지역을 선택해주세요</h3>
-      <div className="grid w-full max-w-2xl grid-cols-3 gap-4">
-        <button className="rounded-lg border border-gray-300 p-4 hover:bg-gray-50">
-          서울
-        </button>
-        <button className="rounded-lg border border-gray-300 p-4 hover:bg-gray-50">
-          경기
-        </button>
-        <button className="rounded-lg border border-gray-300 p-4 hover:bg-gray-50">
-          인천
-        </button>
-        <button className="rounded-lg border border-gray-300 p-4 hover:bg-gray-50">
-          부산
-        </button>
-        <button className="rounded-lg border border-gray-300 p-4 hover:bg-gray-50">
-          대구
-        </button>
-        <button className="rounded-lg border border-gray-300 p-4 hover:bg-gray-50">
-          대전
-        </button>
-        <button className="rounded-lg border border-gray-300 p-4 hover:bg-gray-50">
-          광주
-        </button>
-        <button className="rounded-lg border border-gray-300 p-4 hover:bg-gray-50">
-          울산
-        </button>
-        <button className="rounded-lg border border-gray-300 p-4 hover:bg-gray-50">
-          기타
-        </button>
+    <div className="flex h-full flex-col items-center gap-6">
+      <LocationGrid
+        locationList={locationList}
+        setLocationList={setLocationList}
+        isUndecided={isUndecided}
+        setIsUndecided={setIsUndecided}
+      />
+      <div className="flex gap-3">
+        <Button
+          variant="outlined"
+          size="lg"
+          className="h-[56px] w-[170.5px]"
+          onClick={handlePrevious}
+        >
+          이전으로
+        </Button>
+        <Button
+          variant="filled"
+          size="lg"
+          className="h-[56px] w-[170.5px]"
+          onClick={handleNext}
+        >
+          완료
+        </Button>
       </div>
     </div>
   );
