@@ -28,6 +28,8 @@ export async function getNewList({
       size,
       sort,
     },
+    cache: "force-cache",
+    revalidate: 60 * 24,
   });
 
   return response.data;
