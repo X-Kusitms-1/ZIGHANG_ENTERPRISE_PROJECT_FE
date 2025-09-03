@@ -5,8 +5,8 @@ interface RangeSliderProps {
   maxValue: number;
   onMinChange: React.Dispatch<React.SetStateAction<number>>;
   onMaxChange: React.Dispatch<React.SetStateAction<number>>;
-  getYearText: (_value:number) => string;
-  preventClick: (_e:React.MouseEvent) => void;
+  getYearText: (_value: number) => string;
+  preventClick: (_e: React.MouseEvent) => void;
 }
 
 const RangeSlider: React.FC<RangeSliderProps> = ({
@@ -48,17 +48,9 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
   };
 
   return (
-    <div className="relative w-[440px]" style={{ padding: "0 10px" }}>
+    <div className="relative w-[440px] px-[10px]">
       {/* 배경 트랙 */}
-      <div
-        className="bg-border-tertiary relative h-2 rounded-full"
-        style={{
-          position: "absolute",
-          left: "10px",
-          right: "10px",
-          width: "calc(100% - 20px)",
-        }}
-      >
+      <div className="bg-border-tertiary absolute right-[10px] left-[10px] h-2 w-[calc(100%-20px)] rounded-full">
         {/* 선택된 범위 표시 */}
         <div
           className="bg-border-primary absolute h-2 rounded-full"
@@ -77,23 +69,14 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
         value={minValue}
         onChange={(e) => handleMinChange(Number(e.target.value))}
         onClick={preventClick}
-        className="slider-min absolute top-0 h-2 w-full cursor-pointer appearance-none bg-transparent"
-        style={{
-          pointerEvents: "none",
-          left: 0,
-          right: 0,
-          width: "100%",
-        }}
+        className="slider-min pointer-events-none absolute top-0 right-0 left-0 h-2 w-full cursor-pointer appearance-none bg-transparent"
       />
       {/* 최소값 텍스트 */}
       <div
         ref={minTextRef}
-        className="text-16-500 text-text-tertiary absolute text-center"
+        className="text-16-500 text-text-tertiary pointer-events-none absolute top-6 text-center whitespace-pre"
         style={{
-          top: "24px",
           left: `calc(${10 + (minValue / 10) * (440 - 20)}px - ${minTextWidth / 2}px)`,
-          pointerEvents: "none",
-          whiteSpace: "pre",
         }}
       >
         {getYearText(minValue)}
@@ -107,23 +90,14 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
         value={maxValue}
         onChange={(e) => handleMaxChange(Number(e.target.value))}
         onClick={preventClick}
-        className="slider-max absolute top-0 h-2 w-full cursor-pointer appearance-none bg-transparent"
-        style={{
-          pointerEvents: "none",
-          left: 0,
-          right: 0,
-          width: "100%",
-        }}
+        className="slider-max pointer-events-none absolute top-0 right-0 left-0 h-2 w-full cursor-pointer appearance-none bg-transparent"
       />
       {/* 최대값 텍스트 */}
       <div
         ref={maxTextRef}
-        className="text-16-500 text-text-tertiary absolute text-center"
+        className="text-16-500 text-text-tertiary pointer-events-none absolute top-6 text-center whitespace-pre"
         style={{
-          top: "24px",
           left: `calc(${10 + (maxValue / 10) * (440 - 20)}px - ${maxTextWidth / 2}px)`,
-          pointerEvents: "none",
-          whiteSpace: "pre",
         }}
       >
         {getYearText(maxValue)}
