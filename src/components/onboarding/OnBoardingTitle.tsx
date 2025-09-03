@@ -28,10 +28,10 @@ export default function OnBoardingTitle({
   return (
     <div className="flex w-full flex-col items-center justify-center gap-2">
       <div className="text-28-600 text-text-secondary">
-        <span className="text-28-600 text-text-info mr-2">Q.</span>
+        <span className="text-28-600 text-text-info mr-2 leading-9">Q.</span>
         {title}
       </div>
-      <div className="text-14-500 text-text-tertiary mb-4">{subtitle}</div>
+      <div className="text-14-500 text-text-tertiary mb-4 leading-5">{subtitle}</div>
       <div className="w-full">
         <div className="h-1 w-full overflow-hidden bg-border-tertiary">
           <div
