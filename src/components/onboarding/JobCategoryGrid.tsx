@@ -54,11 +54,9 @@ export default function JobCategoryGrid(props: JobCategoryGridProps) {
       // "전체" 클릭 시
       if (prev.has("전체")) {
         // 이미 "전체"가 선택되어 있으면 해제
-        console.log(`❌ 전체 직무 선택 해제: ${selectedCategory}`);
       } else {
         // "전체" 선택 시 다른 모든 직무 해제하고 "전체"만 선택
         newSet.add("전체");
-        console.log(`✅ 전체 직무 선택: ${selectedCategory}`);
       }
     } else {
       // 개별 직무 클릭 시
@@ -67,14 +65,12 @@ export default function JobCategoryGrid(props: JobCategoryGridProps) {
         prev.forEach((role) => {
           if (role !== roleName) newSet.add(role);
         });
-        console.log(`❌ 직무 선택 해제: ${selectedCategory} - ${roleName}`);
       } else {
         // 새로운 직무 선택 시 "전체" 해제하고 기존 개별 직무들과 함께 선택
         prev.forEach((role) => {
           if (role !== "전체") newSet.add(role);
         });
         newSet.add(roleName);
-        console.log(`✅ 직무 선택: ${selectedCategory} - ${roleName}`);
       }
     }
 
@@ -86,7 +82,6 @@ export default function JobCategoryGrid(props: JobCategoryGridProps) {
         Array.from(roles).map((role) => ({ jobFamily, role }))
     );
     setJobList(allSelected);
-    console.log("📋 현재 선택된 직무 목록:", allSelected);
   };
 
   const handleUndecidedChange = () => {
@@ -96,7 +91,6 @@ export default function JobCategoryGrid(props: JobCategoryGridProps) {
       setSelectedRoles({});
       setJobList([]);
       setSelectedCategory(null);
-      console.log("🚫 모든 직군/직무 선택 초기화됨");
     }
   };
 

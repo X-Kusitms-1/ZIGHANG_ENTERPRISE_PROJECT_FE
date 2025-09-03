@@ -49,11 +49,9 @@ export default function LocationGrid(props: LocationGridProps) {
       // "전체" 클릭 시
       if (prev.has("전체")) {
         // 이미 "전체"가 선택되어 있으면 해제
-        console.log(`❌ 전체 지역구 선택 해제: ${selectedCity}`);
       } else {
         // "전체" 선택 시 다른 모든 지역구 해제하고 "전체"만 선택
         newSet.add("전체");
-        console.log(`✅ 전체 지역구 선택: ${selectedCity}`);
       }
     } else {
       // 개별 지역구 클릭 시
@@ -62,14 +60,12 @@ export default function LocationGrid(props: LocationGridProps) {
         prev.forEach((district) => {
           if (district !== districtName) newSet.add(district);
         });
-        console.log(`❌ 지역구 선택 해제: ${selectedCity} - ${districtName}`);
       } else {
         // 새로운 지역구 선택 시 "전체" 해제하고 기존 개별 지역구들과 함께 선택
         prev.forEach((district) => {
           if (district !== "전체") newSet.add(district);
         });
         newSet.add(districtName);
-        console.log(`✅ 지역구 선택: ${selectedCity} - ${districtName}`);
       }
     }
 
@@ -85,7 +81,6 @@ export default function LocationGrid(props: LocationGridProps) {
         Array.from(districts).map((district) => ({ city, district }))
     );
     setLocationList(allSelected);
-    console.log("📋 현재 선택된 지역 목록:", allSelected);
   };
 
   // const handleUndecidedChange = () => {

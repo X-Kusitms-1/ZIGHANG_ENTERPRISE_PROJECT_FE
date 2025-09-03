@@ -19,9 +19,7 @@ export default function CareerYear({
 }, []);
   // minValue, maxValue 변경 시 onSelect 호출
   useEffect(() => {
-    if (process.env.NODE_ENV === "development") {
-      console.log("변경되는 최소연수, 최대년수", minValue, maxValue);
-    }
+   
     onSelect({ min: minValue, max: maxValue });
   }, [minValue, maxValue, onSelect]);
 
