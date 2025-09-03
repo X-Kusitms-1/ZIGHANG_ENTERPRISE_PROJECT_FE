@@ -9,10 +9,10 @@ import {
 import NewsCard from "@/components/news/NewsCard";
 
 export interface NewsCardType {
-  id: string;
   title: string;
-  image: string;
-  createdAt: string;
+  url: string;
+  publishedAt: string;
+  thumbnailUrl: string;
 }
 
 interface NewsCarouselProps {
@@ -25,7 +25,7 @@ function NewsCarousel({ newsCards }: NewsCarouselProps) {
       <CarouselContent className="max-tablet:space-x-2 w-full space-x-5">
         {newsCards.map((newsCard) => (
           <CarouselItem
-            key={newsCard.id}
+            key={newsCard.url}
             className="max-tablet:max-w-[180px] md:basis-1/2 lg:basis-1/3"
           >
             <NewsCard newsCard={newsCard} />

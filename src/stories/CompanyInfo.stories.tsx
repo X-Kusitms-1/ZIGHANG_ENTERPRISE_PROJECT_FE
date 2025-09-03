@@ -19,14 +19,13 @@ const meta: Meta<typeof CompanyInfo> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-// 샘플 데이터
+// 샘플 데이터 (컴포넌트 기대 타입에 맞춘 필드명)
 const sampleCompanyData = {
   id: "1",
-  name: "Viva Republica Inc.",
-  logo: "/icons/storybook/toss.jpg",
-  companyType: "중견기업",
+  companyNameKr: "Viva Republica Inc.",
+  companyThumbnailUrl: "/icons/storybook/toss.jpg",
+  companyTypeLabel: "중견기업",
   isSubscribed: false,
-  onClick: () => {},
 };
 
 // Main Variant - 데스크탑

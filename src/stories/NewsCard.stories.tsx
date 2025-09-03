@@ -19,22 +19,20 @@ const meta: Meta<typeof NewsCard> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-// 샘플 데이터
+// 샘플 데이터 (컴포넌트 기대 타입에 맞춘 필드명)
 const sampleNewsData = {
-  id: "1",
   title: "토스, 새로운 금융 서비스 출시",
-  image: "/news/default.png",
-  createdAt: "2024.01.15",
-  onClick: () => console.log("뉴스 클릭"),
+  url: "https://example.com/news/1",
+  publishedAt: "2024.01.15",
+  thumbnailUrl: "/news/default.png",
 };
 
 const longTitleNewsData = {
-  id: "2",
   title:
     "매우 긴 뉴스 제목이 들어갈 때의 레이아웃 테스트를 위한 샘플 데이터입니다",
-  image: "/news/default.png",
-  createdAt: "2024.01.14",
-  onClick: () => console.log("긴 제목 뉴스 클릭"),
+  url: "https://example.com/news/2",
+  publishedAt: "2024.01.14",
+  thumbnailUrl: "/news/default.png",
 };
 
 // Main Variant - 데스크탑

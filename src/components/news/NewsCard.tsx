@@ -6,10 +6,10 @@ import Image from "next/image";
 import Link from "next/link";
 
 interface NewsCard {
-  id: string; // 뉴스ID
-  title: string; // 뉴스제목
-  image: string; // 뉴스이미지
-  createdAt: string; // 뉴스작성일
+  title: string;
+  url: string;
+  publishedAt: string;
+  thumbnailUrl: string;
 }
 
 const newsCardVariants = cva("news-card", {
@@ -32,11 +32,12 @@ type NewsCardProps = VariantProps<typeof newsCardVariants> & {
 function NewsCard({ newsCard, variant }: NewsCardProps) {
   return (
     <Link
-      href={`/news/${newsCard.id}`}
+      href={newsCard.url}
       className={newsCardVariants({ variant })}
+      target="_blank"
     >
       <Image
-        src={newsCard.image}
+        src={newsCard.thumbnailUrl}
         alt={newsCard.title}
         width={300}
         height={200}
@@ -53,7 +54,7 @@ function NewsCard({ newsCard, variant }: NewsCardProps) {
           {newsCard.title}
         </h2>
         <div className="text-12-500 text-text-tertiary flex items-center">
-          <p>{newsCard.createdAt}</p>
+          <p>{newsCard.publishedAt}</p>
         </div>
       </div>
     </Link>

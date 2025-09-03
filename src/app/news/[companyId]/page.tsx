@@ -25,8 +25,8 @@ function CompanyNewsPage() {
       <section>
         <h2 className="text-24-600 text-text-secondary">전체 소식</h2>
         <div className="max-tablet:grid-cols-2 mt-6 grid grid-cols-3 justify-items-center gap-4">
-          {mockCompanyData[0].news.map((news) => (
-            <NewsCard key={news.id} newsCard={news} />
+          {mockCompanyData[0].news.map((news, index) => (
+            <NewsCard key={`first-${index}`} newsCard={news} />
           ))}
         </div>
         <div className="max-tablet:hidden mt-15 w-full max-w-[1200px]">
@@ -39,7 +39,7 @@ function CompanyNewsPage() {
                 <CompanyInfo variant="company" companyInfo={company} />
                 {company.news.slice(0, 3).map((news, index) => (
                   <NewsCard
-                    key={news.id}
+                    key={`${company.id}-${index}`}
                     newsCard={news}
                     variant={index === 1 || index === 2 ? "text" : "main"}
                   />
