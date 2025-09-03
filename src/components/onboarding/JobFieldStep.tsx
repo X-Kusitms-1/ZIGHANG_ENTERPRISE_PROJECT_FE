@@ -58,6 +58,7 @@ export default function JobFieldStep({
           size="lg"
           className="h-[56px] w-[170.5px]"
           onClick={handleNext}
+          disabled={jobList.length===0 && !isUndecided}
         >
           다음으로
         </Button>
