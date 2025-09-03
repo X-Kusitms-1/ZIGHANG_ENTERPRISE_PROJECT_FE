@@ -5,43 +5,39 @@ interface LoginSocialListProps {
   onSocialLogin?: () => void;
 }
 
+export const socialConfig = {
+  kakao: {
+    name: "카카오",
+    imageSrc: "/join/kakao.svg",
+    bgColor: "bg-[#FEE500]",
+    textColor: "text-[rgba(0,0,0,0.85)]",
+    borderColor: "",
+  },
+  naver: {
+    name: "네이버",
+    imageSrc: "/join/naver.svg",
+    bgColor: "bg-[#03C75A]",
+    textColor: "text-white",
+    borderColor: "",
+  },
+  google: {
+    name: "Google",
+    imageSrc: "/join/google.svg",
+    bgColor: "bg-white",
+    textColor: "text-[rgba(31,31,31,0.85)]",
+    borderColor: "border border-[#E0E5F0]",
+  },
+};
+
 export default function LoginSocialList({
   onSocialLogin,
 }: LoginSocialListProps) {
-  const socials = [
-    {
-      social: "카카오",
-      imageSrc: "/join/kakao.svg",
-      bgColor: "#FEE500",
-      textColor: "rgba(0,0,0,0.85)",
-    },
-    {
-      social: "네이버",
-      imageSrc: "/join/naver.svg",
-      bgColor: "#03C75A",
-      textColor: "#FFFFFF",
-    },
-    {
-      social: "Google",
-      imageSrc: "/join/google.svg",
-      bgColor: "#FFFFFF",
-      borderColor: "#E0E5F0",
-      textColor: "rgba(31,31,31,0.85)",
-    },
-  ];
+  const socials = Object.keys(socialConfig) as Array<keyof typeof socialConfig>;
 
   return (
     <div className="mb-6 flex flex-col items-center gap-4">
-      {socials.map(({ social, imageSrc, bgColor, borderColor, textColor }) => (
-        <LoginSocial
-          key={social}
-          social={social}
-          imageSrc={imageSrc}
-          bgColor={bgColor}
-          borderColor={borderColor}
-          textColor={textColor}
-          onClick={onSocialLogin}
-        />
+      {socials.map((type) => (
+        <LoginSocial key={type} type={type} onClick={onSocialLogin} />
       ))}
     </div>
   );
