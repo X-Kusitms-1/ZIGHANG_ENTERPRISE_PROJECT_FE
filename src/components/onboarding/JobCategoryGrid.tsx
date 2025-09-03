@@ -47,13 +47,37 @@ export default function JobCategoryGrid(props: JobCategoryGridProps) {
 
   const handleRoleClick = (roleName: string) => {
     if (!selectedCategory) return;
-    const prev = selectedRoles[selectedCategory] || new Set();
-    const newSet = new Set(prev);
-    if (newSet.has(roleName)) {
-      newSet.delete(roleName);
+    const prev = selectedRoles[selectedCategory] || new Set<string>();
+    const newSet = new Set<string>();
+
+    if (roleName === "전체") {
+      // "전체" 클릭 시
+      if (prev.has("전체")) {
+        // 이미 "전체"가 선택되어 있으면 해제
+        console.log(`❌ 전체 직무 선택 해제: ${selectedCategory}`);
+      } else {
+        // "전체" 선택 시 다른 모든 직무 해제하고 "전체"만 선택
+        newSet.add("전체");
+        console.log(`✅ 전체 직무 선택: ${selectedCategory}`);
+      }
     } else {
-      newSet.add(roleName);
+      // 개별 직무 클릭 시
+      if (prev.has(roleName)) {
+        // 이미 선택된 직무면 해제
+        prev.forEach((role) => {
+          if (role !== roleName) newSet.add(role);
+        });
+        console.log(`❌ 직무 선택 해제: ${selectedCategory} - ${roleName}`);
+      } else {
+        // 새로운 직무 선택 시 "전체" 해제하고 기존 개별 직무들과 함께 선택
+        prev.forEach((role) => {
+          if (role !== "전체") newSet.add(role);
+        });
+        newSet.add(roleName);
+        console.log(`✅ 직무 선택: ${selectedCategory} - ${roleName}`);
+      }
     }
+
     const newSelectedRoles = { ...selectedRoles, [selectedCategory]: newSet };
     setSelectedRoles(newSelectedRoles);
     // 모든 직군의 선택값을 industryList에 반영
@@ -62,11 +86,18 @@ export default function JobCategoryGrid(props: JobCategoryGridProps) {
         Array.from(roles).map((role) => ({ jobFamily, role }))
     );
     setJobList(allSelected);
+    console.log("📋 현재 선택된 직무 목록:", allSelected);
   };
 
   const handleUndecidedChange = () => {
     const newUndecided = !isUndecided;
     setIsUndecided(newUndecided);
+    if (newUndecided) {
+      setSelectedRoles({});
+      setJobList([]);
+      setSelectedCategory(null);
+      console.log("🚫 모든 직군/직무 선택 초기화됨");
+    }
   };
 
   const selectedCategoryData = jobCategoriesData.find(
@@ -116,7 +147,17 @@ export default function JobCategoryGrid(props: JobCategoryGridProps) {
             >
               <div className="flex w-[172px] flex-col gap-2">
                 {jobCategoriesData.map((category) => {
-                  const selectedCount = selectedRoles[category.name]?.size || 0;
+                  const selectedSet = selectedRoles[category.name] || new Set();
+                  const isWholeSelected = selectedSet.has("전체");
+
+                  // "전체"가 선택된 경우 해당 직군의 전체 직무 개수 (전체 제외)
+                  // "전체"가 선택되지 않은 경우 선택된 개별 직무 개수
+                  const selectedCount = isWholeSelected
+                    ? category.roles.filter((role) => role.name !== "전체")
+                        .length
+                    : Array.from(selectedSet).filter((role) => role !== "전체")
+                        .length;
+
                   const isSelectedCategory = selectedCategory === category.name;
                   const hasSelectedRoles = selectedCount > 0;
                   return (
@@ -127,7 +168,7 @@ export default function JobCategoryGrid(props: JobCategoryGridProps) {
                         isSelectedCategory
                           ? "bg-bg-info text-text-info text-16-600"
                           : hasSelectedRoles
-                            ? "text-text-primary text-16-600"
+                            ? "text-text-primary text-16-600 hover:bg-bg-base-hovered"
                             : "text-text-tertiary text-16-500 hover:bg-bg-base-hovered"
                       }`}
                       disabled={isUndecided}
@@ -205,7 +246,7 @@ export default function JobCategoryGrid(props: JobCategoryGridProps) {
                           {isSelected && (
                             <Image
                               src="/onboarding/check.svg"
-                              alt="선택됨"
+                              alt="체크"
                               width={20}
                               height={20}
                             />
