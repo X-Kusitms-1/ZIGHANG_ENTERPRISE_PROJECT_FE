@@ -9,34 +9,31 @@ type LocationItem = {
 interface LocationStepProps {
   locationList: LocationItem[];
   setLocationList: React.Dispatch<React.SetStateAction<LocationItem[]>>;
-  isUndecided: boolean;
-  setIsUndecided: React.Dispatch<React.SetStateAction<boolean>>;
   setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
+  onSubmit?: () => void;
 }
 
 export default function LocationStep({
   locationList,
   setLocationList,
-  isUndecided,
-  setIsUndecided,
   setCurrentStep,
+  onSubmit,
 }: LocationStepProps) {
   const handlePrevious = () => {
     setCurrentStep((prev) => prev - 1); // 이전 단계로
   };
 
   const handleNext = () => {
-    // 온보딩 완료 또는 다음 단계로
-    console.log("온보딩 완료!");
+    if (onSubmit) {
+      onSubmit(); // 온보딩 데이터 전송
+    }
   };
 
   return (
-    <div className="flex h-full flex-col items-center gap-6">
+    <div className="flex h-full flex-col items-center gap-[21px]">
       <LocationGrid
         locationList={locationList}
         setLocationList={setLocationList}
-        isUndecided={isUndecided}
-        setIsUndecided={setIsUndecided}
       />
       <div className="flex gap-3">
         <Button
@@ -52,8 +49,9 @@ export default function LocationStep({
           size="lg"
           className="h-[56px] w-[170.5px]"
           onClick={handleNext}
+          disabled={locationList.length === 0}
         >
-          완료
+          다 했어요!
         </Button>
       </div>
     </div>

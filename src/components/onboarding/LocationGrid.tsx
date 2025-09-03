@@ -2,7 +2,6 @@
 import { useState } from "react";
 import Image from "next/image";
 import { Scrollbar } from "react-scrollbars-custom";
-import { Checkbox } from "@/components/ui/checkbox";
 import { LOCATION_DATA } from "@/constants/LocationData";
 
 type LocationItem = {
@@ -13,12 +12,10 @@ type LocationItem = {
 interface LocationGridProps {
   locationList: LocationItem[];
   setLocationList: React.Dispatch<React.SetStateAction<LocationItem[]>>;
-  isUndecided: boolean;
-  setIsUndecided: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function LocationGrid(props: LocationGridProps) {
-  const { locationList, setLocationList, isUndecided, setIsUndecided } = props;
+  const { locationList, setLocationList } = props;
 
   const [selectedCity, setSelectedCity] = useState<string | null>(
     LOCATION_DATA.length > 0 ? LOCATION_DATA[0].city : null
@@ -91,27 +88,27 @@ export default function LocationGrid(props: LocationGridProps) {
     console.log("📋 현재 선택된 지역 목록:", allSelected);
   };
 
-  const handleUndecidedChange = () => {
-    const newUndecided = !isUndecided;
-    setIsUndecided(newUndecided);
-    if (newUndecided) {
-      setSelectedDistricts({});
-      setLocationList([]);
-      setSelectedCity(null);
-      console.log("🚫 모든 지역/지역구 선택 초기화됨");
-    }
-  };
+  // const handleUndecidedChange = () => {
+  //   const newUndecided = !isUndecided;
+  //   setIsUndecided(newUndecided);
+  //   if (newUndecided) {
+  //     setSelectedDistricts({});
+  //     setLocationList([]);
+  //     setSelectedCity(null);
+  //     console.log("🚫 모든 지역/지역구 선택 초기화됨");
+  //   }
+  // };
 
   const selectedCityData = LOCATION_DATA.find(
     (city) => city.city === selectedCity
   );
 
   return (
-    <div className="flex flex-col gap-3 pt-8">
+    <div className="flex flex-col gap-3 pt-6">
       {/* 전체 레이아웃 컨테이너 */}
       <div className="border-t-border-line border-b-border-line flex border-t border-b">
         {/* 지역 영역 */}
-        <div className="flex h-[340px] w-[200px] p-2">
+        <div className="flex h-[380px] w-[200px] p-2">
           <div className="flex w-[172px] flex-col gap-2">
             <Scrollbar
               style={{ width: "192px", height: "100%" }}
@@ -175,7 +172,6 @@ export default function LocationGrid(props: LocationGridProps) {
                             ? "text-text-primary text-16-600 hover:bg-bg-base-hovered"
                             : "text-text-tertiary text-16-500 hover:bg-bg-base-hovered"
                       }`}
-                      disabled={isUndecided}
                     >
                       <span>{city.city}</span>
                       {hasSelectedDistricts && (
@@ -192,7 +188,7 @@ export default function LocationGrid(props: LocationGridProps) {
         </div>
 
         {/* 지역구 영역 */}
-        <div className="border-l-border-line flex h-[340px] flex-1 border-l p-2">
+        <div className="border-l-border-line flex h-[380px] flex-1 border-l p-2">
           <div className="flex flex-col gap-2" style={{ width: "272px" }}>
             <Scrollbar
               style={{ width: "292px", height: "100%" }}
@@ -244,7 +240,6 @@ export default function LocationGrid(props: LocationGridProps) {
                               ? "bg-bg-info text-text-info text-16-600"
                               : "text-text-tertiary hover:bg-bg-base-hovered text-16-500"
                           } `}
-                          disabled={isUndecided}
                         >
                           <span>{district}</span>
                           {isSelected && (
@@ -266,7 +261,7 @@ export default function LocationGrid(props: LocationGridProps) {
         </div>
       </div>
 
-      {/* 미정(아직 선택하지 않음) 옵션 영역 - shadcn Checkbox 사용 */}
+      {/* 미정(아직 선택하지 않음) 옵션 영역 - shadcn Checkbox 사용
       <div className="flex items-center gap-1 py-2">
         <Checkbox
           checked={isUndecided}
@@ -285,7 +280,7 @@ export default function LocationGrid(props: LocationGridProps) {
         >
           지역을 아직 정하지 못했어요.
         </label>
-      </div>
+      </div> */}
     </div>
   );
 }
