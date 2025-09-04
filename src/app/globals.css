@@ -556,8 +556,8 @@
 @theme {
   /* 커스텀 브레이크포인트 설정 */
   --breakpoint-mobile: 0px; /* 모바일: 0px ~ 767px */
-  --breakpoint-tablet: 768px; /* 태블릿: 768px ~ 1023px */
-  --breakpoint-pc: 1024px; /* PC: 1024px 이상 */
+  --breakpoint-tablet: 48rem; /* 768px */
+  --breakpoint-pc: 64rem; /* 1024px */
 }
 
 @layer base {
@@ -580,4 +580,47 @@
   &::-webkit-scrollbar {
     display: none;
   }
+}
+
+/* 말줄임표 처리 유틸리티 */
+@utility text-ellipsis-1 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@utility text-ellipsis-2 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 8s linear infinite;
+}
+
+.scroll-container {
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.scroll-content {
+  display: inline-flex;
+  animation: marquee 1s linear infinite;
+}
+
+.scroll-content span {
+  display: inline-block;
+  /* 텍스트 사이 간격 */
 }

@@ -18,9 +18,9 @@ export const getApiBaseUrl = (): string => {
     case "development":
       return "http://localhost:8080";
     case "production":
-      return "https://prd.ilhaeng.cloud";
+      return "https://prd.next-career.co.kr";
     default:
-      return "https://stg.ilhaeng.cloud";
+      return "https://stg.next-career.co.kr";
   }
 };
 

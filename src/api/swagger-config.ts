@@ -6,7 +6,7 @@ export const SWAGGER_CONFIG = {
   // 스웨거 스펙 URL (실제 API URL로 변경 필요)
   SWAGGER_URL:
     process.env.NEXT_PUBLIC_SWAGGER_URL ||
-    "https://stg.ilhaeng.cloud/v3/api-docs",
+    "https://stg.next-career.co.kr/v3/api-docs",
 
   // 로컬 스웨거 파일 경로 (옵션)
   LOCAL_SWAGGER_PATH: "./swagger.json",
@@ -19,7 +19,7 @@ export const SWAGGER_CONFIG = {
     generatorName: "typescript-axios",
     inputSpec:
       process.env.NEXT_PUBLIC_SWAGGER_URL ||
-      "https://stg.ilhaeng.cloud/v3/api-docs",
+      "https://stg.next-career.co.kr/v3/api-docs",
     outputDir: "./src/api/generated",
     configFile: "./openapi-generator-config.json",
     additionalProperties: {
