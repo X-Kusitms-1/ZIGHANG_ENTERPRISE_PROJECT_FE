@@ -9,11 +9,11 @@ export default function LoginPage() {
       <div className="tablet:px-10 tablet:max-w-screen-lg tablet:mx-auto relative w-full overflow-visible">
         <section className="tablet:gap-[50px] flex h-screen w-full flex-col items-center justify-center gap-10">
           <div className="flex flex-col items-center gap-5">
-            <LoginTitle/>
-            <LoginSubTitle/>
+            <LoginTitle />
+            <LoginSubTitle />
           </div>
-          <LoginSocialList/>
-          <LoginFooter/> 
+          <LoginSocialList />
+          <LoginFooter />
         </section>
       </div>
     </main>
