@@ -13,7 +13,22 @@ export type NewsListFilters = {
 
 export const newsQueryKeys = {
   all: ["news"] as const,
-  list: (filters?: NewsListFilters) => ["news", "list", filters ?? {}] as const,
+  list: (filters?: NewsListFilters) => {
+    const key = {
+      types: filters?.types
+        ? Array.from(filters.types as Set<string>).sort()
+        : undefined,
+      jobGroups: filters?.jobGroups
+        ? Array.from(filters.jobGroups as Set<string>).sort()
+        : undefined,
+      regionCodes: filters?.regionCodes
+        ? Array.from(filters.regionCodes as Set<string>).sort()
+        : undefined,
+      size: filters?.size ?? 10,
+      sort: filters?.sort ?? undefined,
+    };
+    return ["news", "list", key] as const;
+  },
 };
 
 export const useGetNewsList = (filters?: NewsListFilters) => {

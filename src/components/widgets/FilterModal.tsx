@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Funnel, Check, X, RotateCw } from "lucide-react";
 import {
   Dialog,
@@ -12,6 +12,13 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/Button";
 import { filterData, type FilterOption } from "@/constants/filterData";
+import { useGetNewsList } from "@/hooks/news/useGetNewsList";
+import {
+  mapCompanyTypes,
+  mapJobGroups,
+  mapRegionsToCodes,
+  normalizeKoreanLabel,
+} from "@/constants/filterMappings";
 import { FilterButton } from "../ui/FilterButton";
 import { Chip } from "../ui/Chip";
 
@@ -25,6 +32,32 @@ function FilterModal() {
     직군: [],
     지역: [],
   });
+
+  const apiFilters = useMemo(() => {
+    const companyTypes = mapCompanyTypes(selectedFilters["기업 형태"] || []);
+    const jobGroups = mapJobGroups(selectedFilters["직군"] || []);
+    const regionCodes = mapRegionsToCodes(selectedFilters);
+
+    return {
+      types: companyTypes.length ? (new Set(companyTypes) as any) : undefined,
+      jobGroups: jobGroups.length ? (new Set(jobGroups) as any) : undefined,
+      regionCodes: regionCodes.length
+        ? (new Set(regionCodes) as any)
+        : undefined,
+      size: 10,
+    } as const;
+  }, [selectedFilters]);
+
+  const { data: TotalNewData, isFetching } = useGetNewsList(apiFilters);
+
+  // 최소 1초 동안 로딩 유지
+  const [delayDone, setDelayDone] = useState(true);
+  useEffect(() => {
+    setDelayDone(false);
+    const t = setTimeout(() => setDelayDone(true), 1000);
+    return () => clearTimeout(t);
+  }, [selectedFilters]);
+  const isLoadingUI = isFetching || !delayDone;
 
   // 현재 선택된 카테고리의 데이터 가져오기
   const currentCategoryData = filterData.find(
@@ -48,6 +81,7 @@ function FilterModal() {
 
   // 필터 선택/해제
   const toggleFilter = (value: string) => {
+    value = normalizeKoreanLabel(value);
     const categoryKey =
       selectedCategory === "지역" && selectedRegion
         ? `${selectedCategory}-${selectedRegion}`
@@ -321,10 +355,16 @@ function FilterModal() {
             <RotateCw className="size-5" />
             초기화
           </Button>
-          <Button type="submit" variant="filled" className="w-full" size="lg">
-            {getTotalSelectedCount() > 0
-              ? `${getTotalSelectedCount()}개 필터로 검색`
-              : "전체 결과 보기"}
+          <Button
+            type="submit"
+            variant="filled"
+            className="w-full"
+            size="lg"
+            disabled={isLoadingUI}
+          >
+            {isLoadingUI
+              ? "로딩중..."
+              : `${TotalNewData?.pages?.[0]?.totalElements ?? 0}건 소식 보기`}
           </Button>
         </DialogFooter>
       </DialogContent>
