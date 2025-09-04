@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useMemo, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { Funnel, Check, X, RotateCw } from "lucide-react";
 import {
   Dialog,
@@ -9,6 +10,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogFooter,
+  DialogClose,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/Button";
 import { filterData, type FilterOption } from "@/constants/filterData";
@@ -23,6 +25,7 @@ import { FilterButton } from "../ui/FilterButton";
 import { Chip } from "../ui/Chip";
 
 function FilterModal() {
+  const queryClient = useQueryClient();
   const [selectedCategory, setSelectedCategory] = useState<string>("기업 형태");
   const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
   const [selectedFilters, setSelectedFilters] = useState<{
@@ -45,6 +48,7 @@ function FilterModal() {
         ? (new Set(regionCodes) as any)
         : undefined,
       size: 10,
+      sort: undefined,
     } as const;
   }, [selectedFilters]);
 
@@ -355,17 +359,61 @@ function FilterModal() {
             <RotateCw className="size-5" />
             초기화
           </Button>
-          <Button
-            type="submit"
-            variant="filled"
-            className="w-full"
-            size="lg"
-            disabled={isLoadingUI}
-          >
-            {isLoadingUI
-              ? "로딩중..."
-              : `${TotalNewData?.pages?.[0]?.totalElements ?? 0}건 소식 보기`}
-          </Button>
+          <DialogClose asChild>
+            <Button
+              type="button"
+              variant="filled"
+              className="w-full"
+              size="lg"
+              disabled={isLoadingUI}
+              onClick={() => {
+                const f = apiFilters;
+                // 1) 필터 키의 캐시에 현재 결과 선반영
+                queryClient.setQueryData(
+                  [
+                    "news",
+                    "list",
+                    {
+                      types: f.types
+                        ? Array.from(f.types as Set<string>).sort()
+                        : undefined,
+                      jobGroups: f.jobGroups
+                        ? Array.from(f.jobGroups as Set<string>).sort()
+                        : undefined,
+                      regionCodes: f.regionCodes
+                        ? Array.from(f.regionCodes as Set<string>).sort()
+                        : undefined,
+                      size: f.size,
+                      sort: undefined,
+                    },
+                  ],
+                  TotalNewData
+                );
+
+                // 2) CompanyRow에 필터 적용 이벤트 전달
+                const payload = {
+                  companyTypes: f.types
+                    ? Array.from(f.types as Set<string>)
+                    : [],
+                  jobGroups: f.jobGroups
+                    ? Array.from(f.jobGroups as Set<string>)
+                    : [],
+                  regionCodes: f.regionCodes
+                    ? Array.from(f.regionCodes as Set<string>)
+                    : [],
+                  size: f.size,
+                  sort: undefined,
+                };
+                window.dispatchEvent(
+                  new CustomEvent("zighang:apply_filters", { detail: payload })
+                );
+              }}
+            >
+              {isLoadingUI
+                ? "로딩중..."
+                : `${TotalNewData?.pages?.[0]?.totalElements ?? 0}건 소식 보기`}
+            </Button>
+          </DialogClose>
         </DialogFooter>
       </DialogContent>
     </Dialog>

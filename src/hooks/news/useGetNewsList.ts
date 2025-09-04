@@ -32,7 +32,7 @@ export const newsQueryKeys = {
 };
 
 export const useGetNewsList = (filters?: NewsListFilters) => {
-  const pageSize = filters?.size ?? 10;
+  const pageSize = typeof filters?.size === "number" ? filters.size : undefined;
 
   return useInfiniteQuery<NewsResponse>({
     queryKey: newsQueryKeys.list({ ...filters, size: pageSize }),
