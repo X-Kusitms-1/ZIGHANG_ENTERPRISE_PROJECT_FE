@@ -1,8 +1,10 @@
 "use client";
+import { useRouter } from "next/navigation";
 import LoginSocial from "./LoginSocial";
 
 interface LoginSocialListProps {
   onSocialLogin?: () => void;
+  w?: string;
 }
 
 export const socialConfig = {
@@ -29,15 +31,16 @@ export const socialConfig = {
   },
 };
 
-export default function LoginSocialList({
-  onSocialLogin,
-}: LoginSocialListProps) {
+export default function LoginSocialList(props: LoginSocialListProps) {
+  const { onSocialLogin, w = "w-full" } = props;
+  const router = useRouter();
+  const handleSocialLogin = onSocialLogin ?? (() => router.push("/onBoarding"));
   const socials = Object.keys(socialConfig) as Array<keyof typeof socialConfig>;
 
   return (
     <div className="mb-6 flex flex-col items-center gap-4">
       {socials.map((type) => (
-        <LoginSocial key={type} type={type} onClick={onSocialLogin} />
+        <LoginSocial key={type} type={type} onClick={handleSocialLogin} w={w} />
       ))}
     </div>
   );
