@@ -12,9 +12,17 @@
 
 
 
-export * from "./api/email-controller-api";
-export * from "./api/image-controller-api";
-export * from "./api/kakao-login-controller-api";
-export * from "./api/ocr-controller-api";
-export * from "./api/user-controller-api";
+/**
+ * 관심 지역 목록
+ */
+export interface AddressDto {
+    /**
+     * 시/도
+     */
+    "city": string;
+    /**
+     * 구/군
+     */
+    "district": string;
+}
 

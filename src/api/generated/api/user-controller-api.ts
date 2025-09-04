@@ -29,8 +29,8 @@ import type { RspTemplateVoid } from "../models";
 export const UserControllerApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * 
-         * @summary 사용자 온보딩 정보
+         * 사용자의 온보딩 정보(경력, 관심지역 목록, 관심산업 목록)를 저장합니다. 기존 저장 데이터가 있으면 모두 삭제 후 새로 받은 정보로 대체합니다.
+         * @summary 사용자 온보딩 정보 저장
          * @param {PostUserOnboardingDto} postUserOnboardingDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -78,8 +78,8 @@ export const UserControllerApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = UserControllerApiAxiosParamCreator(configuration)
     return {
         /**
-         * 
-         * @summary 사용자 온보딩 정보
+         * 사용자의 온보딩 정보(경력, 관심지역 목록, 관심산업 목록)를 저장합니다. 기존 저장 데이터가 있으면 모두 삭제 후 새로 받은 정보로 대체합니다.
+         * @summary 사용자 온보딩 정보 저장
          * @param {PostUserOnboardingDto} postUserOnboardingDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -100,8 +100,8 @@ export const UserControllerApiFactory = function (configuration?: Configuration,
     const localVarFp = UserControllerApiFp(configuration)
     return {
         /**
-         * 
-         * @summary 사용자 온보딩 정보
+         * 사용자의 온보딩 정보(경력, 관심지역 목록, 관심산업 목록)를 저장합니다. 기존 저장 데이터가 있으면 모두 삭제 후 새로 받은 정보로 대체합니다.
+         * @summary 사용자 온보딩 정보 저장
          * @param {PostUserOnboardingDto} postUserOnboardingDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -117,8 +117,8 @@ export const UserControllerApiFactory = function (configuration?: Configuration,
  */
 export interface UserControllerApiInterface {
     /**
-     * 
-     * @summary 사용자 온보딩 정보
+     * 사용자의 온보딩 정보(경력, 관심지역 목록, 관심산업 목록)를 저장합니다. 기존 저장 데이터가 있으면 모두 삭제 후 새로 받은 정보로 대체합니다.
+     * @summary 사용자 온보딩 정보 저장
      * @param {PostUserOnboardingDto} postUserOnboardingDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -132,8 +132,8 @@ export interface UserControllerApiInterface {
  */
 export class UserControllerApi extends BaseAPI implements UserControllerApiInterface {
     /**
-     * 
-     * @summary 사용자 온보딩 정보
+     * 사용자의 온보딩 정보(경력, 관심지역 목록, 관심산업 목록)를 저장합니다. 기존 저장 데이터가 있으면 모두 삭제 후 새로 받은 정보로 대체합니다.
+     * @summary 사용자 온보딩 정보 저장
      * @param {PostUserOnboardingDto} postUserOnboardingDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}

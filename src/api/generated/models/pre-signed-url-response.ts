@@ -12,9 +12,8 @@
 
 
 
-export interface TokenDto {
-    "grantType"?: string;
-    "accessToken"?: string;
-    "refreshToken"?: string;
+export interface PreSignedUrlResponse {
+    "preSignedUrl"?: string;
+    "objectUrl"?: string;
 }
 

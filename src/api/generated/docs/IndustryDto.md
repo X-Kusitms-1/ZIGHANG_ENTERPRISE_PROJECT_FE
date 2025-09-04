@@ -1,21 +1,22 @@
-# TokenResult
+# IndustryDto
 
+관심 산업/직무 목록
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**tokenDto** | [**TokenDto**](TokenDto.md) |  | [optional] [default to undefined]
-**isNewUser** | **boolean** |  | [optional] [default to undefined]
+**jobFamily** | **string** | 직군 | [default to undefined]
+**role** | **string** | 직무 | [default to undefined]
 
 ## Example
 
 ```typescript
-import { TokenResult } from '@zighang/api-client';
+import { IndustryDto } from '@zighang/api-client';
 
-const instance: TokenResult = {
-    tokenDto,
-    isNewUser,
+const instance: IndustryDto = {
+    jobFamily,
+    role,
 };
 ```
 

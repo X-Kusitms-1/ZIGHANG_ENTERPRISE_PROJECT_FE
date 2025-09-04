@@ -11,40 +11,29 @@
  */
 
 
+// May contain unused imports in some cases
+// @ts-ignore
+import type { AddressDto } from "./address-dto";
+// May contain unused imports in some cases
+// @ts-ignore
+import type { IndustryDto } from "./industry-dto";
 
 export interface PostUserOnboardingDto {
+    /**
+     * 사용자 ID (토큰 구현 전까지 임시 사용)
+     */
     "userId"?: number;
+    /**
+     * 경력 연차 (신입: 0, 1년차: 1, 2년차: 2...)
+     */
     "career"?: number;
-    "address"?: string;
-    "industry"?: PostUserOnboardingDtoIndustryEnum;
+    /**
+     * 관심 지역 목록
+     */
+    "addressList"?: Array<AddressDto>;
+    /**
+     * 관심 산업/직무 목록
+     */
+    "industryList"?: Array<IndustryDto>;
 }
-
-export enum PostUserOnboardingDtoIndustryEnum {
-    ItDevelopment = "IT_DEVELOPMENT",
-    AiData = "AI_DATA",
-    Game = "GAME",
-    Design = "DESIGN",
-    PlanningStrategy = "PLANNING_STRATEGY",
-    MarketingAdvertising = "MARKETING_ADVERTISING",
-    Merchandising = "MERCHANDISING",
-    Sales = "SALES",
-    TradeLogistics = "TRADE_LOGISTICS",
-    TransportationDelivery = "TRANSPORTATION_DELIVERY",
-    LegalAffairs = "LEGAL_AFFAIRS",
-    HrGeneralAffairs = "HR_GENERAL_AFFAIRS",
-    AccountingFinanceTax = "ACCOUNTING_FINANCE_TAX",
-    SecuritiesAssetManagement = "SECURITIES_ASSET_MANAGEMENT",
-    BankingCardInsurance = "BANKING_CARD_INSURANCE",
-    EngineeringRd = "ENGINEERING_RD",
-    ConstructionArchitecture = "CONSTRUCTION_ARCHITECTURE",
-    ProductionSkilledLabor = "PRODUCTION_SKILLED_LABOR",
-    MedicalHealthcare = "MEDICAL_HEALTHCARE",
-    PublicSectorWelfare = "PUBLIC_SECTOR_WELFARE",
-    Education = "EDUCATION",
-    MediaEntertainment = "MEDIA_ENTERTAINMENT",
-    CustomerServiceTm = "CUSTOMER_SERVICE_TM",
-    Service = "SERVICE",
-    FoodBeverage = "FOOD_BEVERAGE"
-}
-
 

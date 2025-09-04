@@ -3,7 +3,13 @@
  */
 
 // API 클라이언트
-export { apiClient, serverApiClient, api, serverApi } from "./apiClient";
+export {
+  apiClient,
+  serverApiClient,
+  api,
+  serverApi,
+  getApiBaseUrl,
+} from "./apiClient";
 
 // Fetch 어댑터
 export { fetchAdapter } from "./fetchAdapter";

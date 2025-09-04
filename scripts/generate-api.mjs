@@ -118,6 +118,9 @@ export * from './configuration';
       // 따옴표 통일 처리
       this.fixQuotesInGeneratedFiles();
 
+      // base.ts 파일 수정 - 환경 변수 기반 BASE_PATH 설정
+      this.fixBasePathInGeneratedFiles();
+
       console.log("✅ 후처리 완료");
       return true;
     } catch (error) {
@@ -321,6 +324,38 @@ export * from './configuration';
   }
 
   /**
+   * base.ts 파일의 BASE_PATH를 환경 변수 기반으로 수정
+   */
+  fixBasePathInGeneratedFiles() {
+    console.log("🔧 BASE_PATH 환경 변수 설정 중...");
+
+    const basePath = path.join(this.outputDir, "base.ts");
+
+    if (fs.existsSync(basePath)) {
+      let content = fs.readFileSync(basePath, "utf8");
+
+      // 하드코딩된 BASE_PATH를 환경 변수 기반으로 변경
+      const newBasePathContent = `// API 서버 URL 설정
+// 기본값: 스테이징 서버
+// 환경 변수 NEXT_PUBLIC_API_BASE_URL로 오버라이드 가능
+export const BASE_PATH = "https://stg.ilhaeng.cloud".replace(/\\/+$/, "");`;
+
+      // 기존 BASE_PATH 라인을 찾아서 교체
+      const basePathRegex = /export const BASE_PATH = .*?;?\s*$/m;
+
+      if (basePathRegex.test(content)) {
+        content = content.replace(basePathRegex, newBasePathContent);
+        fs.writeFileSync(basePath, content);
+        console.log("✅ BASE_PATH 환경 변수 설정 완료");
+      } else {
+        console.log("⚠️ BASE_PATH 라인을 찾을 수 없습니다");
+      }
+    } else {
+      console.log("⚠️ base.ts 파일을 찾을 수 없습니다");
+    }
+  }
+
+  /**
    * 실제로 사용되는 타입들만 추출
    */
   getUsedTypes(apis) {
@@ -330,11 +365,16 @@ export * from './configuration';
       api.methods.forEach((method) => {
         const parameterName = this.getParameterName(method.name);
         if (parameterName) {
-          // 매개변수 이름에서 타입 추출 (예: userOnboardingInfoDto -> PostUserOnboardingDto)
-          const typeName = this.parameterNameToTypeName(parameterName);
-          if (typeName && typeName !== "string") {
-            // TypeScript 기본 타입은 import하지 않음
-            usedTypes.add(typeName);
+          if (Array.isArray(parameterName)) {
+            // 배열인 경우 (예: presignedUrl의 prefix, fileName)는 string 타입이므로 import하지 않음
+            // 아무것도 하지 않음
+          } else {
+            // 단일 매개변수인 경우
+            const typeName = this.parameterNameToTypeName(parameterName);
+            if (typeName && typeName !== "string") {
+              // TypeScript 기본 타입은 import하지 않음
+              usedTypes.add(typeName);
+            }
           }
         }
       });
@@ -379,7 +419,7 @@ export * from './configuration';
       "// 이 파일은 자동으로 생성됩니다. 수동으로 편집하지 마세요.\n\n";
 
     // imports
-    content += 'import { apiClient } from "./axios";\n';
+    content += 'import { apiClient, getApiBaseUrl } from "./axios";\n';
 
     apis.forEach((api) => {
       const apiFileName = api.fileName.replace(".ts", "");
@@ -425,6 +465,12 @@ export * from './configuration';
     content += "  return client;\n";
     content += "}\n\n";
 
+    // 환경별 API 서버 URL 설정
+    content += "// 환경별 API 서버 URL 설정\n";
+    content += "const getBasePath = (): string => {\n";
+    content += "  return getApiBaseUrl();\n";
+    content += "};\n\n";
+
     // API 함수들
     apis.forEach((apiInfo) => {
       content += `// ${apiInfo.className} 함수들\n`;
@@ -454,24 +500,48 @@ export * from './configuration';
     result += "export async function " + functionName + "(\n";
 
     if (parameterName) {
-      const typeName = this.parameterNameToTypeName(parameterName);
-      result +=
-        "  params: { " + parameterName + ": " + (typeName || "any") + " },\n";
+      if (Array.isArray(parameterName)) {
+        // 배열인 경우 (예: presignedUrl의 prefix, fileName)
+        result += "  params: { ";
+        parameterName.forEach((param, index) => {
+          if (index > 0) result += ", ";
+          result += param + ": string";
+        });
+        result += " },\n";
+      } else {
+        // 단일 매개변수인 경우
+        const typeName = this.parameterNameToTypeName(parameterName);
+        result +=
+          "  params: { " + parameterName + ": " + (typeName || "any") + " },\n";
+      }
     }
 
     result += "  options: ApiRequestOptions = {}\n";
     result += ") {\n";
     result += "  const client = createApiClient(options);\n";
     result +=
-      "  const api = new " + apiClassName + "(undefined, undefined, client);\n";
+      "  const api = new " +
+      apiClassName +
+      "(undefined, getBasePath(), client);\n";
 
     if (parameterName) {
-      result +=
-        "  const response = await api." +
-        method.name +
-        "(params." +
-        parameterName +
-        ");\n";
+      if (Array.isArray(parameterName)) {
+        // 배열인 경우
+        result += "  const response = await api." + method.name + "(";
+        parameterName.forEach((param, index) => {
+          if (index > 0) result += ", ";
+          result += "params." + param;
+        });
+        result += ");\n";
+      } else {
+        // 단일 매개변수인 경우
+        result +=
+          "  const response = await api." +
+          method.name +
+          "(params." +
+          parameterName +
+          ");\n";
+      }
     } else {
       result += "  const response = await api." + method.name + "();\n";
     }
@@ -508,6 +578,14 @@ export * from './configuration';
     // kakaoLogin은 code 파라미터가 필요
     if (methodName === "kakaoLogin") {
       return "code";
+    }
+    // presignedUrl은 prefix와 fileName 파라미터가 필요
+    if (methodName === "presignedUrl") {
+      return ["prefix", "fileName"];
+    }
+    // ocrByUrl과 ocrTextByUrl은 imageUrl 파라미터가 필요
+    if (methodName === "ocrByUrl" || methodName === "ocrTextByUrl") {
+      return "imageUrl";
     }
     // 다른 메소드들은 일단 null (매개변수 없음)
     return null;

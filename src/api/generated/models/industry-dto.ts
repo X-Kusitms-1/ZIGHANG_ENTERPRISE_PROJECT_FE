@@ -12,9 +12,17 @@
 
 
 
-export * from "./api/email-controller-api";
-export * from "./api/image-controller-api";
-export * from "./api/kakao-login-controller-api";
-export * from "./api/ocr-controller-api";
-export * from "./api/user-controller-api";
+/**
+ * 관심 산업/직무 목록
+ */
+export interface IndustryDto {
+    /**
+     * 직군
+     */
+    "jobFamily": string;
+    /**
+     * 직무
+     */
+    "role": string;
+}
 
