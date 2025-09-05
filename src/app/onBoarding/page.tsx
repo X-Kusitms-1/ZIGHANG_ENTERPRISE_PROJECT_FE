@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import MobileHeader from "@/components/mobileLogin/MobileHeader";
 import MobileLoginTitle from "@/components/mobileLogin/MobileLoginTitle";
 import MobileSubTitle from "@/components/mobileLogin/MobileSubTitle";
@@ -19,6 +20,7 @@ type LocationItem = {
 };
 
 export default function OnBoardingPage() {
+  const router = useRouter();
   const [currentStep, setCurrentStep] = useState(0);
   const [career, setCareer] = useState<number>(-2);
   const [careerYear, setCareerYear] = useState<{ min: number; max: number }>({
@@ -28,6 +30,41 @@ export default function OnBoardingPage() {
   const [jobList, setJobList] = useState<JobItem[]>([]);
   const [isUndecided, setIsUndecided] = useState(false);
   const [locationList, setLocationList] = useState<LocationItem[]>([]);
+
+  // 온보딩 데이터 전송 함수
+  const handleOnBoardingSubmit = async () => {
+    try {
+      console.log("온보딩 데이터 전송:", {
+        career,
+        careerYear,
+        jobList,
+        isUndecided,
+        locationList,
+      });
+
+      // 예시: API 전송
+      // const response = await fetch("/api/onboarding", {
+      //   method: "POST",
+      //   body: JSON.stringify({
+      //     career,
+      //     careerYear,
+      //     jobList,
+      //     isUndecided,
+      //     locationList,
+      //   }),
+      //   headers: { "Content-Type": "application/json" },
+      // });
+
+      // if (response.ok) {
+      //   router.push("/onBoarding/complete");
+      // }
+
+      // 임시로 바로 이동 (API 연결 시 위 코드로 대체)
+      router.push("/onBoarding/success");
+    } catch (error) {
+      console.error("온보딩 데이터 전송 실패:", error);
+    }
+  };
 
   const steps = [
     {
@@ -48,8 +85,12 @@ export default function OnBoardingPage() {
     },
     {
       title: "얼마나 일하셨나요?",
-      subtitle:
-        "정확하지 않아도 괜찮아요! 마이페이지에서 언제든지 수정할 수 있어요.",
+      subtitle: (
+        <>
+          정확하지 않아도 괜찮아요! 마이페이지에서 언제든지
+          <br className="mobile:block tablet:hidden" /> 수정할 수 있어요.
+        </>
+      ),
       content: (
         <CareerYear
           value={careerYear}
@@ -60,8 +101,13 @@ export default function OnBoardingPage() {
     },
     {
       title: "희망 직군/직무를 선택해주세요!",
-      subtitle:
-        "복수 선택할 수 있어요. 선택 내용은 마이페이지에서 언제든지 수정 가능해요.",
+      subtitle: (
+        <>
+          복수 선택할 수 있어요. 선택 내용은 마이페이지에서
+          <br className="mobile:block tablet:hidden" />
+          언제든지 수정 가능해요.
+        </>
+      ),
       content: (
         <JobFieldStep
           jobList={jobList}
@@ -75,13 +121,19 @@ export default function OnBoardingPage() {
     },
     {
       title: "희망 근무 지역을 선택해주세요!",
-      subtitle:
-        "복수 선택할 수 있어요. 선택 내용은 마이페이지에서 언제든지 수정 가능해요.",
+      subtitle: (
+        <>
+          복수 선택할 수 있어요. 선택 내용은 마이페이지에서
+          <br className="mobile:block tablet:hidden" />
+          언제든지 수정 가능해요.
+        </>
+      ),
       content: (
         <LocationStep
           locationList={locationList}
           setLocationList={setLocationList}
           setCurrentStep={setCurrentStep}
+          onSubmit={handleOnBoardingSubmit}
         />
       ),
     },
@@ -95,10 +147,12 @@ export default function OnBoardingPage() {
         totalSteps={steps.length}
       />
       <div
-        className="tablet:px-8 pc:w-[768px] pc:mx-auto mobile:px-5 pc:px-0 flex flex-col pb-5"
+        className={`tablet:px-8 pc:w-[768px] pc:mx-auto pc:px-0 mobile:pb-5 tablet:pb-8 flex flex-col ${currentStep === 2 ? "mobile:px-3" : "mobile:px-5"}`}
         style={{ minHeight: "calc(100dvh - 72px)" }}
       >
-        <div className="mt-[7.04dvh] mb-[16.4dvh] flex flex-col gap-3">
+        <div
+          className={`mt-[60px] flex flex-col gap-3 ${[2, 3].includes(currentStep) ? "mobile:mb-0" : "mb-[44px]"}`}
+        >
           <MobileLoginTitle text={steps[currentStep].title} />
           <MobileSubTitle text={steps[currentStep].subtitle} />
         </div>
