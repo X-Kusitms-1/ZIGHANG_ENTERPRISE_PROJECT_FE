@@ -10,7 +10,7 @@ import { fetchAdapter } from "./fetchAdapter";
  * API 기본 설정
  */
 const API_CONFIG = {
-  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || "https://stg.ilhaeng.cloud",
+  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
   timeout: 10000,
   headers: {
     "Content-Type": "application/json",
@@ -19,7 +19,7 @@ const API_CONFIG = {
 
 // 환경별 API 서버 URL 설정
 export const getApiBaseUrl = (): string => {
-  return process.env.NEXT_PUBLIC_API_BASE_URL || "https://stg.ilhaeng.cloud";
+  return process.env.NEXT_PUBLIC_API_BASE_URL || "";
 };
 
 /**

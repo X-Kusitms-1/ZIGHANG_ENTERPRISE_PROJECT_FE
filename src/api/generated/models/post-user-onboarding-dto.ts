@@ -24,9 +24,13 @@ export interface PostUserOnboardingDto {
      */
     "userId"?: number;
     /**
-     * 경력 연차 (신입: 0, 1년차: 1, 2년차: 2...)
+     * 최소 경력 연차 (신입: 0, 1년차: 1, 2년차: 2...)
      */
-    "career"?: number;
+    "minCareer"?: number;
+    /**
+     * 최대 경력 연차 (신입: 0, 1년차: 1, 2년차: 2...)
+     */
+    "maxCareer"?: number;
     /**
      * 관심 지역 목록
      */

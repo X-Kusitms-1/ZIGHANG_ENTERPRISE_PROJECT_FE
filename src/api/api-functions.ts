@@ -2,12 +2,17 @@
 // 이 파일은 자동으로 생성됩니다. 수동으로 편집하지 마세요.
 
 import { apiClient, getApiBaseUrl } from "./axios";
+import { CompanyControllerApi } from "./generated/api/company-controller-api";
 import { EmailControllerApi } from "./generated/api/email-controller-api";
 import { ImageControllerApi } from "./generated/api/image-controller-api";
 import { KakaoLoginControllerApi } from "./generated/api/kakao-login-controller-api";
 import { OcrControllerApi } from "./generated/api/ocr-controller-api";
+import { SubscriptionControllerApi } from "./generated/api/subscription-controller-api";
 import { UserControllerApi } from "./generated/api/user-controller-api";
-import type { PostUserOnboardingDto } from "./generated/models";
+import type {
+  SubscriptionRequest,
+  PostUserOnboardingDto,
+} from "./generated/models";
 
 export interface ApiRequestOptions {
   token?: string;
@@ -43,23 +48,66 @@ const getBasePath = (): string => {
   return getApiBaseUrl();
 };
 
+// CompanyControllerApi 함수들
+/**
+ * *
+ */
+export async function detail(
+  params: { companyId: number },
+  options: ApiRequestOptions = {}
+) {
+  const client = createApiClient(options);
+  const api = new CompanyControllerApi(undefined, getBasePath(), client);
+  const response = await api.getDetail(params.companyId);
+  return response.data;
+}
+
+/**
+ * *
+ */
+export async function subscribedCompaniesWithNews(
+  params: { userId: number },
+  options: ApiRequestOptions = {}
+) {
+  const client = createApiClient(options);
+  const api = new CompanyControllerApi(undefined, getBasePath(), client);
+  const response = await api.getSubscribedCompaniesWithNews(params.userId);
+  return response.data;
+}
+
+/**
+ * *
+ */
+export async function searchWithNews(
+  options: ApiRequestOptions = {}
+) {
+  const client = createApiClient(options);
+  const api = new CompanyControllerApi(undefined, getBasePath(), client);
+  const response = await api.searchWithNews();
+  return response.data;
+}
+
+
 // EmailControllerApi 함수들
 /**
  * *
  */
-export async function sendEmail(options: ApiRequestOptions = {}) {
+export async function sendEmail(
+  options: ApiRequestOptions = {}
+) {
   const client = createApiClient(options);
   const api = new EmailControllerApi(undefined, getBasePath(), client);
   const response = await api.sendEmail();
   return response.data;
 }
 
+
 // ImageControllerApi 함수들
 /**
  * *
  */
 export async function presignedUrl(
-  params: { prefix: string; fileName: string },
+  params: { prefix: string, fileName: string },
   options: ApiRequestOptions = {}
 ) {
   const client = createApiClient(options);
@@ -67,6 +115,7 @@ export async function presignedUrl(
   const response = await api.presignedUrl(params.prefix, params.fileName);
   return response.data;
 }
+
 
 // KakaoLoginControllerApi 함수들
 /**
@@ -82,12 +131,13 @@ export async function kakaoLogin(
   return response.data;
 }
 
+
 // OcrControllerApi 함수들
 /**
  * *
  */
 export async function ocrByUrl(
-  params: { imageUrl: any },
+  params: { imageUrl: string },
   options: ApiRequestOptions = {}
 ) {
   const client = createApiClient(options);
@@ -100,7 +150,7 @@ export async function ocrByUrl(
  * *
  */
 export async function ocrTextByUrl(
-  params: { imageUrl: any },
+  params: { imageUrl: string },
   options: ApiRequestOptions = {}
 ) {
   const client = createApiClient(options);
@@ -109,18 +159,47 @@ export async function ocrTextByUrl(
   return response.data;
 }
 
+
+// SubscriptionControllerApi 함수들
+/**
+ * *
+ */
+export async function register(
+  params: { subscriptionRequest: SubscriptionRequest },
+  options: ApiRequestOptions = {}
+) {
+  const client = createApiClient(options);
+  const api = new SubscriptionControllerApi(undefined, getBasePath(), client);
+  const response = await api.register(params.subscriptionRequest);
+  return response.data;
+}
+
+/**
+ * *
+ */
+export async function unregister(
+  params: { subscriptionRequest: SubscriptionRequest },
+  options: ApiRequestOptions = {}
+) {
+  const client = createApiClient(options);
+  const api = new SubscriptionControllerApi(undefined, getBasePath(), client);
+  const response = await api.unregister(params.subscriptionRequest);
+  return response.data;
+}
+
+
 // UserControllerApi 함수들
 /**
  * *
  */
 export async function userOnboardingInfo(
-  params: { userOnboardingInfoDto: PostUserOnboardingDto },
+  params: { postUserOnboardingDto: PostUserOnboardingDto },
   options: ApiRequestOptions = {}
 ) {
   const client = createApiClient(options);
   const api = new UserControllerApi(undefined, getBasePath(), client);
-  const response = await api.postUserOnboardingInfo(
-    params.userOnboardingInfoDto
-  );
+  const response = await api.postUserOnboardingInfo(params.postUserOnboardingDto);
   return response.data;
 }
+
+

@@ -220,13 +220,81 @@ export * from './configuration';
     let match;
 
     while ((match = methodRegex.exec(content)) !== null) {
+      const methodName = match[1];
+      const methodSignature = this.extractMethodSignature(content, match.index);
+      const parameters = this.extractMethodParameters(methodSignature);
+
       methods.push({
-        name: match[1],
+        name: methodName,
         description: this.extractMethodDescription(content, match.index),
+        parameters: parameters,
+        signature: methodSignature,
       });
     }
 
     return methods;
+  }
+
+  /**
+   * 메소드 시그니처 추출
+   */
+  extractMethodSignature(content, startIndex) {
+    const lines = content.split("\n");
+    const startLine = content.substring(0, startIndex).split("\n").length - 1;
+
+    // 메소드 시작 라인부터 찾기
+    for (let i = startLine; i < lines.length; i++) {
+      const line = lines[i].trim();
+      if (line.includes("public") && line.includes("(")) {
+        // 여러 줄에 걸친 경우 처리
+        let signature = line;
+        let j = i;
+        while (!signature.includes(")") && j < lines.length - 1) {
+          j++;
+          signature += " " + lines[j].trim();
+        }
+        return signature;
+      }
+    }
+    return "";
+  }
+
+  /**
+   * 메소드 매개변수 추출
+   */
+  extractMethodParameters(signature) {
+    const parameters = [];
+
+    // 괄호 안의 내용 추출
+    const paramMatch = signature.match(/\(([^)]*)\)/);
+    if (!paramMatch || !paramMatch[1].trim()) {
+      return parameters;
+    }
+
+    const paramString = paramMatch[1].trim();
+    if (paramString === "") {
+      return parameters;
+    }
+
+    // 매개변수들을 파싱
+    const paramParts = paramString.split(",").map((p) => p.trim());
+
+    for (const part of paramParts) {
+      // 매개변수 이름과 타입 추출
+      const paramMatch = part.match(/(\w+):\s*([^,]+)/);
+      if (paramMatch) {
+        const paramName = paramMatch[1];
+        const paramType = paramMatch[2].trim();
+
+        parameters.push({
+          name: paramName,
+          type: paramType,
+          optional: part.includes("?"),
+        });
+      }
+    }
+
+    return parameters;
   }
 
   /**
@@ -338,7 +406,7 @@ export * from './configuration';
       const newBasePathContent = `// API 서버 URL 설정
 // 기본값: 스테이징 서버
 // 환경 변수 NEXT_PUBLIC_API_BASE_URL로 오버라이드 가능
-export const BASE_PATH = "https://stg.ilhaeng.cloud".replace(/\\/+$/, "");`;
+export const BASE_PATH = "https://stg.next-career.co.kr".replace(/\\/+$/, "");`;
 
       // 기존 BASE_PATH 라인을 찾아서 교체
       const basePathRegex = /export const BASE_PATH = .*?;?\s*$/m;
@@ -363,24 +431,46 @@ export const BASE_PATH = "https://stg.ilhaeng.cloud".replace(/\\/+$/, "");`;
 
     apis.forEach((api) => {
       api.methods.forEach((method) => {
-        const parameterName = this.getParameterName(method.name);
-        if (parameterName) {
-          if (Array.isArray(parameterName)) {
-            // 배열인 경우 (예: presignedUrl의 prefix, fileName)는 string 타입이므로 import하지 않음
-            // 아무것도 하지 않음
-          } else {
-            // 단일 매개변수인 경우
-            const typeName = this.parameterNameToTypeName(parameterName);
-            if (typeName && typeName !== "string") {
-              // TypeScript 기본 타입은 import하지 않음
+        if (method.parameters) {
+          method.parameters.forEach((param) => {
+            const typeName = param.type;
+            // TypeScript 기본 타입이나 기본 타입 배열은 import하지 않음
+            if (
+              typeName &&
+              !this.isBasicType(typeName) &&
+              !typeName.includes("string") &&
+              !typeName.includes("number") &&
+              !typeName.includes("boolean") &&
+              !typeName.includes("any")
+            ) {
               usedTypes.add(typeName);
             }
-          }
+          });
         }
       });
     });
 
     return Array.from(usedTypes);
+  }
+
+  /**
+   * 기본 타입인지 확인
+   */
+  isBasicType(typeName) {
+    const basicTypes = [
+      "string",
+      "number",
+      "boolean",
+      "any",
+      "void",
+      "null",
+      "undefined",
+      "string[]",
+      "number[]",
+      "boolean[]",
+      "any[]",
+    ];
+    return basicTypes.includes(typeName);
   }
 
   /**
@@ -491,7 +581,7 @@ export const BASE_PATH = "https://stg.ilhaeng.cloud".replace(/\\/+$/, "");`;
    */
   generateApiMethodFunction(apiClassName, method) {
     const functionName = this.convertToFunctionName(method.name);
-    const parameterName = this.getParameterName(method.name);
+    const parameterName = this.getParameterName(method);
     const description = method.description || method.name;
 
     let result = "/**\n";
@@ -501,18 +591,18 @@ export const BASE_PATH = "https://stg.ilhaeng.cloud".replace(/\\/+$/, "");`;
 
     if (parameterName) {
       if (Array.isArray(parameterName)) {
-        // 배열인 경우 (예: presignedUrl의 prefix, fileName)
+        // 여러 매개변수인 경우
         result += "  params: { ";
         parameterName.forEach((param, index) => {
           if (index > 0) result += ", ";
-          result += param + ": string";
+          const paramType = this.getParameterType(method, param);
+          result += param + ": " + paramType;
         });
         result += " },\n";
       } else {
         // 단일 매개변수인 경우
-        const typeName = this.parameterNameToTypeName(parameterName);
-        result +=
-          "  params: { " + parameterName + ": " + (typeName || "any") + " },\n";
+        const paramType = this.getParameterType(method, parameterName);
+        result += "  params: { " + parameterName + ": " + paramType + " },\n";
       }
     }
 
@@ -526,7 +616,7 @@ export const BASE_PATH = "https://stg.ilhaeng.cloud".replace(/\\/+$/, "");`;
 
     if (parameterName) {
       if (Array.isArray(parameterName)) {
-        // 배열인 경우
+        // 여러 매개변수인 경우
         result += "  const response = await api." + method.name + "(";
         parameterName.forEach((param, index) => {
           if (index > 0) result += ", ";
@@ -567,28 +657,30 @@ export const BASE_PATH = "https://stg.ilhaeng.cloud".replace(/\\/+$/, "");`;
   }
 
   /**
-   * 메소드에 필요한 매개변수 이름 추출
+   * 메소드에 필요한 매개변수 이름 추출 (실제 매개변수 정보 사용)
    */
-  getParameterName(methodName) {
-    // post로 시작하는 메소드는 보통 DTO를 받음
-    if (methodName.startsWith("post")) {
-      const baseName = methodName.replace(/^post/, "");
-      return baseName.charAt(0).toLowerCase() + baseName.slice(1) + "Dto";
+  getParameterName(method) {
+    if (!method.parameters || method.parameters.length === 0) {
+      return null;
     }
-    // kakaoLogin은 code 파라미터가 필요
-    if (methodName === "kakaoLogin") {
-      return "code";
+
+    // 단일 매개변수인 경우
+    if (method.parameters.length === 1) {
+      return method.parameters[0].name;
     }
-    // presignedUrl은 prefix와 fileName 파라미터가 필요
-    if (methodName === "presignedUrl") {
-      return ["prefix", "fileName"];
-    }
-    // ocrByUrl과 ocrTextByUrl은 imageUrl 파라미터가 필요
-    if (methodName === "ocrByUrl" || methodName === "ocrTextByUrl") {
-      return "imageUrl";
-    }
-    // 다른 메소드들은 일단 null (매개변수 없음)
-    return null;
+
+    // 여러 매개변수인 경우 배열로 반환
+    return method.parameters.map((param) => param.name);
+  }
+
+  /**
+   * 매개변수 타입 정보 추출
+   */
+  getParameterType(method, paramName) {
+    if (!method.parameters) return "any";
+
+    const param = method.parameters.find((p) => p.name === paramName);
+    return param ? param.type : "any";
   }
 
   /**
