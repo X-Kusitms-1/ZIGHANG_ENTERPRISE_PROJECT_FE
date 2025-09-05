@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo, useEffect, Suspense } from "react";
+import { ErrorBoundary } from "react-error-boundary";
 import { useQueryClient } from "@tanstack/react-query";
 import NewsCard from "@/components/news/NewsCard";
 import {
@@ -16,6 +17,8 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import NewsGridSkeleton from "./NewsGridSkeleton";
+import NewsGridError from "./NewsGridError";
 
 interface NewsGridProps {
   companyId: string;
@@ -26,6 +29,16 @@ export default function NewsGrid({
   companyId,
   itemsPerPage = 9,
 }: NewsGridProps) {
+  return (
+    <ErrorBoundary fallback={<NewsGridError />}>
+      <Suspense fallback={<NewsGridSkeleton itemsPerPage={9} />}>
+        <NewsGridInternal companyId={companyId} itemsPerPage={itemsPerPage} />
+      </Suspense>
+    </ErrorBoundary>
+  );
+}
+
+function NewsGridInternal({ companyId, itemsPerPage = 9 }: NewsGridProps) {
   const { data } = useGetCompanyWithNews(companyId);
   const [currentPage, setCurrentPage] = useState(1);
   const queryClient = useQueryClient();

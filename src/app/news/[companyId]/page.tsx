@@ -1,6 +1,5 @@
 import React from "react";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
-import { Suspense } from "react";
 import CompanyInfo from "@/components/news/CompanyInfo";
 import getQueryClient from "@/utils/getQueryClient";
 import { companyQueryKeys } from "@/hooks/news/useGetCompanyWithNews";
@@ -8,7 +7,6 @@ import { getCompanyWithNews } from "@/api/news/companyWithNews";
 import NewsGrid from "@/components/news/NewsGrid";
 import CompanySidebar from "@/components/news/CompanySidebar";
 import SimilarCompaniesGrid from "@/components/news/SimilarCompaniesGrid";
-import NewsGridSkeleton from "@/components/news/NewsGridSkeleton";
 
 async function CompanyNewsPage({
   params,
@@ -35,13 +33,9 @@ async function CompanyNewsPage({
           <CompanyInfo variant="sub" companyInfo={companyData.company} />
           <CompanySidebar />
         </section>
-        <section className="max-tablet:ml-0 ml-[320px]">
-          <div id="all-news">
-            <h2 className="text-24-600 text-text-secondary">전체 소식</h2>
-            <Suspense fallback={<NewsGridSkeleton itemsPerPage={9} />}>
-              <NewsGrid companyId={companyId} />
-            </Suspense>
-          </div>
+        <section id="all-news" className="max-tablet:ml-0 ml-[320px] w-full">
+          <h2 className="text-24-600 text-text-secondary">전체 소식</h2>
+          <NewsGrid companyId={companyId} />
           <div
             id="similar-companies"
             className="max-tablet:hidden mt-15 w-full max-w-[1200px]"
