@@ -157,7 +157,7 @@ export default function OnBoardingModal({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
         onInteractOutside={(e) => e.preventDefault()}
-        className="flex !h-[640px] !w-[680px] w-full !max-w-[680px] flex-col items-center gap-0 rounded-lg bg-white px-22 pt-6 pb-[44px] [&>button]:hidden"
+        className={`flex !h-[640px] !w-[680px] w-full !max-w-[680px] flex-col items-center gap-0 rounded-lg bg-white ${currentStep === 0 ? "px-22" : currentStep === 2 || 3 ? "px-[90px]" : ""} pt-6 pb-[44px] [&>button]:hidden`}
       >
         {isCompleted ? (
           // 완료 화면
