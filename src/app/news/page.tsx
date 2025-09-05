@@ -8,7 +8,6 @@ import TotalNews from "@/components/news/TotalNews";
 import CompanyRow from "@/components/news/CompanyRow";
 import getQueryClient from "@/utils/getQueryClient";
 import TotalNewsSkeleton from "@/components/news/TotalNewsSkeleton";
-import CompanyRowSkeleton from "@/components/news/CompanyRowSkeleton";
 
 function NewsPage() {
   const queryClient = getQueryClient();
@@ -40,9 +39,7 @@ function NewsPage() {
         </Suspense>
       </section>
       <section className="max-tablet:mt-12 flex w-full max-w-[1200px] flex-col gap-4">
-        <Suspense fallback={<CompanyRowSkeleton />}>
-          <CompanyRow />
-        </Suspense>
+        <CompanyRow />
       </section>
     </HydrationBoundary>
   );

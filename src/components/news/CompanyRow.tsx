@@ -1,17 +1,30 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { Suspense, useEffect, useMemo, useState } from "react";
+import { ErrorBoundary } from "react-error-boundary";
 import { useGetNewsList } from "@/hooks/news/useGetNewsList";
 import { useIntersect } from "@/hooks/useIntersect";
 import CompanyInfo from "./CompanyInfo";
 import NewsCarousel from "./NewsCarousel";
+import CompanyRowSkeleton from "./CompanyRowSkeleton";
+import CompanyRowError from "./CompanyRowError";
 import type { NewsItem } from "@/api/type/news";
 import type {
   SearchWithNewsJobGroupsEnum,
   SearchWithNewsTypesEnum,
 } from "@/api/generated/api/company-controller-api";
 
-function CompanyRow() {
+export default function CompanyRow() {
+  return (
+    <ErrorBoundary fallback={<CompanyRowError />}>
+      <Suspense fallback={<CompanyRowSkeleton />}>
+        <CompanyRowInternal />
+      </Suspense>
+    </ErrorBoundary>
+  );
+}
+
+function CompanyRowInternal() {
   const [filters, setFilters] = useState<{
     types?: Set<SearchWithNewsTypesEnum>;
     jobGroups?: Set<SearchWithNewsJobGroupsEnum>;
@@ -90,5 +103,3 @@ function CompanyRow() {
     </>
   );
 }
-
-export default CompanyRow;
