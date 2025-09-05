@@ -9,7 +9,7 @@ export default function LoginPage() {
     <div className="flex min-h-[100dvh] flex-col bg-white">
       <MobileHeader />
       <div className="px-5 tablet:px-8 pc:mx-auto pc:max-w-[1024px]">
-        <div className="flex flex-col gap-3 mb-[16.4dvh]">
+        <div className="flex flex-col gap-3 mb-[140px] mt-[71px]">
             <MobileLoginTitle />
             <MobileSubTitle />
         </div>
