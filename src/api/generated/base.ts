@@ -17,8 +17,10 @@ import type { Configuration } from "./configuration";
 import type { AxiosPromise, AxiosInstance, RawAxiosRequestConfig } from "axios";
 import globalAxios from "axios";
 
-export const BASE_PATH = "http://localhost:8080".replace(/\/+$/, "");
-
+// API 서버 URL 설정
+// 기본값: 스테이징 서버
+// 환경 변수 NEXT_PUBLIC_API_BASE_URL로 오버라이드 가능
+export const BASE_PATH = "https://stg.next-career.co.kr".replace(/\/+$/, "");
 export const COLLECTION_FORMATS = {
     csv: ",",
     ssv: " ",

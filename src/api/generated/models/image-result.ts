@@ -11,10 +11,15 @@
  */
 
 
+// May contain unused imports in some cases
+// @ts-ignore
+import type { Field } from "./field";
 
-export interface TokenDto {
-    "grantType"?: string;
-    "accessToken"?: string;
-    "refreshToken"?: string;
+export interface ImageResult {
+    "uid"?: string;
+    "name"?: string;
+    "inferResult"?: string;
+    "message"?: string;
+    "fields"?: Array<Field>;
 }
 

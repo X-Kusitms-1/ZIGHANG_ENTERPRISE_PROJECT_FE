@@ -7,7 +7,7 @@ All URIs are relative to *http://localhost:8080*
 |[**kakaoLogin**](#kakaologin) | **GET** /v1/auth/kakao | 카카오 소셜 로그인|
 
 # **kakaoLogin**
-> TokenResult kakaoLogin()
+> RspTemplateObject kakaoLogin()
 
 카카오 인가 코드로 소셜 로그인을 진행하며, 성공 시 서비스 자체 JWT(Access/Refresh Token)와 신규 가입 여부를 반환합니다. 처음 로그인한 유저의 경우 isNewUser가 참으로 내려갑니다. 
 
@@ -38,7 +38,7 @@ const { status, data } = await apiInstance.kakaoLogin(
 
 ### Return type
 
-**TokenResult**
+**RspTemplateObject**
 
 ### Authorization
 

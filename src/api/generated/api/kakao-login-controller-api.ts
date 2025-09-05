@@ -20,7 +20,7 @@ import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObj
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, type RequestArgs, BaseAPI, RequiredError, operationServerMap } from "../base";
 // @ts-ignore
-import type { TokenResult } from "../models";
+import type { RspTemplateObject } from "../models";
 /**
  * KakaoLoginControllerApi - axios parameter creator
  */
@@ -83,7 +83,7 @@ export const KakaoLoginControllerApiFp = function(configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async kakaoLogin(code: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TokenResult>> {
+        async kakaoLogin(code: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RspTemplateObject>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.kakaoLogin(code, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap["KakaoLoginControllerApi.kakaoLogin"]?.[localVarOperationServerIndex]?.url;
@@ -105,7 +105,7 @@ export const KakaoLoginControllerApiFactory = function (configuration?: Configur
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        kakaoLogin(code: string, options?: RawAxiosRequestConfig): AxiosPromise<TokenResult> {
+        kakaoLogin(code: string, options?: RawAxiosRequestConfig): AxiosPromise<RspTemplateObject> {
             return localVarFp.kakaoLogin(code, options).then((request) => request(axios, basePath));
         },
     };
@@ -122,7 +122,7 @@ export interface KakaoLoginControllerApiInterface {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    kakaoLogin(code: string, options?: RawAxiosRequestConfig): AxiosPromise<TokenResult>;
+    kakaoLogin(code: string, options?: RawAxiosRequestConfig): AxiosPromise<RspTemplateObject>;
 
 }
 
