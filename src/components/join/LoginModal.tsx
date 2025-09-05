@@ -7,13 +7,11 @@ import LoginFooter from "./LoginFooter";
 interface LoginModalProps {
   open: boolean;
   onOpenChange: React.Dispatch<React.SetStateAction<boolean>>;
-  handleSocialLogin?: () => void;
 }
 
 export default function LoginModal({
   open,
   onOpenChange,
-  handleSocialLogin,
 }: LoginModalProps) {
   return (
     <Dialog onOpenChange={onOpenChange} open={open}>
@@ -30,7 +28,7 @@ export default function LoginModal({
           <LoginTitle />
         </DialogTitle>
         <LoginSubTitle />
-        <LoginSocialList onSocialLogin={handleSocialLogin} w="w-100" />
+        <LoginSocialList w="w-100" />
         <LoginFooter />
       </DialogContent>
     </Dialog>
