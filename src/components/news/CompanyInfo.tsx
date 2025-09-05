@@ -4,6 +4,7 @@ import React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { ChevronRight, Send, Plus } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { Button } from "../ui/Button";
 
 interface CompanyInfo {
@@ -34,37 +35,40 @@ interface CompanyInfoProps extends VariantProps<typeof companyInfoVariants> {
 function CompanyInfo({ companyInfo, variant }: CompanyInfoProps) {
   return (
     <div className={companyInfoVariants({ variant })}>
-      <div className="max-tablet:space-x-2 flex space-x-4">
-        {/* <div>{companyInfo.logo}</div> */}
-        <Image
-          src={companyInfo.companyThumbnailUrl}
-          alt={companyInfo.companyNameKr}
-          width={64}
-          height={64}
-          className={`bg-bg-neutral aspect-square h-16 w-16 flex-shrink-0 rounded-[7.5px] ${
-            variant === "sub"
-              ? "max-tablet:w-[60px] max-tablet:h-[60px]"
-              : "max-tablet:w-11 max-tablet:h-11"
-          } `}
-        />
-        <div className="flex w-full flex-col justify-center space-y-2">
-          <div className="flex justify-between gap-3">
-            <div className="flex space-x-2">
-              <h2 className="companyNameKr-tablet:text-16-600 text-18-600 truncate">
-                {companyInfo.companyNameKr}
-              </h2>
+      <Link href={`/news/${companyInfo.id}`}>
+        <div className="max-tablet:space-x-2 flex space-x-4">
+          {/* <div>{companyInfo.logo}</div> */}
+          <Image
+            src={companyInfo.companyThumbnailUrl}
+            alt={companyInfo.companyNameKr}
+            width={64}
+            height={64}
+            className={`bg-bg-neutral aspect-square h-16 w-16 flex-shrink-0 rounded-[7.5px] ${
+              variant === "sub"
+                ? "max-tablet:w-[60px] max-tablet:h-[60px]"
+                : "max-tablet:w-11 max-tablet:h-11"
+            } `}
+          />
+          <div className="flex w-full flex-col justify-center space-y-2">
+            <div className="flex justify-between gap-3">
+              <div className="flex space-x-2">
+                <h2 className="companyNameKr-tablet:text-16-600 text-18-600 truncate">
+                  {companyInfo.companyNameKr}
+                </h2>
+              </div>
+              {(variant === "main" || variant === "company") && (
+                <ChevronRight
+                  className={`size-4 ${variant === "main" ? "max-tablet:hidden" : ""}`}
+                />
+              )}
             </div>
-            {(variant === "main" || variant === "company") && (
-              <ChevronRight
-                className={`size-4 ${variant === "main" ? "max-tablet:hidden" : ""}`}
-              />
-            )}
-          </div>
-          <div className="text-12-500 text-text-tertiary flex items-center gap-1.5">
-            <p>{companyInfo.companyTypeLabel}</p>
+            <div className="text-12-500 text-text-tertiary flex items-center gap-1.5">
+              <p>{companyInfo.companyTypeLabel}</p>
+            </div>
           </div>
         </div>
-      </div>
+      </Link>
+
       {(variant === "main" || variant === "sub") && (
         <div className="max-tablet:w-auto max-tablet:flex max-tablet:justify-start w-full">
           <Button

@@ -7,6 +7,7 @@ import { getNewList } from "@/api/news/getNewList";
 import TotalNews from "@/components/news/TotalNews";
 import CompanyRow from "@/components/news/CompanyRow";
 import getQueryClient from "@/utils/getQueryClient";
+import TotalNewsSkeleton from "@/components/news/TotalNewsSkeleton";
 
 function NewsPage() {
   const queryClient = getQueryClient();
@@ -33,14 +34,12 @@ function NewsPage() {
         </FilterButton>
       </section>
       <section className="max-tablet:hidden mt-12 w-full max-w-[1200px]">
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<TotalNewsSkeleton />}>
           <TotalNews newsData={newsData} />
         </Suspense>
       </section>
       <section className="max-tablet:mt-12 flex w-full max-w-[1200px] flex-col gap-4">
-        <Suspense fallback={<div>Loading...</div>}>
-          <CompanyRow />
-        </Suspense>
+        <CompanyRow />
       </section>
     </HydrationBoundary>
   );

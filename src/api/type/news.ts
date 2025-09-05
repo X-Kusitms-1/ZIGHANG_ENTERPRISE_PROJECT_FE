@@ -1,9 +1,4 @@
-export interface Company {
-  id: string;
-  companyNameKr: string;
-  companyThumbnailUrl: string;
-  companyTypeLabel: string;
-}
+import { Company } from "./company";
 
 export interface News {
   title: string;
