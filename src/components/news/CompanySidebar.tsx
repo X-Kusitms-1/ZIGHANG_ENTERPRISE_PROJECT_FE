@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Building2 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 
 export default function CompanySidebar() {
@@ -67,7 +66,6 @@ export default function CompanySidebar() {
         }`}
         onClick={() => scrollToSection("similar-companies")}
       >
-        <Building2 />
         같은 직군 기업의 소식
       </Button>
     </>

@@ -94,7 +94,7 @@ function NewsGridInternal({ companyId, itemsPerPage = 9 }: NewsGridProps) {
 
   return (
     <>
-      <div className="max-tablet:grid-cols-2 mt-6 grid grid-cols-3 justify-items-center gap-4">
+      <div className="max-tablet:grid-cols-2 mt-6 grid grid-cols-3 gap-x-6 gap-y-10">
         {paginatedData.items.map((news, index) => (
           <NewsCard key={`news-${index}`} newsCard={news} />
         ))}
