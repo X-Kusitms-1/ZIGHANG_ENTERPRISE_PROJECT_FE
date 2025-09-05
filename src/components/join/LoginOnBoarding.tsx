@@ -13,23 +13,20 @@ export default function LoginOnBoarding({
 }: LoginOnBoardingProps) {
   const {
     isToggle: onBoardingOpen,
-    onOpenToggle: openOnBoarding,
     setIsToggle: setOnBoardingOpen,
   } = useToggle();
 
-  // 소셜 로그인 버튼 클릭 시 온보딩 모달로 전환
-  const handleSocialLogin = () => {
-    onOpenChange(false); // 로그인 모달 닫기
-    openOnBoarding(); // 온보딩 모달 열기
-  };
+  // ...existing code...
 
+  // 카카오 로그인 성공 후 온보딩 모달 열기 (예시: 쿼리 파라미터, localStorage 등 활용)
+  // useEffect(() => {
+  //   if (window.location.search.includes('social=success')) {
+  //     setOnBoardingOpen(true);
+  //   }
+  // }, []);
   return (
     <>
-      <LoginModal
-        open={open}
-        onOpenChange={onOpenChange}
-        handleSocialLogin={handleSocialLogin}
-      />
+      <LoginModal open={open} onOpenChange={onOpenChange} />
       <OnBoardingModal open={onBoardingOpen} onOpenChange={setOnBoardingOpen} />
     </>
   );
