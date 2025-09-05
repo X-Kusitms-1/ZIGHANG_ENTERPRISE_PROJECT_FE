@@ -10,7 +10,7 @@ interface LocationStepProps {
   locationList: LocationItem[];
   setLocationList: React.Dispatch<React.SetStateAction<LocationItem[]>>;
   setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
-  onSubmit?: () => void;
+  onSubmit: () => void;
 }
 
 export default function LocationStep({
@@ -24,22 +24,20 @@ export default function LocationStep({
   };
 
   const handleNext = () => {
-    if (onSubmit) {
-      onSubmit(); // 온보딩 데이터 전송
-    }
+    onSubmit(); // 페이지에서 받은 전송 함수 실행
   };
 
   return (
-    <div className="flex h-full flex-col items-center gap-[21px]">
+    <div className="mobile:flex-1 flex h-full flex-col items-center justify-between">
       <LocationGrid
         locationList={locationList}
         setLocationList={setLocationList}
       />
-      <div className="flex gap-3">
+      <div className="mobile:w-full mobile:px-2 pc:w-auto flex gap-3">
         <Button
           variant="outlined"
           size="lg"
-          className="h-[56px] w-[170.5px]"
+          className="mobile:flex-1 h-[56px] w-[170.5px]"
           onClick={handlePrevious}
         >
           이전으로
@@ -47,7 +45,7 @@ export default function LocationStep({
         <Button
           variant="filled"
           size="lg"
-          className="h-[56px] w-[170.5px]"
+          className="mobile:flex-1 h-[56px] w-[170.5px]"
           onClick={handleNext}
           disabled={locationList.length === 0}
         >

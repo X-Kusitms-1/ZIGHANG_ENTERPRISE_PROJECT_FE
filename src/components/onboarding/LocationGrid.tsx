@@ -15,6 +15,16 @@ interface LocationGridProps {
 }
 
 export default function LocationGrid(props: LocationGridProps) {
+  // 스크롤바 trackY 높이 계산 함수
+  const getTrackYHeight = () => {
+    if (typeof window !== "undefined") {
+      if (window.innerWidth >= 1024) return "324px";
+      if (window.innerWidth >= 768) return "65.53dvh";
+      return "58.78dvh";
+    }
+    return "324px";
+  };
+  const trackYHeight = getTrackYHeight();
   const { locationList, setLocationList } = props;
 
   const [selectedCity, setSelectedCity] = useState<string | null>(
@@ -99,14 +109,14 @@ export default function LocationGrid(props: LocationGridProps) {
   );
 
   return (
-    <div className="flex flex-col gap-3 pt-6">
+    <div className="mobile:w-full flex flex-col gap-3 pt-6">
       {/* 전체 레이아웃 컨테이너 */}
       <div className="border-t-border-line border-b-border-line flex border-t border-b">
         {/* 지역 영역 */}
-        <div className="flex h-[380px] w-[200px] p-2">
-          <div className="flex w-[172px] flex-col gap-2">
+        <div className="pc:w-[200px] tablet:w-[42%] mobile:w-[42%] pc:h-[380px] mobile:h-[60.78dvh] tablet:h-[67.53dvh] flex p-2">
+          <div className="pc:w-[172px] tablet:w-full mobile:w-full flex flex-col gap-2">
             <Scrollbar
-              style={{ width: "192px", height: "100%" }}
+              style={{ width: "100%", height: "100%" }}
               thumbXProps={{
                 style: {
                   display: "none",
@@ -127,9 +137,9 @@ export default function LocationGrid(props: LocationGridProps) {
                 style: {
                   background: "transparent",
                   width: "20px",
-                  right: "0px",
+                  right: window.innerWidth >= 1024 ? "-20px" : "-10px",
                   top: "0",
-                  height: "324px",
+                  height: trackYHeight,
                   paddingTop: "0",
                 },
               }}
@@ -139,7 +149,7 @@ export default function LocationGrid(props: LocationGridProps) {
                 },
               }}
             >
-              <div className="flex w-[172px] flex-col gap-2">
+              <div className="flex w-full flex-col gap-2">
                 {LOCATION_DATA.map((city) => {
                   const selectedSet = selectedDistricts[city.city] || new Set();
                   const isWholeSelected = selectedSet.has("전체");
@@ -183,10 +193,10 @@ export default function LocationGrid(props: LocationGridProps) {
         </div>
 
         {/* 지역구 영역 */}
-        <div className="border-l-border-line flex h-[380px] flex-1 border-l p-2">
-          <div className="flex flex-col gap-2" style={{ width: "272px" }}>
+        <div className="border-l-border-line pc:flex-1 tablet:w-[58%] mobile:w-[58%] pc:h-[380px] mobile:h-[58.78dvh] tablet:h-[65.53dvh] flex border-l p-2">
+          <div className="tablet:w-full mobile:w-full flex flex-col gap-2">
             <Scrollbar
-              style={{ width: "292px", height: "100%" }}
+              style={{ width: "100%", height: "100%" }}
               thumbXProps={{
                 style: {
                   display: "none",
@@ -207,9 +217,9 @@ export default function LocationGrid(props: LocationGridProps) {
                 style: {
                   background: "transparent",
                   width: "20px",
-                  right: "0px",
+                  right: window.innerWidth >= 1024 ? "-20px" : "-10px",
                   top: "0",
-                  height: "324px",
+                  height: trackYHeight,
                   paddingTop: "0",
                 },
               }}
@@ -219,7 +229,7 @@ export default function LocationGrid(props: LocationGridProps) {
                 },
               }}
             >
-              <div className="flex w-[272px] flex-col gap-2">
+              <div className="flex w-full flex-col gap-2">
                 {selectedCityData && (
                   <>
                     {selectedCityData.districts.map((district: string) => {
