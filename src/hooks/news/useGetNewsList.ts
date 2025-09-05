@@ -1,4 +1,4 @@
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { useSuspenseInfiniteQuery } from "@tanstack/react-query";
 import { getNewList } from "@/api/news/getNewList";
 import type { NewsResponse } from "@/api/type/news";
 
@@ -34,7 +34,7 @@ export const newsQueryKeys = {
 export const useGetNewsList = (filters?: NewsListFilters) => {
   const pageSize = typeof filters?.size === "number" ? filters.size : undefined;
 
-  return useInfiniteQuery<NewsResponse>({
+  return useSuspenseInfiniteQuery<NewsResponse>({
     queryKey: newsQueryKeys.list({ ...filters, size: pageSize }),
     initialPageParam: 0,
     queryFn: async ({ pageParam }) => {
