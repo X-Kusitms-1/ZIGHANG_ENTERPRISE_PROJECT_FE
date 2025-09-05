@@ -1,17 +1,25 @@
-"use client";
+import Image from "next/image";
+import { socialConfig } from "./LoginSocialList";
+
+type SocialType = "kakao" | "naver" | "google";
 
 interface LoginSocialProps {
-  social: string;
-  imageSrc: string;
+  type: SocialType;
+  onClick?: () => void;
 }
 
-export default function LoginSocial({ social, imageSrc }: LoginSocialProps) {
+export default function LoginSocial({ type, onClick }: LoginSocialProps) {
+  const config = socialConfig[type];
+
   return (
-    <div className="flex h-14 w-full cursor-pointer flex-row items-center justify-center rounded-lg border border-[#D5D7DA] bg-white hover:bg-zinc-100/60 active:bg-zinc-100">
-      <div className="mr-4 h-7 w-7">
-        <img
-          src={imageSrc}
-          alt={`${social} logo`}
+    <div
+      className={`flex h-12 w-100 cursor-pointer flex-row items-center justify-center rounded-lg hover:bg-zinc-100/60 active:bg-zinc-100 ${config.bgColor} ${config.borderColor}`}
+      onClick={onClick}
+    >
+      <div className="mr-4 h-4 w-4">
+        <Image
+          src={config.imageSrc}
+          alt={`${config.name} logo`}
           loading="lazy"
           width={28}
           height={28}
@@ -19,8 +27,8 @@ export default function LoginSocial({ social, imageSrc }: LoginSocialProps) {
           className="rounded-[4px]"
         />
       </div>
-      <div className="text-[16px] font-medium text-[#414651]">
-        {social} 계정으로 계속하기
+      <div className={`text-16-600 ${config.textColor}`}>
+        {config.name}로 계속하기
       </div>
     </div>
   );
