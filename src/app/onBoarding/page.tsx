@@ -9,6 +9,7 @@ import CareerStep from "@/components/onboarding/CareerStep";
 import CareerYear from "@/components/onboarding/CareerYear";
 import JobFieldStep from "@/components/onboarding/JobFieldStep";
 import LocationStep from "@/components/onboarding/LocationStep";
+import { serverApiClient } from "@/api";
 
 type JobItem = {
   jobFamily: string;
@@ -32,39 +33,27 @@ export default function OnBoardingPage() {
   const [locationList, setLocationList] = useState<LocationItem[]>([]);
 
   // 온보딩 데이터 전송 함수
-  const handleOnBoardingSubmit = async () => {
-    try {
-      console.log("온보딩 데이터 전송:", {
-        career,
-        careerYear,
-        jobList,
-        isUndecided,
-        locationList,
-      });
-
-      // 예시: API 전송
-      // const response = await fetch("/api/onboarding", {
-      //   method: "POST",
-      //   body: JSON.stringify({
-      //     career,
-      //     careerYear,
-      //     jobList,
-      //     isUndecided,
-      //     locationList,
-      //   }),
-      //   headers: { "Content-Type": "application/json" },
-      // });
-
-      // if (response.ok) {
-      //   router.push("/onBoarding/complete");
-      // }
-
-      // 임시로 바로 이동 (API 연결 시 위 코드로 대체)
-      router.push("/onBoarding/success");
-    } catch (error) {
-      console.error("온보딩 데이터 전송 실패:", error);
-    }
-  };
+  const onSubmit = async () => {
+      try {
+        const payload = {
+          minCareer: careerYear.min,
+          maxCareer: careerYear.max,
+          addressList: locationList,
+          industryList: jobList,
+        };
+        console.log("온보딩 데이터 전송:", payload);
+  
+        // 실제 API 전송 예시
+        await serverApiClient.post("/v1/user/onboarding", payload, {
+          headers: { "Content-Type": "application/json" },
+        });
+  
+        // 전송 성공 시 성공 페이지로 이동
+        router.push("/onBoarding/success");
+      } catch (error) {
+        console.error("온보딩 데이터 전송 실패:", error);
+      }
+    };
 
   const steps = [
     {
@@ -133,7 +122,7 @@ export default function OnBoardingPage() {
           locationList={locationList}
           setLocationList={setLocationList}
           setCurrentStep={setCurrentStep}
-          onSubmit={handleOnBoardingSubmit}
+          onSubmit={onSubmit}
         />
       ),
     },

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { serverApiClient } from "@/api";
 import {
   Dialog,
   DialogContent,
@@ -50,26 +51,18 @@ export default function OnBoardingModal({
   // 온보딩 데이터 전송 함수
   const onSubmit = async () => {
     try {
-      console.log("온보딩 데이터 전송:", {
-        career,
-        careerYear,
-        jobList,
-        isUndecided,
-        locationList,
-      });
+      const payload = {
+        minCareer: careerYear.min,
+        maxCareer: careerYear.max,
+        addressList: locationList,
+        industryList: jobList,
+      };
+      console.log("온보딩 데이터 전송:", payload);
 
-      // 예시: API 전송
-      // await fetch("/api/onboarding", {
-      //   method: "POST",
-      //   body: JSON.stringify({
-      //     career,
-      //     careerYear,
-      //     jobList,
-      //     isUndecided,
-      //     locationList,
-      //   }),
-      //   headers: { "Content-Type": "application/json" },
-      // });
+      // 실제 API 전송 예시
+      await serverApiClient.post("/api/onboarding", payload, {
+        headers: { "Content-Type": "application/json" },
+      });
 
       // 전송 성공 시 완료 화면으로 전환
       setIsCompleted(true);
