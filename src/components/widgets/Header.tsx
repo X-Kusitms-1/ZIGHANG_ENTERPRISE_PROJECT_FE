@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import LoginOnBoarding from "@/components/join/LoginOnBoarding";
 import { useToggle } from "@/hooks/useToggle";
@@ -12,6 +13,13 @@ const Header = () => {
     onOpenToggle: openModal,
     setIsToggle: setOpen,
   } = useToggle();
+  const router = useRouter();
+
+  // 모바일 로그인 버튼 핸들러
+  const handleMobileLogin = () => {
+    router.push("/login");
+  };
+
   return (
     <header className="tablet:px-8 pc:px-8 mx-auto flex w-full items-center justify-between py-3">
       <div className="flex items-center gap-8">
@@ -39,7 +47,7 @@ const Header = () => {
         <button className="h-[40px] w-[84px]">기업 회원</button>
         <button
           className="flex h-[40px] cursor-pointer items-center justify-center px-4 py-[10px] text-base text-[#6F00B6]"
-          onClick={openModal}
+          onClick={handleMobileLogin}
         >
           로그인
         </button>
