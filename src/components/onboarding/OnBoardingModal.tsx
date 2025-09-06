@@ -60,12 +60,18 @@ export default function OnBoardingModal({
       console.log("온보딩 데이터 전송:", payload);
 
       // 실제 API 전송 예시
-      await serverApiClient.post("/api/onboarding", payload, {
-        headers: { "Content-Type": "application/json" },
-      });
+      const response = await serverApiClient.post(
+        "/v1/user/onboarding",
+        payload,
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
 
-      // 전송 성공 시 완료 화면으로 전환
-      setIsCompleted(true);
+      // 응답이 200일 때만 완료 화면으로 전환
+      if (response.status === 200) {
+        setIsCompleted(true);
+      }
     } catch (error) {
       console.error("온보딩 데이터 전송 실패:", error);
     }

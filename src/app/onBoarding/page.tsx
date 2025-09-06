@@ -34,26 +34,32 @@ export default function OnBoardingPage() {
 
   // 온보딩 데이터 전송 함수
   const onSubmit = async () => {
-      try {
-        const payload = {
-          minCareer: careerYear.min,
-          maxCareer: careerYear.max,
-          addressList: locationList,
-          industryList: jobList,
-        };
-        console.log("온보딩 데이터 전송:", payload);
-  
-        // 실제 API 전송 예시
-        await serverApiClient.post("/v1/user/onboarding", payload, {
+    try {
+      const payload = {
+        minCareer: careerYear.min,
+        maxCareer: careerYear.max,
+        addressList: locationList,
+        industryList: jobList,
+      };
+      console.log("온보딩 데이터 전송:", payload);
+
+      // 실제 API 전송 예시
+      const response = await serverApiClient.post(
+        "/v1/user/onboarding",
+        payload,
+        {
           headers: { "Content-Type": "application/json" },
-        });
-  
-        // 전송 성공 시 성공 페이지로 이동
+        }
+      );
+
+      // 응답이 200일 때만 성공 페이지로 이동
+      if (response.status === 200) {
         router.push("/onBoarding/success");
-      } catch (error) {
-        console.error("온보딩 데이터 전송 실패:", error);
       }
-    };
+    } catch (error) {
+      console.error("온보딩 데이터 전송 실패:", error);
+    }
+  };
 
   const steps = [
     {
