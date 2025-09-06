@@ -1,7 +1,7 @@
 import React, { Suspense } from "react";
-import { Send } from "lucide-react";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import FilterModal from "@/components/widgets/FilterModal";
+import FilterBottomSheet from "@/components/widgets/FilterBottomSheet";
 import { FilterButton } from "@/components/ui/FilterButton";
 import { getNewList } from "@/api/news/getNewList";
 import TotalNews from "@/components/news/TotalNews";
@@ -27,9 +27,15 @@ function NewsPage() {
         </h2>
       </section>
       <section className="mt-6 flex w-full max-w-[1200px] items-center space-x-2">
-        <FilterModal />
+        {/* 모바일/태블릿에서만 바텀시트 필터 표시 */}
+        <div className="pc:hidden">
+          <FilterBottomSheet />
+        </div>
+        {/* PC에서만 모달 필터 표시 */}
+        <div className="max-pc:hidden">
+          <FilterModal />
+        </div>
         <FilterButton className="gap-1" size="sm">
-          <Send />
           소식 받고 있는 기업
         </FilterButton>
       </section>
