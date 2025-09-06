@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import Image from "next/image";
-import { Scrollbar } from "react-scrollbars-custom";
+import CustomScrollbar from "@/components/ui/CustomScrollbar";
 import { LOCATION_DATA } from "@/constants/LocationData";
 
 type LocationItem = {
@@ -15,16 +15,6 @@ interface LocationGridProps {
 }
 
 export default function LocationGrid(props: LocationGridProps) {
-  // 스크롤바 trackY 높이 계산 함수
-  const getTrackYHeight = () => {
-    if (typeof window !== "undefined") {
-      if (window.innerWidth >= 1024) return "324px";
-      if (window.innerWidth >= 768) return "65.53dvh";
-      return "58.78dvh";
-    }
-    return "324px";
-  };
-  const trackYHeight = getTrackYHeight();
   const { locationList, setLocationList } = props;
 
   const [selectedCity, setSelectedCity] = useState<string | null>(
@@ -115,40 +105,7 @@ export default function LocationGrid(props: LocationGridProps) {
         {/* 지역 영역 */}
         <div className="pc:w-[200px] tablet:w-[42%] mobile:w-[42%] pc:h-[380px] mobile:h-[60.78dvh] tablet:h-[67.53dvh] flex p-2">
           <div className="pc:w-[172px] tablet:w-full mobile:w-full flex flex-col gap-2">
-            <Scrollbar
-              style={{ width: "100%", height: "100%" }}
-              thumbXProps={{
-                style: {
-                  display: "none",
-                },
-              }}
-              thumbYProps={{
-                style: {
-                  height: "76px",
-                  background: "#E0E5F0",
-                  width: "4px",
-                  borderRadius: "9999px",
-                  margin: "0 auto",
-                  minHeight: "76px",
-                  top: "0",
-                },
-              }}
-              trackYProps={{
-                style: {
-                  background: "transparent",
-                  width: "20px",
-                  right: window.innerWidth >= 1024 ? "-20px" : "-10px",
-                  top: "0",
-                  height: trackYHeight,
-                  paddingTop: "0",
-                },
-              }}
-              trackXProps={{
-                style: {
-                  display: "none",
-                },
-              }}
-            >
+            <CustomScrollbar variant="location">
               <div className="flex w-full flex-col gap-2">
                 {LOCATION_DATA.map((city) => {
                   const selectedSet = selectedDistricts[city.city] || new Set();
@@ -188,47 +145,14 @@ export default function LocationGrid(props: LocationGridProps) {
                   );
                 })}
               </div>
-            </Scrollbar>
+            </CustomScrollbar>
           </div>
         </div>
 
         {/* 지역구 영역 */}
         <div className="border-l-border-line pc:flex-1 tablet:w-[58%] mobile:w-[58%] pc:h-[380px] mobile:h-[58.78dvh] tablet:h-[65.53dvh] flex border-l p-2">
           <div className="tablet:w-full mobile:w-full flex flex-col gap-2">
-            <Scrollbar
-              style={{ width: "100%", height: "100%" }}
-              thumbXProps={{
-                style: {
-                  display: "none",
-                },
-              }}
-              thumbYProps={{
-                style: {
-                  height: "76px",
-                  background: "#E0E5F0",
-                  width: "4px",
-                  borderRadius: "9999px",
-                  margin: "0 auto",
-                  minHeight: "76px",
-                  top: "0",
-                },
-              }}
-              trackYProps={{
-                style: {
-                  background: "transparent",
-                  width: "20px",
-                  right: window.innerWidth >= 1024 ? "-20px" : "-10px",
-                  top: "0",
-                  height: trackYHeight,
-                  paddingTop: "0",
-                },
-              }}
-              trackXProps={{
-                style: {
-                  display: "none",
-                },
-              }}
-            >
+            <CustomScrollbar variant="location">
               <div className="flex w-full flex-col gap-2">
                 {selectedCityData && (
                   <>
@@ -261,7 +185,7 @@ export default function LocationGrid(props: LocationGridProps) {
                   </>
                 )}
               </div>
-            </Scrollbar>
+            </CustomScrollbar>
           </div>
         </div>
       </div>

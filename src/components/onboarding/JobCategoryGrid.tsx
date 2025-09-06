@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import Image from "next/image";
-import { Scrollbar } from "react-scrollbars-custom";
+import CustomScrollbar from "@/components/ui/CustomScrollbar";
 import { Checkbox } from "@/components/ui/checkbox";
 import { JOB_CATEGORIES } from "@/constants/JobKind";
 
@@ -18,16 +18,6 @@ interface JobCategoryGridProps {
 }
 
 export default function JobCategoryGrid(props: JobCategoryGridProps) {
-  // 스크롤바 trackY 높이 계산
-  const getTrackYHeight = () => {
-    if (typeof window !== "undefined") {
-      if (window.innerWidth >= 1024) return "324px";
-      if (window.innerWidth >= 768) return "60.53dvh"; // 62.53 - 2dvh (padding)
-      return "53.78dvh"; // 55.78 - 2dvh (padding)
-    }
-    return "324px";
-  };
-  const trackYHeight = getTrackYHeight();
   const { jobList, setJobList, isUndecided, setIsUndecided } = props;
 
   const jobCategoriesData = JOB_CATEGORIES;
@@ -115,43 +105,7 @@ export default function JobCategoryGrid(props: JobCategoryGridProps) {
         {/* 카테고리(직군) 영역 */}
         <div className="pc:w-[200px] tablet:w-[42%] mobile:w-[42%] pc:h-[340px] mobile:h-[55.78dvh] tablet:h-[62.53dvh] flex p-2">
           <div className="pc:w-[172px] tablet:w-full mobile:w-full flex flex-col gap-2">
-            <Scrollbar
-              style={{ width: "100%", height: "100%" }}
-              thumbXProps={{
-                style: {
-                  display: "none",
-                },
-              }}
-              thumbYProps={{
-                style: {
-                  height: "76px",
-                  background: "#E0E5F0",
-                  width: "4px",
-                  borderRadius: "9999px",
-                  margin: "0 auto",
-                  minHeight: "76px",
-                  top: "0",
-                },
-              }}
-              trackYProps={{
-                style: {
-                  background: "transparent",
-                  width: "20px",
-                  right:
-                    typeof window !== "undefined" && window.innerWidth >= 1024
-                      ? "-20px"
-                      : "-10px",
-                  top: "0",
-                  height: trackYHeight,
-                  paddingTop: "0",
-                },
-              }}
-              trackXProps={{
-                style: {
-                  display: "none",
-                },
-              }}
-            >
+            <CustomScrollbar variant="job">
               <div className="flex w-full flex-col gap-2">
                 {jobCategoriesData.map((category) => {
                   const selectedSet = selectedRoles[category.name] || new Set();
@@ -190,50 +144,14 @@ export default function JobCategoryGrid(props: JobCategoryGridProps) {
                   );
                 })}
               </div>
-            </Scrollbar>
+            </CustomScrollbar>
           </div>
         </div>
 
         {/* 역할(직무) 영역 */}
         <div className="border-l-border-line pc:flex-1 tablet:w-[58%] mobile:w-[58%] pc:h-[340px] mobile:h-[55.78dvh] tablet:h-[62.53dvh] flex border-l p-2">
           <div className="flex w-full flex-col gap-2">
-            <Scrollbar
-              style={{ width: "100%", height: "100%" }}
-              thumbXProps={{
-                style: {
-                  display: "none",
-                },
-              }}
-              thumbYProps={{
-                style: {
-                  height: "76px",
-                  background: "#E0E5F0",
-                  width: "4px",
-                  borderRadius: "9999px",
-                  margin: "0 auto",
-                  minHeight: "76px",
-                  top: "0",
-                },
-              }}
-              trackYProps={{
-                style: {
-                  background: "transparent",
-                  width: "20px",
-                  right:
-                    typeof window !== "undefined" && window.innerWidth >= 1024
-                      ? "-20px"
-                      : "-10px",
-                  top: "0",
-                  height: trackYHeight,
-                  paddingTop: "0",
-                },
-              }}
-              trackXProps={{
-                style: {
-                  display: "none",
-                },
-              }}
-            >
+            <CustomScrollbar variant="job">
               <div className="flex w-full flex-col gap-2">
                 {selectedCategoryData && (
                   <>
@@ -267,7 +185,7 @@ export default function JobCategoryGrid(props: JobCategoryGridProps) {
                   </>
                 )}
               </div>
-            </Scrollbar>
+            </CustomScrollbar>
           </div>
           {/* 역할 오른쪽 구분선 */}
         </div>
