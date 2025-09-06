@@ -14,7 +14,7 @@ export default function ConditionalLayout({
   const [showHeaderFooter, setShowHeaderFooter] = useState(true);
 
   // 특정 경로에서 Header와 Footer를 제외할 경로 배열
-  const excludePaths = ["/login","/onBoarding"];
+  const excludePaths = ["/login","/onBoarding, ","/onBoarding/success"];
 
   useEffect(() => {
     setShowHeaderFooter(!excludePaths.includes(pathname));
