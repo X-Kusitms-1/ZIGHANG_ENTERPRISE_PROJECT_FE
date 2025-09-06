@@ -101,7 +101,7 @@ function NewsGridInternal({ companyId, itemsPerPage = 9 }: NewsGridProps) {
       </div>
 
       {paginatedData.totalPages > 0 && (
-        <div className="mt-8">
+        <div className="max-pc:my-8 mt-8">
           <Pagination>
             <PaginationContent>
               <PaginationItem>

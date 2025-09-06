@@ -1,73 +1,81 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Button } from "@/components/ui/Button";
 
-export default function CompanySidebar() {
-  const [activeSection, setActiveSection] = useState("all-news");
+interface CompanySidebarProps {
+  activeSection: string;
+  onSectionChange: (_sectionId: string) => void;
+}
 
-  const scrollToSection = (sectionId: string) => {
-    if (sectionId === "all-news") {
-      // 전체 소식 버튼을 누르면 페이지 맨 위로 스크롤
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    } else {
-      // 다른 섹션은 해당 섹션으로 스크롤
-      const element = document.getElementById(sectionId);
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth" });
-      }
-    }
-  };
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollY = window.scrollY;
-      const windowHeight = window.innerHeight;
-
-      // 전체 소식 섹션 (페이지 상단 근처)
-      if (scrollY < 200) {
-        setActiveSection("all-news");
-      }
-      // 유사 기업 섹션
-      else {
-        const similarSection = document.getElementById("similar-companies");
-        if (similarSection) {
-          const rect = similarSection.getBoundingClientRect();
-          if (rect.top <= windowHeight / 2) {
-            setActiveSection("similar-companies");
-          }
-        }
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+export default function CompanySidebar({
+  activeSection,
+  onSectionChange,
+}: CompanySidebarProps) {
+  const tabs = [
+    { id: "all-news", label: "전체 소식", count: "999+" },
+    { id: "similar-companies", label: "같은 직군 기업의 소식", count: "999+" },
+  ];
 
   return (
     <>
-      <Button
-        variant="inversed"
-        size="lg"
-        className={`w-full justify-start ${
-          activeSection === "all-news" ? "bg-gray-100 text-gray-900" : ""
-        }`}
-        onClick={() => scrollToSection("all-news")}
-      >
-        전체 소식
-      </Button>
-      <Button
-        variant="inversed"
-        size="lg"
-        className={`w-full justify-start space-x-2 ${
-          activeSection === "similar-companies"
-            ? "bg-gray-100 text-gray-900"
-            : ""
-        }`}
-        onClick={() => scrollToSection("similar-companies")}
-      >
-        같은 직군 기업의 소식
-      </Button>
+      {/* PC: 세로 사이드바 */}
+      <div className="max-pc:hidden space-y-2">
+        <Button
+          variant="inversed"
+          size="lg"
+          className={`w-full justify-start ${
+            activeSection === "all-news" ? "bg-gray-100 text-gray-900" : ""
+          }`}
+          onClick={() => onSectionChange("all-news")}
+        >
+          전체 소식
+        </Button>
+        <Button
+          variant="inversed"
+          size="lg"
+          className={`w-full justify-start space-x-2 ${
+            activeSection === "similar-companies"
+              ? "bg-gray-100 text-gray-900"
+              : ""
+          }`}
+          onClick={() => onSectionChange("similar-companies")}
+        >
+          같은 직군 기업의 소식
+        </Button>
+      </div>
+
+      {/* 모바일/태블릿: 가로 탭 */}
+      <div className="pc:hidden mt-6">
+        <div className="relative border-b">
+          <div className="flex">
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() => onSectionChange(tab.id)}
+                className={`text-16-600 relative flex flex-1 items-center justify-center gap-2 py-4 transition-colors ${
+                  activeSection === tab.id
+                    ? "text-text-primary"
+                    : "text-text-tertiary"
+                }`}
+              >
+                <span className="truncate">{tab.label}</span>
+              </button>
+            ))}
+          </div>
+          {/* 동적으로 움직이는 보라색 선 */}
+          <div
+            className="bg-bg-primary info absolute bottom-0 z-10 h-0.5 transition-all duration-300 ease-in-out"
+            style={{
+              width: `${100 / tabs.length}%`,
+              left: `${(tabs.findIndex((tab) => tab.id === activeSection) * 100) / tabs.length}%`,
+            }}
+          />
+          {/* 전체 탭 영역의 배경 선 (회색) */}
+          <div className="bg-border-line absolute right-0 bottom-0 left-0 h-0.5" />
+        </div>
+      </div>
     </>
   );
 }
