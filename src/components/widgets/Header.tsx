@@ -2,17 +2,11 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import LoginOnBoarding from "@/components/join/LoginOnBoarding";
-import { useToggle } from "@/hooks/useToggle";
+import LoginModal from "../login/LoginModal";
 import NavMenu from "./NavMenu";
 import MenuSidebar from "./MenuSidebar";
 
 const Header = () => {
-  const {
-    isToggle: open,
-    onOpenToggle: openModal,
-    setIsToggle: setOpen,
-  } = useToggle();
   const router = useRouter();
 
   // 모바일 로그인 버튼 핸들러
@@ -35,12 +29,11 @@ const Header = () => {
       <div className="tablet:flex hidden items-center gap-5">
         <div className="flex items-center gap-4">
           <button className="h-[40px] w-[84px]">기업 회원</button>
-          <button
-            className="flex h-[40px] cursor-pointer items-center justify-center gap-3 rounded-[8px] border border-[#DDDDE1] px-4 py-[10px] text-base text-[#6F00B6]"
-            onClick={openModal}
-          >
-            로그인 / 회원가입
-          </button>
+          <LoginModal>
+            <button className="flex h-[40px] cursor-pointer items-center justify-center gap-3 rounded-[8px] border border-[#DDDDE1] px-4 py-[10px] text-base text-[#6F00B6]">
+              로그인 / 회원가입
+            </button>
+          </LoginModal>
         </div>
       </div>
       <div className="tablet:hidden flex items-center gap-5">
@@ -53,7 +46,6 @@ const Header = () => {
         </button>
         <MenuSidebar />
       </div>
-      <LoginOnBoarding open={open} onOpenChange={setOpen} />
     </header>
   );
 };
