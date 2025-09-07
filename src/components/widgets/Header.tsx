@@ -3,6 +3,7 @@ import React from "react";
 import Image from "next/image";
 import LoginOnBoarding from "@/components/join/LoginOnBoarding";
 import { useToggle } from "@/hooks/useToggle";
+import { Button } from "../ui/Button";
 import NavMenu from "./NavMenu";
 import MenuSidebar from "./MenuSidebar";
 
@@ -24,25 +25,17 @@ const Header = () => {
         />
         <NavMenu className="tablet:block hidden" />
       </div>
-      <div className="tablet:flex hidden items-center gap-5">
+      <div className="pc:flex hidden items-center gap-5">
         <div className="flex items-center gap-4">
-          <button className="h-[40px] w-[84px]">기업 회원</button>
-          <button
-            className="flex h-[40px] cursor-pointer items-center justify-center gap-3 rounded-[8px] border border-[#DDDDE1] px-4 py-[10px] text-base text-[#6F00B6]"
-            onClick={openModal}
-          >
-            로그인 / 회원가입
-          </button>
+          <Button variant="inversed" size="sm">
+            기업 회원
+          </Button>
+          <Button size="sm" onClick={openModal}>
+            로그인
+          </Button>
         </div>
       </div>
-      <div className="tablet:hidden flex items-center gap-5">
-        <button className="h-[40px] w-[84px]">기업 회원</button>
-        <button
-          className="flex h-[40px] cursor-pointer items-center justify-center px-4 py-[10px] text-base text-[#6F00B6]"
-          onClick={openModal}
-        >
-          로그인
-        </button>
+      <div className="max-pc:flex hidden items-center gap-5">
         <MenuSidebar />
       </div>
       <LoginOnBoarding open={open} onOpenChange={setOpen} />

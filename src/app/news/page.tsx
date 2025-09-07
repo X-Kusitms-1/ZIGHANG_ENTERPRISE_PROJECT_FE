@@ -20,9 +20,9 @@ function NewsPage() {
 
   return (
     <HydrationBoundary state={dehydratedState}>
-      <section className="bg-bg-neutral mt-4 flex w-full max-w-[1200px] flex-col justify-center gap-1 rounded-2xl px-8 py-11">
+      <section className="bg-bg-neutral max-pc:px-5 max-pc:py-8 mt-4 flex w-full max-w-[1200px] flex-col justify-center gap-1 rounded-2xl px-8 py-11">
         <p className="text-14-600 text-text-info">기업 소식</p>
-        <h2 className="text-24-600 text-text-primary">
+        <h2 className="text-24-600 text-text-primary max-pc:text-20-600 max-tablet:text-16-600">
           관심 기업의 뉴스레터를 확인해 보세요
         </h2>
       </section>

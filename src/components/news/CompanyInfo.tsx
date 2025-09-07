@@ -18,7 +18,7 @@ interface CompanyInfo {
 const companyInfoVariants = cva("company-info", {
   variants: {
     variant: {
-      main: "flex flex-col space-y-5 max-tablet:flex-row max-tablet:space-x-4 max-tablet:justify-between pc:min-w-[280px] tablet:min-w-[280px]",
+      main: "flex flex-col space-y-5 max-pc:flex-row max-pc:space-x-4 max-pc:justify-between pc:min-w-[280px] tablet:min-w-[280px]",
       sub: "flex flex-col space-y-5 pc:min-w-[280px] tablet:min-w-[280px]",
       company: "flex",
       content: "flex",
@@ -82,15 +82,13 @@ function CompanyInfo({ companyInfo, variant, className }: CompanyInfoProps) {
       </Link>
 
       {(variant === "main" || variant === "sub") && (
-        <div className="max-tablet:w-auto max-tablet:flex max-tablet:justify-start w-full">
+        <div className="max-pc:w-auto max-pc:flex max-pc:justify-start w-full">
           <Button
             variant="neutral"
             size="md"
-            className={`max-tablet:text-14-500 flex w-full items-center gap-2 ${
-              variant === "main"
-                ? "max-tablet:max-w-[92px] max-tablet:h-[36px]"
-                : ""
-            } ${variant === "sub" ? "max-tablet:min-w-[360px] max-tablet:min-h-[56px] !text-16-500" : ""} `}
+            className={`max-pc:text-14-500 flex w-full items-center gap-2 ${
+              variant === "main" ? "max-pc:max-w-[92px] max-pc:h-[36px]" : ""
+            } ${variant === "sub" ? "max-pc:min-w-[360px] max-pc:min-h-[56px] !text-16-500" : ""} `}
           >
             {companyInfo.isSubscribed ? "소식받기" : "소식 받는 중"}
             {companyInfo.isSubscribed ? (

@@ -11,7 +11,7 @@ function TotalNews({ newsData }: TotalNewsProps) {
   const news = use(newsData);
 
   return (
-    <h3 className="text-18-600 text-text-secondary">
+    <h3 className="text-18-600 text-text-secondary max:pc:hidden">
       전체 소식 <span className="text-text-info">{news.totalElements}</span>
     </h3>
   );

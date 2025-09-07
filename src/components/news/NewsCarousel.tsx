@@ -26,7 +26,7 @@ function NewsCarousel({ newsCards }: NewsCarouselProps) {
         {newsCards.map((newsCard, index) => (
           <CarouselItem
             key={`${newsCard.url}-${index}`}
-            className="max-tablet:max-w-[180px] md:basis-1/2 lg:basis-1/3"
+            className="max-pc:max-w-[180px] md:basis-1/2 lg:basis-1/3"
           >
             <NewsCard newsCard={newsCard} />
           </CarouselItem>

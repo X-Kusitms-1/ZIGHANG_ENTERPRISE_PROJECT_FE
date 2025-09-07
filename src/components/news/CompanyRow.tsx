@@ -77,7 +77,7 @@ export default function CompanyRow() {
       {companies.map((company) => (
         <div
           key={company.company.id}
-          className="max-tablet:flex-col max-tablet:py-0 max-tablet:pb-11 flex w-full gap-6 py-11"
+          className="max-pc:flex-col max-pc:py-0 max-pc:pb-11 flex w-full gap-6 py-11"
         >
           <CompanyInfo variant="main" companyInfo={company.company} />
           <NewsCarousel newsCards={company.news} />
