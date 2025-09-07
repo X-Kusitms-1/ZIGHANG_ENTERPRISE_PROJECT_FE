@@ -1,12 +1,42 @@
+"use client";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
+import { useEffect, useState } from "react";
 import SearchInput from "@/components/widgets/SearchInput";
 import JobCategoryGrid from "@/components/widgets/JobCategoryGrid";
 import Banner from "@/components/widgets/Banner";
+import OnBoardingModal from "@/components/onboarding/OnBoardingModal";
 
 export default function Home() {
+  
+  const [showOnboarding, setShowOnboarding] = useState(false);
+  
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const shouldShowOnboarding = urlParams.get("showOnboarding");
+    if (shouldShowOnboarding === "true") {
+      // 백엔드에서 온보딩 완료 여부 검증
+      import("@/api").then(({ serverApiClient }) => {
+        serverApiClient
+          .get("/v1/user/status")
+          .then((response) => {
+            const onboardingComplete = response.data.data.isOnboarded;
+            if (!onboardingComplete) {
+              setShowOnboarding(true);
+            } else {
+              setShowOnboarding(false);
+            }
+          })
+          .catch(() => {
+            setShowOnboarding(false);
+          });
+      });
+    }
+  }, []);
+
   return (
     <>
+      {showOnboarding && <OnBoardingModal defaultOpen={true} />}
       <div className="my-6 flex w-full flex-col items-center">
         <div className="tablet:flex-row tablet:text-[22px] flex flex-col items-center gap-1 text-[18px] font-bold">
           <span>대기업 및 유니콘 채용 공고를</span>
