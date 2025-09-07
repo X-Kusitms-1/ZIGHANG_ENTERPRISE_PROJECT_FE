@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import MobileHeader from "@/components/mobileLogin/MobileHeader";
 import MobileLoginTitle from "@/components/mobileLogin/MobileLoginTitle";
@@ -31,6 +31,13 @@ export default function OnBoardingPage() {
   const [jobList, setJobList] = useState<JobItem[]>([]);
   const [isUndecided, setIsUndecided] = useState(false);
   const [locationList, setLocationList] = useState<LocationItem[]>([]);
+  const [userName, setUserName] = useState<string>("");
+
+  // 최초 마운트 시 로컬스토리지에서 userName 가져오기
+  useEffect(() => {
+    const name = localStorage.getItem("userName");
+    if (name) setUserName(name);
+  }, []);
 
   // 온보딩 데이터 전송 함수
   const onSubmit = async () => {
@@ -46,24 +53,23 @@ export default function OnBoardingPage() {
       // 실제 API 전송 예시
       const response = await serverApiClient.post(
         "/v1/user/onboarding",
-        payload,
-        {
-          headers: { "Content-Type": "application/json" },
-        }
+        payload
       );
 
       // 응답이 200일 때만 성공 페이지로 이동
       if (response.status === 200) {
-        router.push("/onBoarding/success");
+        router.replace("/onBoarding/success");
       }
     } catch (error) {
+      alert("온보딩 데이터 입력 오류 다시 시도해주세요");
+      router.replace("/onBoarding");
       console.error("온보딩 데이터 전송 실패:", error);
     }
   };
 
   const steps = [
     {
-      title: "소현님, 경력이신가요?",
+      title: `${userName ? userName : "사용자"}님, 경력이신가요?`,
       subtitle: (
         <>
           단 1분, 프로필을 작성하시면 맞춤형 공고를

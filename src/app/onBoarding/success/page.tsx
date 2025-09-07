@@ -1,4 +1,5 @@
 "use client";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 import MobileHeader from "@/components/mobileLogin/MobileHeader";
@@ -6,10 +7,15 @@ import MobileLoginTitle from "@/components/mobileLogin/MobileLoginTitle";
 import MobileSubTitle from "@/components/mobileLogin/MobileSubTitle";
 
 export default function OnBoardingSuccessPage() {
+  const [displayName, setDisplayName] = useState("사용자");
   const router = useRouter();
 
+  useEffect(() => {
+    const userName = localStorage.getItem("userName");
+    setDisplayName(userName ?? "사용자");
+  }, []);
+
   const handleGoToMain = () => {
-    // TODO: 메인 페이지로 이동
     router.push("/");
   };
 
@@ -23,7 +29,7 @@ export default function OnBoardingSuccessPage() {
             <MobileSubTitle
               text={
                 <>
-                  소현님에게 맞는 맞춤형 공고들을 앞으로
+                  {displayName}님에게 맞는 맞춤형 공고들을 앞으로
                   <br className="mobile:block tablet:hidden" />
                   추천해드릴게요!
                 </>
@@ -35,7 +41,7 @@ export default function OnBoardingSuccessPage() {
         <Button
           variant="filled"
           size="lg"
-          className="w-full h-[56px]"
+          className="h-[56px] w-full"
           onClick={handleGoToMain}
         >
           나한테 꼭 맞는 공고 보러가기
