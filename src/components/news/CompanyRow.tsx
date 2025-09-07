@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Suspense, useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { useGetNewsList } from "@/hooks/news/useGetNewsList";
 import { useIntersect } from "@/hooks/useIntersect";
@@ -15,16 +15,6 @@ import type {
 } from "@/api/generated/api/company-controller-api";
 
 export default function CompanyRow() {
-  return (
-    <ErrorBoundary fallback={<CompanyRowError />}>
-      <Suspense fallback={<CompanyRowSkeleton />}>
-        <CompanyRowInternal />
-      </Suspense>
-    </ErrorBoundary>
-  );
-}
-
-function CompanyRowInternal() {
   const [filters, setFilters] = useState<{
     types?: Set<SearchWithNewsTypesEnum>;
     jobGroups?: Set<SearchWithNewsJobGroupsEnum>;
@@ -74,17 +64,16 @@ function CompanyRowInternal() {
     return data.pages.flatMap((p) => p.content);
   }, [data]);
 
-  const ref = useIntersect<HTMLDivElement>(
-    () => {
-      if (hasNextPage && !isFetchingNextPage) {
-        fetchNextPage();
-      }
-    },
-    hasNextPage && !isFetchingNextPage && isFetched
-  );
+  const ref = useIntersect<HTMLDivElement>(() => {
+    if (hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, hasNextPage && !isFetchingNextPage);
+
+  if (!isFetched) return <CompanyRowSkeleton />;
 
   return (
-    <>
+    <ErrorBoundary fallback={<CompanyRowError />}>
       {companies.map((company) => (
         <div
           key={company.company.id}
@@ -100,6 +89,6 @@ function CompanyRowInternal() {
         ref={ref}
         style={{ width: "1px", height: "1px", marginTop: "10px" }}
       />
-    </>
+    </ErrorBoundary>
   );
 }

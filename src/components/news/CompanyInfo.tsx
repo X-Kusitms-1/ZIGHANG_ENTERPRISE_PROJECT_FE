@@ -37,45 +37,46 @@ interface CompanyInfoProps extends VariantProps<typeof companyInfoVariants> {
 function CompanyInfo({ companyInfo, variant, className }: CompanyInfoProps) {
   return (
     <div className={companyInfoVariants({ variant, className })}>
-      <Link href={`/news/${companyInfo.id}`}>
-        <div className={"max-tablet:space-x-2 flex space-x-4"}>
-          {/* <div>{companyInfo.logo}</div> */}
-          <Image
-            src={companyInfo.companyThumbnailUrl}
-            alt={companyInfo.companyNameKr}
-            width={20}
-            height={20}
-            className={`bg-bg-neutral pc:h-16 pc:w-16 aspect-square flex-shrink-0 rounded-[7.5px] ${
-              variant === "company"
-                ? "max-pc:!w-5 max-pc:!h-5"
-                : variant === "sub"
-                  ? "max-pc:w-[60px] max-pc:h-[60px]"
-                  : variant === "main"
-                    ? "max-pc:w-11 max-pc:h-11"
-                    : ""
-            } `}
-          />
-          <div className="flex w-full flex-col justify-center space-y-2">
-            <div className="flex justify-between gap-3">
-              <div className="flex space-x-2">
-                <h2 className="companyNameKr-tablet:text-16-600 text-18-600 truncate">
-                  {companyInfo.companyNameKr}
-                </h2>
-              </div>
-              {(variant === "main" || variant === "company") && (
-                <ChevronRight
-                  className={`size-4 ${variant === "main" ? "max-tablet:hidden" : ""}`}
-                />
-              )}
+      <Link
+        href={`/news/${companyInfo.id}`}
+        className={"max-tablet:space-x-2 flex space-x-4"}
+      >
+        {/* <div>{companyInfo.logo}</div> */}
+        <Image
+          src={companyInfo.companyThumbnailUrl}
+          alt={companyInfo.companyNameKr}
+          width={20}
+          height={20}
+          className={`bg-bg-neutral pc:h-16 pc:w-16 aspect-square flex-shrink-0 rounded-[7.5px] ${
+            variant === "company"
+              ? "max-pc:!w-5 max-pc:!h-5"
+              : variant === "sub"
+                ? "max-pc:w-[60px] max-pc:h-[60px]"
+                : variant === "main"
+                  ? "max-pc:w-11 max-pc:h-11"
+                  : ""
+          } `}
+        />
+        <div className="flex w-full flex-col justify-center space-y-2">
+          <div className="flex justify-between gap-3">
+            <div className="flex space-x-2">
+              <h2 className="companyNameKr-tablet:text-16-600 text-18-600 truncate">
+                {companyInfo.companyNameKr}
+              </h2>
             </div>
+            {(variant === "main" || variant === "company") && (
+              <ChevronRight
+                className={`size-4 ${variant === "main" ? "max-tablet:hidden" : ""}`}
+              />
+            )}
+          </div>
 
-            <div
-              className={`text-12-500 text-text-tertiary flex items-center gap-1.5 ${
-                variant === "company" ? "max-pc:hidden" : ""
-              }`}
-            >
-              <p>{companyInfo.companyTypeLabel}</p>
-            </div>
+          <div
+            className={`text-12-500 text-text-tertiary flex items-center gap-1.5 ${
+              variant === "company" ? "max-pc:hidden" : ""
+            }`}
+          >
+            <p>{companyInfo.companyTypeLabel}</p>
           </div>
         </div>
       </Link>
