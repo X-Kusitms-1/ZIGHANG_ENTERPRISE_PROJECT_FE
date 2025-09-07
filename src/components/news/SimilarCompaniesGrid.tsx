@@ -14,7 +14,7 @@ export default function SimilarCompaniesGrid({
 }: SimilarCompaniesGridProps) {
   return (
     <ErrorBoundary fallback={<SimilarCompaniesError />}>
-      <div className="max-pc:grid-cols-1 mt-6 grid w-full max-w-[1200px] grid-cols-3 gap-4">
+      <div className="max-pc:grid-cols-1 mt-6 mb-8 grid w-full max-w-[1200px] grid-cols-3 gap-4">
         {companies.map((companyWithNews) => (
           <div
             key={companyWithNews.company.id}

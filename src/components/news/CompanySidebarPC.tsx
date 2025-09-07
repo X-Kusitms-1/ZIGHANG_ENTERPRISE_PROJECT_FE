@@ -7,6 +7,8 @@ export default function CompanySidebarPC() {
   const [activeSection, setActiveSection] = useState("all-news");
 
   const scrollToSection = (sectionId: string) => {
+    // 클릭 즉시 활성화 상태 업데이트 (스크롤 이벤트 대기하지 않음)
+    setActiveSection(sectionId);
     if (sectionId === "all-news") {
       // 전체 소식 버튼을 누르면 페이지 맨 위로 스크롤
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -41,6 +43,8 @@ export default function CompanySidebarPC() {
     };
 
     window.addEventListener("scroll", handleScroll);
+    // 마운트 시 최초 한 번 현재 위치로 활성 섹션 계산
+    handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
