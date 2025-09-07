@@ -1,17 +1,17 @@
 "use client";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { X } from "lucide-react";
 
 export default function CloseButton() {
   const router = useRouter();
   return (
-    <Image
-      src="/x-button.svg"
-      alt="닫기"
-      width={24}
-      height={24}
-      className="cursor-pointer"
+    <button
+      type="button"
+      aria-label="닫기"
+      className="cursor-pointer flex items-center justify-center p-0 bg-transparent border-none"
       onClick={() => router.back()}
-    />
+    >
+      <X size={24} />
+    </button>
   );
 }
