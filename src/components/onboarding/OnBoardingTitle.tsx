@@ -34,7 +34,11 @@ export default function OnBoardingTitle({
       <div className="text-14-500 text-text-tertiary mb-4 leading-5">
         {subtitle}
       </div>
-      <div className="pc:w-[680px] w-full">
+      <div
+        className={`pc:w-[680px] pc:mb-0 w-full ${
+          currentStep === 0 || currentStep === 1 ? "mobile:mb-[115px]" : ""
+        }`}
+      >
         <div className="bg-border-tertiary h-1 w-full overflow-hidden">
           <div
             className="h-1 rounded-r-lg bg-purple-600 transition-all duration-300 ease-in-out"
