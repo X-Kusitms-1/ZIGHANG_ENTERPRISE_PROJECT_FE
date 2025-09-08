@@ -23,9 +23,9 @@ export default function ApplyCountInput() {
   };
 
   return (
-    <div className="bg-bg-info-hovered flex h-[38vh] relative min-h-[220px] w-full max-w-[480px] min-w-[320px] flex-shrink-0 flex-col gap-[10px] rounded-[12px] md:h-[320px] md:max-w-[400px]">
+    <div className="bg-bg-info-hovered flex h-[38vh] relative max-h-[280px] w-full max-w-[432px] min-w-[400px] flex-shrink-0 flex-col gap-[10px] rounded-[12px] ">
       {/* 배경 이미지 (absolute, z-0) */}
-      <div className="absolute inset-0 h-[72%] w-full">
+      <div className="absolute inset-0 h-[73%] w-full">
           <Image
             src="/today/apply-component.svg"
             alt="지원할 공고 개수 배경 이미지"
@@ -35,37 +35,37 @@ export default function ApplyCountInput() {
           />
       </div>
       {/* 입력 컨트롤 영역 (relative, z-10) */}
-      <div className="bg-bg-info relative z-10 mx-auto mt-[30vh] flex h-[52px] w-[70%] min-w-[200px] items-center justify-between rounded-[10px] p-3">
-        <label className="text-text-secondary text-base font-semibold md:text-lg">
+      <div className="bg-bg-info absolute bottom-3 left-4 z-10 flex h-[52px] w-[68.5%] min-w-[200px] items-center justify-between rounded-[10px] px-3 py-[16px]">
+        <label className="text-text-secondary text-16-600 leading-6">
           지원할 공고 개수
         </label>
         {/* 카운터 컨트롤 */}
-        <div className="flex h-9 w-[40%] min-w-[90px] items-center">
+        <div className="bg-bg-base flex h-9 w-[45.6%] items-center rounded-[8px]">
           {/* 감소 버튼 */}
           <button
             onClick={handleDecrement}
             disabled={count <= 1}
-            className="bg-bg-base hover:bg-bg-base-hovered active:bg-bg-base-focused flex h-9 w-9 items-center justify-center rounded-l-lg border-0 disabled:cursor-not-allowed disabled:opacity-50"
+            className="hover:bg-bg-base-hovered active:bg-bg-base-focused flex h-9 w-9 items-center justify-center border-0 disabled:cursor-not-allowed disabled:opacity-50"
           >
             <Minus className="text-text-secondary h-4 w-4" />
           </button>
           {/* 개수 표시 */}
-          <div className="bg-bg-base flex h-9 flex-1 items-center justify-center border-0 px-4 py-2">
-            <span className="text-text-primary text-sm md:text-base">
+          <div className="flex h-9 flex-1 items-center justify-center border-0">
+            <span className="text-text-primary text-14-500">
               {count}
             </span>
           </div>
           {/* 증가 버튼 */}
           <button
             onClick={handleIncrement}
-            className="bg-bg-base hover:bg-bg-base-hovered active:bg-bg-base-focused flex h-9 w-9 items-center justify-center rounded-r-lg border-0"
+            className="hover:bg-bg-base-hovered active:bg-bg-base-focused flex h-9 w-9 items-center justify-center border-0"
           >
             <Plus className="text-text-secondary h-4 w-4" />
           </button>
         </div>
       </div>
       {/* 제출 버튼 */}
-      <div className="absolute top-[75%] right-4 z-10">
+      <div className="absolute bottom-3 right-4 z-10">
         <Button
           onClick={handleSubmit}
           variant="filled"
