@@ -1,5 +1,5 @@
 import React from "react";
-import TooltipArrow from "./TooltipArrow";
+import Image from "next/image";
 
 interface TodaysGoalStatusProps {
   userName?: string;
@@ -18,15 +18,16 @@ export function TodaysGoalStatus({
   const progressWidth = `${percentage}%`;
 
   return (
-    <div className="bg-bg-base relative h-[142px] w-full rounded-[12px] p-5 pb-0 min-w-[402px]">
+    <div className="bg-bg-base relative h-[142px] w-full min-w-[402px] rounded-[12px] p-5 pb-7 flex flex-col justify-between">
       {/* Title */}
-      <div className="text-18-600 text-text-tertiary mb-[18px] leading-[28px]">
-        {userName}님의 목표달성 현황
-      </div>
-
-      {/* Progress Count */}
-      <div className="text-18-600 text-text-primary mb-[10px] leading-[28px]">
-        {completed}/{total}개
+      <div className="flex justify-between">
+        <div className="text-18-600 text-text-tertiary leading-[28px]">
+          {userName}님의 목표달성 현황
+        </div>
+        {/* Progress Count */}
+        <div className="text-18-600 text-text-primary mb-[10px] leading-[28px]">
+          {completed}/{total}개
+        </div>
       </div>
 
       {/* Progress Bar Container */}
@@ -52,8 +53,12 @@ export function TodaysGoalStatus({
             </div>
             {/* Tooltip Arrow */}
             <div className="absolute top-full left-1/2 -translate-x-1/2 transform">
-              <TooltipArrow
-                style={{ color: "var(--color-bg-transparent-mostdarkest)" }}
+              <Image
+                src="/today/triangle.svg"
+                alt="툴팁 화살표"
+                width={8}
+                height={7}
+                style={{ display: "block" }}
               />
             </div>
           </div>
