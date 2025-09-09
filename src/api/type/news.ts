@@ -5,6 +5,7 @@ export interface News {
   url: string;
   publishedAt: string;
   thumbnailUrl: string;
+  isSubscribed?: boolean;
 }
 
 export interface NewsItem {
@@ -18,6 +19,7 @@ export interface Sort {
   ascending: boolean;
   property: string;
   ignoreCase: boolean;
+  descending?: boolean;
 }
 
 export interface Pageable {

@@ -16,6 +16,9 @@ const buttonVariants = cva(
           "bg-bg-base text-text-secondary border border-border-inverse hover:bg-bg-base-hovered active:bg-neutral-100",
         inversed:
           "bg-bg-base text-text-secondary hover:bg-bg-base-hovered active:bg-bg-base-focused",
+
+        subtle:
+          "bg-bg-info hover:bg-bg-info-hovered active:bg-bg-info-focused text-text-info hover:text-text-info-darker active:text-text-info-darker",
         disabled: "bg-bg-disabled !text-text-disabled cursor-not-allowed",
       },
       size: {
@@ -38,6 +41,7 @@ const iconVariants = cva("", {
       neutral: "text-icon-secondary",
       outlined: "text-icon-secondary",
       inversed: "text-icon-secondary",
+      subtle: "text-icon-info",
       disabled: "text-icon-disabled",
     },
   },

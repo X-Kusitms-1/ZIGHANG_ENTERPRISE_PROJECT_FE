@@ -5,6 +5,7 @@ export interface Company {
   companyNameKr: string;
   companyThumbnailUrl: string;
   companyTypeLabel: string;
+  isSubscribed: boolean;
 }
 
 export interface CompanyWithNews {

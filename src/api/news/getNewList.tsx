@@ -40,5 +40,6 @@ export async function getNewList({
     revalidate: 60 * 24,
   });
 
-  return response.data;
+  // API 래퍼 { statusCode, message, data } 중 data만 반환
+  return response.data?.data ?? response.data;
 }
