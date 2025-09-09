@@ -19,9 +19,7 @@ export default function KakaoCallbackPage() {
         }
 
         const response = await serverApi.get("/v1/user/status");
-        console.log(response.data.data.isOnboarded);
         const onboardingComplete  = response.data.data.isOnboarded;
-        console.log(onboardingComplete);
         if (!onboardingComplete) {
           // 온보딩이 완료되지 않은 경우
           const isMobile = window.innerWidth < 768; // 모바일 기준 (tablet: 768px)
