@@ -1,11 +1,11 @@
 "use client";
 
 import React, { useState } from "react";
-import CompanyInfo from "@/components/news/CompanyInfo";
 import NewsGrid from "@/components/news/NewsGrid";
 import CompanySidebar from "@/components/news/CompanySidebar";
 import SimilarCompaniesGrid from "@/components/news/SimilarCompaniesGrid";
 import { CompanyDetailWithNewsResponse } from "@/api/type/company";
+import CompanyInfoContainer from "./CompanyInfoContainer";
 
 interface CompanyContentProps {
   companyId: string;
@@ -35,7 +35,7 @@ export default function CompanyContent({
 
   return (
     <>
-      <CompanyInfo
+      <CompanyInfoContainer
         className="pc:hidden"
         variant="sub"
         companyInfo={companyData.company}
