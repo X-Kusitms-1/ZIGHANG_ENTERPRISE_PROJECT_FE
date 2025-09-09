@@ -4,10 +4,10 @@ import React, { useEffect, useMemo, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { useGetNewsList } from "@/hooks/news/useGetNewsList";
 import { useIntersect } from "@/hooks/useIntersect";
-import CompanyInfo from "./CompanyInfo";
 import NewsCarousel from "./NewsCarousel";
 import CompanyRowSkeleton from "./CompanyRowSkeleton";
 import CompanyRowError from "./CompanyRowError";
+import CompanyInfoContainer from "./CompanyInfoContainer";
 import type { NewsItem } from "@/api/type/news";
 import type {
   SearchWithNewsJobGroupsEnum,
@@ -79,7 +79,7 @@ export default function CompanyRow() {
           key={company.company.id}
           className="max-pc:flex-col max-pc:py-0 max-pc:pb-11 flex w-full gap-6 py-11"
         >
-          <CompanyInfo variant="main" companyInfo={company.company} />
+          <CompanyInfoContainer companyInfo={company.company} />
           <NewsCarousel newsCards={company.news} />
         </div>
       ))}

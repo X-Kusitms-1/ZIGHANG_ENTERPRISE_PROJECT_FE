@@ -6,8 +6,6 @@ import { ChevronRight, MailCheck } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { Company } from "@/api/type/company";
-import { useSubscriptionMutation } from "@/hooks/news/useSubscriptionMutation";
-import { useUnsubscriptionMutation } from "@/hooks/news/useSubscriptionMutation";
 import { Button } from "../ui/Button";
 
 const companyInfoVariants = cva("company-info", {
@@ -27,21 +25,15 @@ const companyInfoVariants = cva("company-info", {
 interface CompanyInfoProps extends VariantProps<typeof companyInfoVariants> {
   companyInfo: Company;
   className?: string;
+  onSubscribe?: () => void;
 }
 
-function CompanyInfo({ companyInfo, variant, className }: CompanyInfoProps) {
-  const { mutate: subscribeCompany } = useSubscriptionMutation(companyInfo.id);
-  const { mutate: unsubscribeCompany } = useUnsubscriptionMutation(
-    companyInfo.id
-  );
-
-  const handleSubscribe = () => {
-    if (companyInfo.isSubscribed) {
-      unsubscribeCompany();
-    } else {
-      subscribeCompany();
-    }
-  };
+function CompanyInfo({
+  companyInfo,
+  variant,
+  className,
+  onSubscribe,
+}: CompanyInfoProps) {
   return (
     <div className={companyInfoVariants({ variant, className })}>
       <Link
@@ -91,7 +83,7 @@ function CompanyInfo({ companyInfo, variant, className }: CompanyInfoProps) {
       {(variant === "main" || variant === "sub") && (
         <div className="max-pc:w-auto max-pc:flex max-pc:justify-start w-full">
           <Button
-            onClick={handleSubscribe}
+            onClick={onSubscribe}
             variant={companyInfo.isSubscribed ? "neutral" : "subtle"}
             size="md"
             className={`max-pc:text-14-500 flex w-full items-center gap-2 ${
