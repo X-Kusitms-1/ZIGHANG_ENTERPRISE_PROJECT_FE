@@ -23,19 +23,19 @@ export default function ApplyCountInput() {
   };
 
   return (
-    <div className="bg-bg-info-hovered flex h-[38vh] relative max-h-[280px] w-full max-w-[432px] min-w-[400px] flex-shrink-0 flex-col gap-[10px] rounded-[12px] ">
+    <div className="bg-bg-info-hovered relative flex h-[280px] w-[432px] flex-shrink-0 flex-col gap-[10px] rounded-[12px]">
       {/* 배경 이미지 (absolute, z-0) */}
-      <div className="absolute inset-0 h-[73%] w-full">
-          <Image
-            src="/today/apply-component.svg"
-            alt="지원할 공고 개수 배경 이미지"
-            fill
-            className="z-0 rounded-[12px] object-cover"
-            style={{ zIndex: 0 }}
-          />
+      <div className="absolute inset-0 h-[204.4px] w-full">
+        <Image
+          src="/today/apply-component.svg"
+          alt="지원할 공고 개수 배경 이미지"
+          fill
+          className="z-0 rounded-[12px] object-cover"
+          style={{ zIndex: 0 }}
+        />
       </div>
       {/* 입력 컨트롤 영역 (relative, z-10) */}
-      <div className="bg-bg-info absolute bottom-3 left-4 z-10 flex h-[52px] w-[68.5%] min-w-[200px] items-center justify-between rounded-[10px] px-3 py-[16px]">
+      <div className="bg-bg-info absolute bottom-3 left-4 z-10 flex h-[52px] w-[296px] items-center justify-between rounded-[10px] px-3 py-[16px]">
         <label className="text-text-secondary text-16-600 leading-6">
           지원할 공고 개수
         </label>
@@ -51,9 +51,7 @@ export default function ApplyCountInput() {
           </button>
           {/* 개수 표시 */}
           <div className="flex h-9 flex-1 items-center justify-center border-0">
-            <span className="text-text-primary text-14-500">
-              {count}
-            </span>
+            <span className="text-text-primary text-14-500">{count}</span>
           </div>
           {/* 증가 버튼 */}
           <button
@@ -65,7 +63,7 @@ export default function ApplyCountInput() {
         </div>
       </div>
       {/* 제출 버튼 */}
-      <div className="absolute bottom-3 right-4 z-10">
+      <div className="absolute right-4 bottom-3 z-10">
         <Button
           onClick={handleSubmit}
           variant="filled"
