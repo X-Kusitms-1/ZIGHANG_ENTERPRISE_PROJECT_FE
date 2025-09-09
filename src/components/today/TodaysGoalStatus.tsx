@@ -10,7 +10,7 @@ interface TodaysGoalStatusProps {
 
 export function TodaysGoalStatus({
   userName = "소현",
-  completed = 3,
+  completed = 0,
   total = 5,
 }: TodaysGoalStatusProps) {
   // completed/total로 퍼센트 계산
@@ -18,7 +18,7 @@ export function TodaysGoalStatus({
   const progressWidth = `${percentage}%`;
 
   return (
-    <div className="bg-bg-base relative h-[142px] w-full min-w-[402px] rounded-[12px] p-5 pb-7 flex flex-col justify-between">
+    <div className="bg-bg-base relative flex h-[142px] w-full min-w-[402px] flex-col justify-between rounded-[12px] p-5 pb-7">
       {/* Title */}
       <div className="flex justify-between">
         <div className="text-18-600 text-text-tertiary leading-[28px]">
@@ -42,27 +42,48 @@ export function TodaysGoalStatus({
         />
 
         {/* Tooltip: 진행바 끝나는 지점 위에 위치 */}
-        <div
-          className="absolute -top-11"
-          style={{ left: `calc(${progressWidth} - 25px)` }} // 20px은 툴팁의 절반 너비(중앙 정렬)
-        >
-          <div className="relative flex flex-col items-center">
-            {/* Tooltip Content */}
-            <div className="bg-bg-transparent-mostdarkest text-text-inverse text-12-500 rounded-[8px] px-3 py-1.5">
-              {percentage}%
-            </div>
-            {/* Tooltip Arrow */}
-            <div className="absolute top-full left-1/2 -translate-x-1/2 transform">
-              <Image
-                src="/today/triangle.svg"
-                alt="툴팁 화살표"
-                width={8}
-                height={7}
-                style={{ display: "block" }}
-              />
+        {completed === 0 ? (
+          <div className="absolute -top-11 left-0">
+            <div className="relative flex flex-col items-center">
+              {/* Tooltip Content */}
+              <div className="bg-bg-transparent-mostdarkest text-text-inverse text-12-500 rounded-[8px] px-3 py-1.5">
+                시작이 반이에요!
+              </div>
+              {/* Tooltip Arrow */}
+              <div className="absolute top-full left-[10px] transform">
+                <Image
+                  src="/today/triangle.svg"
+                  alt="툴팁 화살표"
+                  width={8}
+                  height={7}
+                  style={{ display: "block" }}
+                />
+              </div>
             </div>
           </div>
-        </div>
+        ) : (
+          <div
+            className="absolute -top-11"
+            style={{ left: `calc(${progressWidth} - 25px)` }} // 20px은 툴팁의 절반 너비(중앙 정렬)
+          >
+            <div className="relative flex flex-col items-center">
+              {/* Tooltip Content */}
+              <div className="bg-bg-transparent-mostdarkest text-text-inverse text-12-500 rounded-[8px] px-3 py-1.5">
+                {`${percentage}%`}
+              </div>
+              {/* Tooltip Arrow */}
+              <div className="absolute top-full left-1/2 -translate-x-1/2 transform">
+                <Image
+                  src="/today/triangle.svg"
+                  alt="툴팁 화살표"
+                  width={8}
+                  height={7}
+                  style={{ display: "block" }}
+                />
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
