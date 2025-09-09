@@ -9,6 +9,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { Button } from "../ui/Button";
 import NavMenu from "./NavMenu";
 
 function MenuSidebar() {
@@ -22,11 +23,14 @@ function MenuSidebar() {
           height={24}
         />
       </SheetTrigger>
-      <SheetContent className="rounded-l-2xl px-5">
+      <SheetContent className="rounded-l-2xl bg-white px-5">
         <SheetHeader>
           <SheetTitle className="sr-only">메뉴</SheetTitle>
         </SheetHeader>
         <NavMenu className="mt-5" orientation="vertical" />
+        <Button variant="filled" size="sm" className="mx-auto">
+          로그인
+        </Button>
       </SheetContent>
     </Sheet>
   );
