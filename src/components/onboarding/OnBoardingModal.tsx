@@ -1,11 +1,14 @@
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { serverApiClient } from "@/api";
 import {
   Dialog,
   DialogContent,
   DialogTitle,
   DialogDescription,
   DialogFooter,
+  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "../ui/Button";
 import OnBoardingTitle from "./OnBoardingTitle";
@@ -13,6 +16,7 @@ import CareerStep from "./CareerStep";
 import JobFieldStep from "./JobFieldStep";
 import LocationStep from "./LocationStep";
 import CareerYear from "./CareerYear";
+
 type JobItem = {
   jobFamily: string;
   role: string;
@@ -21,17 +25,32 @@ type LocationItem = {
   city: string;
   district: string;
 };
+
+interface OnBoardingModalProps {
+  children?: React.ReactNode;
+  defaultOpen?: boolean;
+}
+
 export default function OnBoardingModal({
-  open,
-  onOpenChange,
-}: {
-  open: boolean;
-  onOpenChange: React.Dispatch<React.SetStateAction<boolean>>;
-}) {
+  // ...existing code...
+  // 사용자 이름 가져오기
+ 
+  children,
+  defaultOpen = false,
+}: OnBoardingModalProps) {
+  // ...existing code...
   const [currentStep, setCurrentStep] = useState(0);
   const [isCompleted, setIsCompleted] = useState(false); // 완료 상태 추가
+  const router = useRouter();
+  const [open, setOpen] = useState(defaultOpen);
 
   // career: -2(선택안함) -1(경력 선택 시) 0(신입) 또는 n(경력 n년)
+  // 완료 버튼 클릭 시 상태 초기화, 모달 닫기, 메인 이동
+  function handleGoToMain() {
+    resetStates();
+    setOpen(false);
+    router.push("/");
+  }
   const [career, setCareer] = useState<number>(-2);
   // 경력 연수 범위 상태 추가
   const [careerYear, setCareerYear] = useState<{ min: number; max: number }>({
@@ -50,46 +69,43 @@ export default function OnBoardingModal({
   // 온보딩 데이터 전송 함수
   const onSubmit = async () => {
     try {
-      console.log("온보딩 데이터 전송:", {
-        career,
-        careerYear,
-        jobList,
-        isUndecided,
-        locationList,
-      });
+      const payload = {
+        minCareer: careerYear.min,
+        maxCareer: careerYear.max,
+        addressList: locationList,
+        industryList: jobList,
+      };
 
-      // 예시: API 전송
-      // await fetch("/api/onboarding", {
-      //   method: "POST",
-      //   body: JSON.stringify({
-      //     career,
-      //     careerYear,
-      //     jobList,
-      //     isUndecided,
-      //     locationList,
-      //   }),
-      //   headers: { "Content-Type": "application/json" },
-      // });
+      // 실제 API 전송 예시
+      const response = await serverApiClient.post(
+        "/v1/user/onboarding",
+        payload,
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
 
-      // 전송 성공 시 완료 화면으로 전환
-      setIsCompleted(true);
+      // 응답이 200일 때만 완료 화면으로 전환
+      if (response.status === 200) {
+        setIsCompleted(true);
+      }
     } catch (error) {
+      alert("온보딩 데이터 저장 실패 다시 시도해주세요");
+      setOpen(false);
       console.error("온보딩 데이터 전송 실패:", error);
     }
   };
 
   // 모달이 닫힐 때 상태 초기화
-  useEffect(() => {
-    if (!open) {
-      setCurrentStep(0);
-      setIsCompleted(false);
-      setCareer(-2);
-      setCareerYear({ min: 0, max: 1 });
-      setJobList([]);
-      setIsUndecided(false);
-      setLocationList([]);
-    }
-  }, [open]);
+  const resetStates = () => {
+    setCurrentStep(0);
+    setIsCompleted(false);
+    setCareer(-2);
+    setCareerYear({ min: 0, max: 1 });
+    setJobList([]);
+    setIsUndecided(false);
+    setLocationList([]);
+  };
 
   // career 값이 변경될 때 careerYear 초기화
   useEffect(() => {
@@ -98,10 +114,11 @@ export default function OnBoardingModal({
       setCareerYear({ min: 0, max: 1 });
     }
   }, [career]);
-
+  const userName = localStorage.getItem("userName");
+  const displayName = userName ?? "사용자";
   const steps = [
     {
-      title: "소현님, 경력이신가요?",
+      title: `${displayName}님, 경력이신가요?`,
       subtitle: "당신의 경력을 알려주세요",
       content: (
         <CareerStep
@@ -152,12 +169,14 @@ export default function OnBoardingModal({
       ),
     },
   ];
+ 
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={setOpen}>
+      {children && <DialogTrigger asChild>{children}</DialogTrigger>}
       <DialogContent
         onInteractOutside={(e) => e.preventDefault()}
-        className="flex !h-[640px] !w-[680px] w-full !max-w-[680px] flex-col items-center gap-0 rounded-lg bg-white px-0 pt-6 pb-[44px] [&>button]:hidden"
+        className={`flex !h-[640px] !w-[680px] w-full !max-w-[680px] flex-col items-center gap-0 rounded-lg bg-white ${currentStep === 0 ? "px-22" : currentStep === 2 || 3 ? "px-[90px]" : ""} pt-6 pb-[44px] [&>button]:hidden`}
       >
         {isCompleted ? (
           // 완료 화면
@@ -168,7 +187,7 @@ export default function OnBoardingModal({
               </div>
             </DialogTitle>
             <DialogDescription className="text-16-500 text-text-tertiary leading-6">
-              소현님에게 맞는 맞춤형 공고들을 앞으로 추천해드릴게요!
+              {displayName}님에게 맞는 맞춤형 공고들을 앞으로 추천해드릴게요!
             </DialogDescription>
             <div className="flex flex-1 items-center justify-center">
               <div className="h-40 w-50">이미지</div>
@@ -178,7 +197,7 @@ export default function OnBoardingModal({
                 variant="filled"
                 size="lg"
                 className="w-[353px]"
-                onClick={() => onOpenChange(false)}
+                onClick={handleGoToMain}
               >
                 나한테 꼭 맞는 공고 보러가기
               </Button>

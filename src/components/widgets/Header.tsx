@@ -1,18 +1,19 @@
 "use client";
 import React from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
-import LoginOnBoarding from "@/components/join/LoginOnBoarding";
-import { useToggle } from "@/hooks/useToggle";
-import { Button } from "../ui/Button";
+import LoginModal from "../login/LoginModal";
 import NavMenu from "./NavMenu";
 import MenuSidebar from "./MenuSidebar";
 
 const Header = () => {
-  const {
-    isToggle: open,
-    onOpenToggle: openModal,
-    setIsToggle: setOpen,
-  } = useToggle();
+  const router = useRouter();
+
+  // 모바일 로그인 버튼 핸들러
+  const handleMobileLogin = () => {
+    router.push("/login");
+  };
+
   return (
     <header className="tablet:px-8 pc:px-8 mx-auto flex w-full items-center justify-between py-3">
       <div className="flex items-center gap-8">
@@ -30,15 +31,16 @@ const Header = () => {
           <Button variant="inversed" size="sm">
             기업 회원
           </Button>
-          <Button size="sm" onClick={openModal}>
-            로그인
-          </Button>
+          <LoginModal>
+            <Button size="sm" onClick={openModal}>
+              로그인
+            </Button>
+          </LoginModal>
         </div>
       </div>
       <div className="max-pc:flex hidden items-center gap-5">
         <MenuSidebar />
       </div>
-      <LoginOnBoarding open={open} onOpenChange={setOpen} />
     </header>
   );
 };

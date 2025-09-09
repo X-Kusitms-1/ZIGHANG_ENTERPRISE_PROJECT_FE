@@ -17,12 +17,17 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
   getYearText,
   preventClick,
 }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
   const minTextRef = useRef<HTMLDivElement>(null);
   const maxTextRef = useRef<HTMLDivElement>(null);
   const [minTextWidth, setMinTextWidth] = useState(0);
   const [maxTextWidth, setMaxTextWidth] = useState(0);
+  const [containerWidth, setContainerWidth] = useState(440); // 기본값 PC
 
   useLayoutEffect(() => {
+    if (containerRef.current) {
+      setContainerWidth(containerRef.current.offsetWidth);
+    }
     if (minTextRef.current) {
       setMinTextWidth(minTextRef.current.offsetWidth);
     }
@@ -48,7 +53,10 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
   };
 
   return (
-    <div className="relative w-[440px] px-[10px]">
+    <div
+      ref={containerRef}
+      className="pc:w-[440px] tablet:w-[560px] mobile:w-full relative px-[10px]"
+    >
       {/* 배경 트랙 */}
       <div className="bg-border-tertiary absolute right-[10px] left-[10px] h-2 w-[calc(100%-20px)] rounded-full">
         {/* 선택된 범위 표시 */}
@@ -76,7 +84,7 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
         ref={minTextRef}
         className="text-16-500 text-text-tertiary pointer-events-none absolute top-6 text-center whitespace-pre"
         style={{
-          left: `calc(${10 + (minValue / 10) * (440 - 20)}px - ${minTextWidth / 2}px)`,
+          left: `calc(${10 + (minValue / 10) * (containerWidth - 20)}px - ${minTextWidth / 2}px)`,
         }}
       >
         {getYearText(minValue)}
@@ -97,7 +105,7 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
         ref={maxTextRef}
         className="text-16-500 text-text-tertiary pointer-events-none absolute top-6 text-center whitespace-pre"
         style={{
-          left: `calc(${10 + (maxValue / 10) * (440 - 20)}px - ${maxTextWidth / 2}px)`,
+          left: `calc(${10 + (maxValue / 10) * (containerWidth - 20)}px - ${maxTextWidth / 2}px)`,
         }}
       >
         {getYearText(maxValue)}

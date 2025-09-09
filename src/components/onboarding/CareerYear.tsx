@@ -53,10 +53,10 @@ export default function CareerYear({
   };
 
   return (
-    <div className="flex h-full flex-col items-center justify-center gap-6">
-      <div className="mt-30 flex flex-1 flex-col gap-8">
-        <div className="flex flex-col items-center gap-[50px]">
-          <div className="text-24-600 text-text-info leading-[32px]">
+    <div className="flex h-full flex-col items-center mobile:flex-1 justify-between gap-6">
+      <div className="pc:mt-30 mobile:mt-4 flex pc:flex-1 flex-col gap-8 mobile:w-full">
+        <div className="flex flex-col items-center pc:gap-[50px] mobile:gap-6 tablet:gap-11 mobile:w-full mobile:px-[30.25px]">
+          <div className="tablet:text-24-600 mobile:text-18-600 text-text-info tablet:leading-[32px]">
             {getCareerRangeText(minValue, maxValue)}
           </div>
 
@@ -70,11 +70,11 @@ export default function CareerYear({
           />
         </div>
       </div>
-      <div className="flex gap-3">
+      <div className="flex gap-3 mobile:w-full pc:w-auto">
         <Button
           variant="outlined"
           size="lg"
-          className="w-[170.5px]"
+          className="pc:w-[170.5px] mobile:flex-1 h-[56px]"
           onClick={handlePrevious}
         >
           이전으로
@@ -82,7 +82,7 @@ export default function CareerYear({
         <Button
           variant="filled"
           size="lg"
-          className="w-[170.5px]"
+          className="pc:w-[170.5px] mobile:flex-1 h-[56px]"
           onClick={handleNext}
         >
           다음으로
