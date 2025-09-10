@@ -11,7 +11,7 @@ function ApplyTabButton({
   return (
     <button
       onClick={onClick}
-      className={`text-14-500 flex items-center justify-center rounded-[6px] px-3 py-1.5 transition-all ${
+      className={`text-14-500 flex items-center justify-center rounded-[6px] px-3 py-1.5 transition-all cursor-pointer ${
         active
           ? "bg-bg-base text-text-primary"
           : "bg-bg-neutral-hovered text-text-tertiary"
