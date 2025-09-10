@@ -1,7 +1,7 @@
+// app/layout.tsx
 import localFont from "next/font/local";
-import Header from "@/components/widgets/Header";
-import Footer from "@/components/widgets/Footer";
 import ReactQueryProvider from "@/context/ReactQueryProvider";
+import ConditionalLayout from "@/components/layout/ConditionalLayout"; // 새 컴포넌트
 import type { Metadata } from "next";
 import "./globals.css";
 
@@ -26,11 +26,7 @@ export default function RootLayout({
     <html lang="ko">
       <body className={`${pretendard.variable} antialiased`}>
         <ReactQueryProvider>
-          <main className="tablet:px-6 flex flex-col items-center justify-center px-4">
-            <Header />
-            {children}
-          </main>
-          <Footer />
+          <ConditionalLayout>{children}</ConditionalLayout>
         </ReactQueryProvider>
       </body>
     </html>

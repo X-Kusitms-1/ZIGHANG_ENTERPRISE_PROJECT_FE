@@ -20,7 +20,7 @@ function OnboardingBox({
     <div
       className={
         (selected ? "bg-bg-info " : "bg-bg-tertiary ") +
-        "flex h-[195px] w-[240px] cursor-pointer flex-col items-center justify-center gap-5 rounded-[12px] transition-colors duration-100 ease-in-out"
+        "flex pc:h-[195px] pc:w-[240px] mobile:flex-1 mobile:h-[160px] cursor-pointer flex-col items-center justify-center gap-5 rounded-[12px] transition-colors duration-100 ease-in-out"
       }
       onClick={onClick}
     >
@@ -46,8 +46,8 @@ export default function CareerStep({
     }
   };
   return (
-    <div className="flex h-full flex-col items-center">
-      <div className="flex w-full flex-1 items-center justify-center gap-6">
+    <div className="flex h-full flex-col items-center justify-between mobile:flex-1">
+      <div className="flex w-full pc:flex-1 items-center justify-center gap-6">
         <OnboardingBox selected={value === 0} onClick={() => onSelect(0)}>
           <Image
             src={
@@ -77,16 +77,14 @@ export default function CareerStep({
           <div className="text-28-600 text-text-secondary">경력</div>
         </OnboardingBox>
       </div>
-      <div>
         <Button
           variant="filled"
           size="lg"
-          className="w-[353px]"
+          className="pc:w-[353px] mobile:w-full"
           onClick={handleNext}
         >
           다음으로
         </Button>
-      </div>
     </div>
   );
 }

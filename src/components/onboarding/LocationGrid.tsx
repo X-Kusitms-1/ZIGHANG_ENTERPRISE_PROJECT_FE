@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import Image from "next/image";
-import { Scrollbar } from "react-scrollbars-custom";
+import CustomScrollbar from "@/components/ui/CustomScrollbar";
 import { LOCATION_DATA } from "@/constants/LocationData";
 
 type LocationItem = {
@@ -99,47 +99,14 @@ export default function LocationGrid(props: LocationGridProps) {
   );
 
   return (
-    <div className="flex flex-col gap-3 pt-6">
+    <div className="mobile:w-full flex flex-col gap-3 pt-6">
       {/* 전체 레이아웃 컨테이너 */}
       <div className="border-t-border-line border-b-border-line flex border-t border-b">
         {/* 지역 영역 */}
-        <div className="flex h-[380px] w-[200px] p-2">
-          <div className="flex w-[172px] flex-col gap-2">
-            <Scrollbar
-              style={{ width: "192px", height: "100%" }}
-              thumbXProps={{
-                style: {
-                  display: "none",
-                },
-              }}
-              thumbYProps={{
-                style: {
-                  height: "76px",
-                  background: "#E0E5F0",
-                  width: "4px",
-                  borderRadius: "9999px",
-                  margin: "0 auto",
-                  minHeight: "76px",
-                  top: "0",
-                },
-              }}
-              trackYProps={{
-                style: {
-                  background: "transparent",
-                  width: "20px",
-                  right: "0px",
-                  top: "0",
-                  height: "324px",
-                  paddingTop: "0",
-                },
-              }}
-              trackXProps={{
-                style: {
-                  display: "none",
-                },
-              }}
-            >
-              <div className="flex w-[172px] flex-col gap-2">
+        <div className="pc:w-[200px] tablet:w-[42%] mobile:w-[42%] pc:h-[380px] mobile:h-[60.78dvh] tablet:h-[67.53dvh] flex p-2">
+          <div className="pc:w-[172px] tablet:w-full mobile:w-full flex flex-col gap-2">
+            <CustomScrollbar variant="location">
+              <div className="flex w-full flex-col gap-2">
                 {LOCATION_DATA.map((city) => {
                   const selectedSet = selectedDistricts[city.city] || new Set();
                   const isWholeSelected = selectedSet.has("전체");
@@ -178,48 +145,15 @@ export default function LocationGrid(props: LocationGridProps) {
                   );
                 })}
               </div>
-            </Scrollbar>
+            </CustomScrollbar>
           </div>
         </div>
 
         {/* 지역구 영역 */}
-        <div className="border-l-border-line flex h-[380px] flex-1 border-l p-2">
-          <div className="flex flex-col gap-2" style={{ width: "272px" }}>
-            <Scrollbar
-              style={{ width: "292px", height: "100%" }}
-              thumbXProps={{
-                style: {
-                  display: "none",
-                },
-              }}
-              thumbYProps={{
-                style: {
-                  height: "76px",
-                  background: "#E0E5F0",
-                  width: "4px",
-                  borderRadius: "9999px",
-                  margin: "0 auto",
-                  minHeight: "76px",
-                  top: "0",
-                },
-              }}
-              trackYProps={{
-                style: {
-                  background: "transparent",
-                  width: "20px",
-                  right: "0px",
-                  top: "0",
-                  height: "324px",
-                  paddingTop: "0",
-                },
-              }}
-              trackXProps={{
-                style: {
-                  display: "none",
-                },
-              }}
-            >
-              <div className="flex w-[272px] flex-col gap-2">
+        <div className="border-l-border-line pc:flex-1 tablet:w-[58%] mobile:w-[58%] pc:h-[380px] mobile:h-[58.78dvh] tablet:h-[65.53dvh] flex border-l p-2">
+          <div className="tablet:w-full mobile:w-full flex flex-col gap-2">
+            <CustomScrollbar variant="location">
+              <div className="flex w-full flex-col gap-2">
                 {selectedCityData && (
                   <>
                     {selectedCityData.districts.map((district: string) => {
@@ -251,7 +185,7 @@ export default function LocationGrid(props: LocationGridProps) {
                   </>
                 )}
               </div>
-            </Scrollbar>
+            </CustomScrollbar>
           </div>
         </div>
       </div>

@@ -37,18 +37,18 @@ export default function JobFieldStep({
   };
 
   return (
-    <div className="flex h-full flex-col items-center gap-6">
+    <div className="flex h-full flex-col items-center mobile:flex-1 justify-between">
       <JobCategoryGrid
         jobList={jobList}
         setJobList={setJobList}
         isUndecided={isUndecided}
         setIsUndecided={setIsUndecided}
       />
-      <div className="flex gap-3">
+      <div className="flex gap-3 mobile:w-full mobile:px-2 pc:w-auto">
         <Button
           variant="outlined"
           size="lg"
-          className="h-[56px] w-[170.5px]"
+          className="h-[56px] pc:w-[170.5px] mobile:flex-1"
           onClick={handlePrevious}
         >
           이전으로
@@ -56,7 +56,7 @@ export default function JobFieldStep({
         <Button
           variant="filled"
           size="lg"
-          className="h-[56px] w-[170.5px]"
+          className="h-[56px] pc:w-[170.5px] mobile:flex-1"
           onClick={handleNext}
           disabled={jobList.length===0 && !isUndecided}
         >

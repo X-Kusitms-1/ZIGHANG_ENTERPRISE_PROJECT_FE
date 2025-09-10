@@ -15,6 +15,7 @@ const API_CONFIG = {
   headers: {
     "Content-Type": "application/json",
   },
+  withCredentials: true, // 세션 기반 인증을 위해 추가
 };
 
 // 환경별 API 서버 URL 설정
@@ -40,11 +41,11 @@ export const serverApiClient: AxiosInstance = axios.create(API_CONFIG);
  */
 apiClient.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
-    // 인증 토큰이 있으면 헤더에 추가
-    const token = getAuthToken();
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
+    // 인증 토큰 헤더 추가 로직은 세션 방식으로 변경되어 주석 처리
+    // const token = getAuthToken();
+    // if (token) {
+    //   config.headers.Authorization = `Bearer ${token}`;
+    // }
 
     // 요청 로깅 (개발 환경에서만)
     if (process.env.NODE_ENV === "development") {
@@ -100,11 +101,11 @@ apiClient.interceptors.response.use(
  */
 serverApiClient.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
-    // 인증 토큰이 있으면 헤더에 추가
-    const token = getAuthToken();
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
+    // 인증 토큰 헤더 추가 로직은 세션 방식으로 변경되어 주석 처리
+    // const token = getAuthToken();
+    // if (token) {
+    //   config.headers.Authorization = `Bearer ${token}`;
+    // }
 
     // 요청 로깅 (개발 환경에서만)
     if (process.env.NODE_ENV === "development") {
@@ -155,23 +156,23 @@ serverApiClient.interceptors.response.use(
 /**
  * 인증 토큰 가져오기 (구현 필요)
  */
-function getAuthToken(): string | null {
-  // 쿠키, 로컬스토리지, 세션스토리지 등에서 토큰 가져오기
-  if (typeof window !== "undefined") {
-    return localStorage.getItem("authToken");
-  }
-  return null;
-}
+// function getAuthToken(): string | null {
+//   // 쿠키, 로컬스토리지, 세션스토리지 등에서 토큰 가져오기
+//   if (typeof window !== "undefined") {
+//     return localStorage.getItem("authToken");
+//   }
+//   return null;
+// }
 
 /**
  * 인증 에러 처리 (구현 필요)
  */
 function handleAuthError(): void {
-  // 토큰 제거 및 로그인 페이지로 리다이렉트
-  if (typeof window !== "undefined") {
-    localStorage.removeItem("authToken");
-    // window.location.href = '/login';
-  }
+  // 세션 방식에서는 토큰 제거 불필요, 필요시 로그인 페이지로 리다이렉트만 사용
+  // if (typeof window !== "undefined") {
+  //   localStorage.removeItem("authToken");
+  //   // window.location.href = '/login';
+  // }
 }
 
 /**

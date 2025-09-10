@@ -1,6 +1,6 @@
 "use client";
-
 import React from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import {
   Sheet,
@@ -13,6 +13,12 @@ import { Button } from "../ui/Button";
 import NavMenu from "./NavMenu";
 
 function MenuSidebar() {
+  const router = useRouter();
+
+  // 모바일 로그인 버튼 핸들러
+  const handleMobileLogin = () => {
+    router.push("/login");
+  };
   return (
     <Sheet>
       <SheetTrigger>
@@ -28,7 +34,12 @@ function MenuSidebar() {
           <SheetTitle className="sr-only">메뉴</SheetTitle>
         </SheetHeader>
         <NavMenu className="mt-5" orientation="vertical" />
-        <Button variant="filled" size="sm" className="mx-auto">
+        <Button
+          variant="filled"
+          size="sm"
+          className="mx-auto"
+          onClick={handleMobileLogin}
+        >
           로그인
         </Button>
       </SheetContent>

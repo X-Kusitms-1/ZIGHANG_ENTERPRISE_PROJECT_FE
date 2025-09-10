@@ -6,14 +6,19 @@ type SocialType = "kakao" | "naver" | "google";
 interface LoginSocialProps {
   type: SocialType;
   onClick?: () => void;
+  w?: string;
 }
 
-export default function LoginSocial({ type, onClick }: LoginSocialProps) {
+export default function LoginSocial({
+  type,
+  onClick,
+  w = "w-full",
+}: LoginSocialProps) {
   const config = socialConfig[type];
 
   return (
     <div
-      className={`flex h-12 w-100 cursor-pointer flex-row items-center justify-center rounded-lg hover:bg-zinc-100/60 active:bg-zinc-100 ${config.bgColor} ${config.borderColor}`}
+      className={`flex h-12 ${w} cursor-pointer flex-row items-center justify-center rounded-lg ${config.bgColor} ${config.borderColor}`}
       onClick={onClick}
     >
       <div className="mr-4 h-4 w-4">

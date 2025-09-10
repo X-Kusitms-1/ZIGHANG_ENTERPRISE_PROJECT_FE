@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import Image from "next/image";
-import { Scrollbar } from "react-scrollbars-custom";
+import CustomScrollbar from "@/components/ui/CustomScrollbar";
 import { Checkbox } from "@/components/ui/checkbox";
 import { JOB_CATEGORIES } from "@/constants/JobKind";
 
@@ -99,47 +99,14 @@ export default function JobCategoryGrid(props: JobCategoryGridProps) {
   );
 
   return (
-    <div className="flex flex-col gap-3 pt-8">
+    <div className="mobile:w-full pc:gap-3 mobile:gap-[10px] tablet:gap-[15px] flex flex-col pt-6">
       {/* 전체 레이아웃 컨테이너 */}
       <div className="border-t-border-line border-b-border-line flex border-t border-b">
         {/* 카테고리(직군) 영역 */}
-        <div className="flex h-[340px] w-[200px] p-2">
-          <div className="flex w-[172px] flex-col gap-2">
-            <Scrollbar
-              style={{ width: "192px", height: "100%" }}
-              thumbXProps={{
-                style: {
-                  display: "none",
-                },
-              }}
-              thumbYProps={{
-                style: {
-                  height: "76px",
-                  background: "#E0E5F0",
-                  width: "4px",
-                  borderRadius: "9999px",
-                  margin: "0 auto",
-                  minHeight: "76px",
-                  top: "0",
-                },
-              }}
-              trackYProps={{
-                style: {
-                  background: "transparent",
-                  width: "20px",
-                  right: "0px",
-                  top: "0",
-                  height: "324px",
-                  paddingTop: "0",
-                },
-              }}
-              trackXProps={{
-                style: {
-                  display: "none",
-                },
-              }}
-            >
-              <div className="flex w-[172px] flex-col gap-2">
+        <div className="pc:w-[200px] tablet:w-[42%] mobile:w-[42%] pc:h-[340px] mobile:h-[55.78dvh] tablet:h-[62.53dvh] flex p-2">
+          <div className="pc:w-[172px] tablet:w-full mobile:w-full flex flex-col gap-2">
+            <CustomScrollbar variant="job">
+              <div className="flex w-full flex-col gap-2">
                 {jobCategoriesData.map((category) => {
                   const selectedSet = selectedRoles[category.name] || new Set();
                   const isWholeSelected = selectedSet.has("전체");
@@ -158,7 +125,7 @@ export default function JobCategoryGrid(props: JobCategoryGridProps) {
                     <button
                       key={category.name}
                       onClick={() => handleCategoryClick(category.name)}
-                      className={`flex h-[40px] items-center justify-between rounded-lg py-2 pr-4 pl-5 text-left transition-colors ${
+                      className={`flex h-[40px] w-full items-center justify-between rounded-lg py-2 pr-4 pl-5 text-left transition-colors ${
                         isSelectedCategory
                           ? "bg-bg-info text-text-info text-16-600"
                           : hasSelectedRoles
@@ -177,48 +144,15 @@ export default function JobCategoryGrid(props: JobCategoryGridProps) {
                   );
                 })}
               </div>
-            </Scrollbar>
+            </CustomScrollbar>
           </div>
         </div>
 
         {/* 역할(직무) 영역 */}
-        <div className="border-l-border-line flex h-[340px] flex-1 border-l p-2">
-          <div className="flex flex-col gap-2" style={{ width: "272px" }}>
-            <Scrollbar
-              style={{ width: "292px", height: "100%" }}
-              thumbXProps={{
-                style: {
-                  display: "none",
-                },
-              }}
-              thumbYProps={{
-                style: {
-                  height: "76px",
-                  background: "#E0E5F0",
-                  width: "4px",
-                  borderRadius: "9999px",
-                  margin: "0 auto",
-                  minHeight: "76px",
-                  top: "0",
-                },
-              }}
-              trackYProps={{
-                style: {
-                  background: "transparent",
-                  width: "20px",
-                  right: "0px",
-                  top: "0",
-                  height: "324px",
-                  paddingTop: "0",
-                },
-              }}
-              trackXProps={{
-                style: {
-                  display: "none",
-                },
-              }}
-            >
-              <div className="flex w-[272px] flex-col gap-2">
+        <div className="border-l-border-line pc:flex-1 tablet:w-[58%] mobile:w-[58%] pc:h-[340px] mobile:h-[55.78dvh] tablet:h-[62.53dvh] flex border-l p-2">
+          <div className="flex w-full flex-col gap-2">
+            <CustomScrollbar variant="job">
+              <div className="flex w-full flex-col gap-2">
                 {selectedCategoryData && (
                   <>
                     {selectedCategoryData.roles.map((role) => {
@@ -251,14 +185,14 @@ export default function JobCategoryGrid(props: JobCategoryGridProps) {
                   </>
                 )}
               </div>
-            </Scrollbar>
+            </CustomScrollbar>
           </div>
           {/* 역할 오른쪽 구분선 */}
         </div>
       </div>
 
       {/* 미정(아직 선택하지 않음) 옵션 영역 - shadcn Checkbox 사용 */}
-      <div className="flex items-center gap-1 py-2">
+      <div className="mobile:px-2 flex items-center gap-1 py-2">
         <Checkbox
           checked={isUndecided}
           onCheckedChange={handleUndecidedChange}
