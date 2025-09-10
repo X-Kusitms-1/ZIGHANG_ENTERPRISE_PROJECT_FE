@@ -1,18 +1,13 @@
 "use client";
 import React from "react";
-import { useRouter } from "next/navigation";
 import Image from "next/image";
 import LoginModal from "../login/LoginModal";
+import { Button } from "../ui/Button";
 import NavMenu from "./NavMenu";
 import MenuSidebar from "./MenuSidebar";
 
 const Header = () => {
-  const router = useRouter();
 
-  // 모바일 로그인 버튼 핸들러
-  const handleMobileLogin = () => {
-    router.push("/login");
-  };
 
   return (
     <header className="tablet:px-8 pc:px-8 mx-auto flex w-full items-center justify-between py-3">
@@ -32,7 +27,7 @@ const Header = () => {
             기업 회원
           </Button>
           <LoginModal>
-            <Button size="sm" onClick={openModal}>
+            <Button size="sm">
               로그인
             </Button>
           </LoginModal>
