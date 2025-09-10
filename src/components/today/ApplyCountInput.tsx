@@ -68,7 +68,7 @@ export default function ApplyCountInput() {
           onClick={handleSubmit}
           variant="filled"
           size="lg"
-          className="h-[52px] w-[92px] rounded-[10px]"
+          className="h-[52px] w-[92px] rounded-[10px] cursor-pointer"
         >
           <span className="text-base">공고 확인</span>
         </Button>
