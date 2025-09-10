@@ -30,17 +30,17 @@ function SideComponent({
       const newTitle = title.replace("사용자", userName);
       setDisplayTitle(newTitle);
     }
-  }, [title]);  
+  }, [title]);
 
   return (
     <div
-      className={`flex w-[342px] flex-col items-center rounded-xl bg-white p-6 ${className}`}
+      className={`flex w-[342px] flex-col items-center rounded-[12px] bg-white p-6 ${className}`}
     >
       <div className="flex flex-col items-start gap-1 self-stretch">
-        <div className="text-lg leading-7 font-semibold text-[#2D3139]">
+        <div className="text-18-600 text-text-secondary leading-7">
           {displayTitle}
         </div>
-        <div className="text-xs leading-4 font-medium text-[#686D79]">
+        <div className="text-12-500 text-text-tertiary overflow-hidden leading-4 text-ellipsis whitespace-nowrap">
           {subtitle}
         </div>
       </div>
@@ -55,10 +55,8 @@ function SideComponent({
           />
         )}
       </div>
-      <button className="flex w-full items-center justify-center rounded-lg bg-[#F9F2FD] p-3">
-        <div className="text-sm leading-5 font-medium text-[#701DA5]">
-          {buttonText}
-        </div>
+      <button className="flex w-full items-center justify-center rounded-[8px] bg-bg-info p-3 text-14-500 leading-5 text-[#701DA5] cursor-pointer">
+        {buttonText} 
       </button>
     </div>
   );
