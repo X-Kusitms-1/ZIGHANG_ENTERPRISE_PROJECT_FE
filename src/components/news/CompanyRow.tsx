@@ -79,7 +79,7 @@ export default function CompanyRow() {
           key={company.company.id}
           className="max-pc:flex-col max-pc:py-0 max-pc:pb-11 flex w-full gap-6 py-11"
         >
-          <CompanyInfoContainer companyInfo={company.company} />
+          <CompanyInfoContainer variant="main" companyInfo={company.company} />
           <NewsCarousel newsCards={company.news} />
         </div>
       ))}
