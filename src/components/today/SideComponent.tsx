@@ -1,4 +1,6 @@
+"use client";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 
 interface SideComponentProps {
   title: string;
@@ -15,13 +17,28 @@ function SideComponent({
   buttonText,
   className = "",
 }: SideComponentProps) {
+  const [displayTitle, setDisplayTitle] = useState(title);
+
+  useEffect(() => {
+    if (title.includes("사용자")) {
+      let userName = "사용자";
+      const storedName = localStorage.getItem("userName");
+      console.log("localStorage에서 가져온 값:", storedName);
+      if (storedName && storedName.trim()) {
+        userName = storedName;
+      }
+      const newTitle = title.replace("사용자", userName);
+      setDisplayTitle(newTitle);
+    }
+  }, [title]);  
+
   return (
     <div
       className={`flex w-[342px] flex-col items-center rounded-xl bg-white p-6 ${className}`}
     >
       <div className="flex flex-col items-start gap-1 self-stretch">
         <div className="text-lg leading-7 font-semibold text-[#2D3139]">
-          {title}
+          {displayTitle}
         </div>
         <div className="text-xs leading-4 font-medium text-[#686D79]">
           {subtitle}
@@ -31,7 +48,7 @@ function SideComponent({
         {image && (
           <Image
             src={image}
-            alt={title}
+            alt={displayTitle}
             width={100}
             height={80}
             className="h-full w-full object-cover"
@@ -54,14 +71,14 @@ export default function SideGroup() {
         title="타이틀1"
         subtitle="서브타이틀1"
         image="/today/page.svg"
-        buttonText="버튼1"
+        buttonText="리포트 보러 가기"
         className="gap-[30px]"
       />
       <SideComponent
-        title="타이틀2"
-        subtitle="서브타이틀2"
+        title="사용자 님은 무슨 타입이에요?"
+        subtitle="성향, 좋아하는 스타일을 알려주시면 더 정확한 추천이 가능해요!"
         image="/today/apply-component.svg"
-        buttonText="버튼2"
+        buttonText="추천 정확도 올리기"
         className="gap-6"
       />
     </div>
