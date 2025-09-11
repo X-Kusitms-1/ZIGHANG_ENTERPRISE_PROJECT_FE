@@ -6,7 +6,7 @@ import { TodaysGoalStatus } from "@/components/today/TodaysGoalStatus";
 
 export default function TodaysApply(){
     return(
-        <div className="bg-bg-neutral h-100dvh w-full pt-12 px-30 mx-auto flex gap-3 justify-center">
+        <div className="bg-bg-neutral h-100dvh w-full pt-12 mx-auto flex gap-3 justify-center">
             <div className="flex flex-col gap-11">
                 <div className="flex gap-3">
                     <ApplyCountInput/>
@@ -15,7 +15,7 @@ export default function TodaysApply(){
                         <MainSqureGroup/>
                     </div>
                 </div>
-                <ApplyList/>
+                <div className="mr-[10px]"><ApplyList/></div>
             </div>
             <SideGroup/>
         </div>

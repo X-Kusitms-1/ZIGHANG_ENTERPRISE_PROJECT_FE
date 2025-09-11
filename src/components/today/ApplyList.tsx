@@ -2,9 +2,11 @@
 import { useState } from "react";
 import ApplyListMenu from "./ApplyListMenu";
 import NowApplyList, { type ApplyListItem } from "./NowApplyList";
+import PastApplyList, { type PastApplyListItem } from "./PastApplyList";
 
-// Sample data - replace with actual data from your API
+// 오늘 지원 리스트용 더미데이터
 const sampleApplyListItems: ApplyListItem[] = [
+  // ...기존 데이터 그대로...
   {
     id: "1",
     number: "01",
@@ -72,10 +74,27 @@ const sampleApplyListItems: ApplyListItem[] = [
   },
 ];
 
+// 지난 지원 리스트용 더미데이터 30개
+const samplePastApplyListItems: PastApplyListItem[] = Array.from(
+  { length: 86 },
+  (_, i) => ({
+    id: `${i + 1}`,
+    status: ["대기중", "합격", "불합격"][i % 3] as "대기중" | "합격" | "불합격",
+    number: (i + 1).toString().padStart(2, "0"),
+    companyName: `기업명${i + 1}`,
+    jobTitle: `직무명${i + 1}`,
+    applicationDate: `2024-09-${((i % 30) + 1).toString().padStart(2, "0")}`,
+    hasUploadedFile: i % 2 === 0,
+  })
+);
+
 export default function ApplyList() {
   const [activeTab, setActiveTab] = useState<"today" | "past">("today");
   const [applyItems, setApplyItems] =
     useState<ApplyListItem[]>(sampleApplyListItems);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  // 지난 지원 리스트용 더미데이터는 상태로 관리하지 않고 바로 사용
 
   const handleApplyClick = (item: ApplyListItem) => {
     console.log("Apply clicked for:", item);
@@ -88,6 +107,14 @@ export default function ApplyList() {
         item.id === id ? { ...item, isApplied: checked } : item
       )
     );
+  };
+
+  // 지난 지원 리스트용 파일 첨부/관리 핸들러 예시
+  const handleUploadClick = (item: PastApplyListItem) => {
+    console.log("Upload clicked for:", item);
+  };
+  const handleFileManageClick = (item: PastApplyListItem) => {
+    console.log("File manage clicked for:", item);
   };
 
   return (
@@ -103,9 +130,13 @@ export default function ApplyList() {
       )}
 
       {activeTab === "past" && (
-        <div className="text-text-tertiary py-8 text-center">
-          과거 지원 내역이 표시됩니다.
-        </div>
+        <PastApplyList
+          items={samplePastApplyListItems}
+          currentPage={currentPage}
+          onUploadClick={handleUploadClick}
+          onFileManageClick={handleFileManageClick}
+          onPageChange={setCurrentPage}
+        />
       )}
     </div>
   );

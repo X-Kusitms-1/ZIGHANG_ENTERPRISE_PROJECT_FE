@@ -23,7 +23,7 @@ export default function NowApplyList({
   onApplicationStatusChange,
 }: NowApplyListProps) {
   return (
-    <div className="flex w-full flex-col gap-1 rounded-[12px] bg-white pb-1">
+    <div className="flex w-full flex-col gap-1 rounded-[12px] bg-white pb-1 mr-5">
       {/* Header Row */}
       <div className="border-border-line flex items-center justify-between border-b px-6 py-4">
         <div className="flex items-center gap-2">
