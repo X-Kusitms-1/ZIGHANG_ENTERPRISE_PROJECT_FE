@@ -3,6 +3,7 @@ import {
   SearchWithNewsTypesEnum,
   SearchWithNewsJobGroupsEnum,
 } from "../generated/api/company-controller-api";
+import { SubscribedCompaniesWithNewsResponse } from "../type/news";
 
 export async function getNewList({
   types,
@@ -42,4 +43,11 @@ export async function getNewList({
 
   // API 래퍼 { statusCode, message, data } 중 data만 반환
   return response.data?.data ?? response.data;
+}
+
+export async function getSubscribedCompaniesWithNews(): Promise<SubscribedCompaniesWithNewsResponse> {
+  const url = `${getApiBaseUrl()}/v1/companies/subscriptions`;
+  const response = await serverApi.get(url);
+
+  return response.data ?? response.data;
 }

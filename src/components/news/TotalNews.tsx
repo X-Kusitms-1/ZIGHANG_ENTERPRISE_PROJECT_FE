@@ -1,18 +1,13 @@
 "use client";
 
-import React, { use } from "react";
-import { NewsResponse } from "@/api/type/news";
+import React from "react";
+import { useNewsFilterContext } from "@/context/NewsFilterContext";
 
-interface TotalNewsProps {
-  newsData: Promise<NewsResponse>;
-}
-
-function TotalNews({ newsData }: TotalNewsProps) {
-  const news = use(newsData);
-
+function TotalNews() {
+  const { totalCount } = useNewsFilterContext();
   return (
-    <h3 className="text-18-600 text-text-secondary max:pc:hidden">
-      전체 소식 <span className="text-text-info">{news.totalElements}</span>
+    <h3 className="text-18-600 text-text-secondary max-pc:hidden">
+      전체 소식 <span className="text-text-info">{totalCount}</span>
     </h3>
   );
 }

@@ -44,3 +44,7 @@ export interface NewsResponse {
   sort: Sort[];
   empty: boolean;
 }
+
+export interface SubscribedCompaniesWithNewsResponse {
+  data: NewsItem[];
+}

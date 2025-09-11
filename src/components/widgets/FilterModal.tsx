@@ -21,11 +21,13 @@ import {
   mapRegionsToCodes,
   normalizeKoreanLabel,
 } from "@/constants/filterMappings";
+import { useNewsFilterContext } from "@/context/NewsFilterContext";
 import { FilterButton } from "../ui/FilterButton";
 import { Chip } from "../ui/Chip";
 
 function FilterModal() {
   const queryClient = useQueryClient();
+  const { setFilters } = useNewsFilterContext();
   const [selectedCategory, setSelectedCategory] = useState<string>("기업 형태");
   const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
   const [selectedFilters, setSelectedFilters] = useState<{
@@ -369,7 +371,7 @@ function FilterModal() {
               disabled={isLoadingUI}
               onClick={() => {
                 const f = apiFilters;
-                // 1) 필터 키의 캐시에 현재 결과 선반영
+                // 1) 필터 키의 캐시에 현재 결과 선반영 (선택)
                 queryClient.setQueryData(
                   [
                     "news",
@@ -391,23 +393,14 @@ function FilterModal() {
                   TotalNewData
                 );
 
-                // 2) CompanyRow에 필터 적용 이벤트 전달
-                const payload = {
-                  companyTypes: f.types
-                    ? Array.from(f.types as Set<string>)
-                    : [],
-                  jobGroups: f.jobGroups
-                    ? Array.from(f.jobGroups as Set<string>)
-                    : [],
-                  regionCodes: f.regionCodes
-                    ? Array.from(f.regionCodes as Set<string>)
-                    : [],
+                // 2) 컨텍스트로 필터 상태 적용
+                setFilters({
+                  types: f.types as any,
+                  jobGroups: f.jobGroups as any,
+                  regionCodes: f.regionCodes as any,
                   size: f.size,
                   sort: undefined,
-                };
-                window.dispatchEvent(
-                  new CustomEvent("zighang:apply_filters", { detail: payload })
-                );
+                });
               }}
             >
               {isLoadingUI

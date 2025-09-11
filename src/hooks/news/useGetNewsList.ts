@@ -1,6 +1,12 @@
-import { useInfiniteQuery } from "@tanstack/react-query";
-import { getNewList } from "@/api/news/getNewList";
-import type { NewsResponse } from "@/api/type/news";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import {
+  getNewList,
+  getSubscribedCompaniesWithNews,
+} from "@/api/news/getNewList";
+import type {
+  NewsResponse,
+  SubscribedCompaniesWithNewsResponse,
+} from "@/api/type/news";
 
 export type NewsListFilters = {
   // 필요 시 확장
@@ -55,5 +61,12 @@ export const useGetNewsList = (filters?: NewsListFilters) => {
     retry: 1,
     refetchOnWindowFocus: false,
     staleTime: 1000 * 30,
+  });
+};
+
+export const useGetSubscribedCompaniesWithNews = () => {
+  return useQuery<SubscribedCompaniesWithNewsResponse>({
+    queryKey: ["subscribedCompaniesWithNews"],
+    queryFn: () => getSubscribedCompaniesWithNews(),
   });
 };
