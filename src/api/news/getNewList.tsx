@@ -1,4 +1,4 @@
-import { apiClient, getApiBaseUrl } from "../axios/apiClient";
+import { serverApi, getApiBaseUrl } from "../axios/apiClient";
 import {
   SearchWithNewsTypesEnum,
   SearchWithNewsJobGroupsEnum,
@@ -35,7 +35,7 @@ export async function getNewList({
   if (typeof sort === "string" && sort) params.set("sort", sort);
 
   const url = `${getApiBaseUrl()}/v1/companies?${params.toString()}`;
-  const response = await apiClient.get(url, {
+  const response = await serverApi.get(url, {
     cache: "force-cache",
     revalidate: 60 * 24,
   });

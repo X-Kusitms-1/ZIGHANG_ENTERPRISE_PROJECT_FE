@@ -40,6 +40,7 @@ export default function NewsGrid({
 
 function NewsGridInternal({ companyId, itemsPerPage = 9 }: NewsGridProps) {
   const { data } = useGetCompanyWithNews(companyId);
+
   const [currentPage, setCurrentPage] = useState(1);
   const queryClient = useQueryClient();
 
@@ -90,7 +91,9 @@ function NewsGridInternal({ companyId, itemsPerPage = 9 }: NewsGridProps) {
     return pages;
   };
 
-  if (!data?.newAll) return null;
+  if (!data) {
+    return <NewsGridSkeleton itemsPerPage={itemsPerPage} />;
+  }
 
   return (
     <>

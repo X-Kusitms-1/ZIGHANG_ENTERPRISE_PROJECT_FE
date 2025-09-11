@@ -1,4 +1,4 @@
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { getCompanyWithNews } from "@/api/news/companyWithNews";
 import type { CompanyDetailWithNewsResponse } from "@/api/type/company";
 
@@ -7,7 +7,7 @@ export const companyQueryKeys = {
 };
 
 export const useGetCompanyWithNews = (companyId: string) => {
-  return useSuspenseQuery<CompanyDetailWithNewsResponse>({
+  return useQuery<CompanyDetailWithNewsResponse>({
     queryKey: companyQueryKeys.detail(companyId),
     queryFn: () => getCompanyWithNews(companyId),
     retry: 1,

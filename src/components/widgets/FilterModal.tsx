@@ -264,9 +264,9 @@ function FilterModal() {
                 </div>
               </div>
             ) : (
-              /* 기업 형태, 직군의 경우 기존 구조 */
+              /* 기업 형태, 직군: 2열 그리드로 버튼 배치 */
               <div>
-                <div className="flex flex-wrap gap-2">
+                <div className="grid grid-cols-2 gap-2">
                   {getCurrentOptions().map(
                     (option: string | FilterOption, index: number) => {
                       const value =
@@ -299,6 +299,7 @@ function FilterModal() {
                           size="lg"
                           selected={isSelected}
                           onClick={() => toggleFilter(value)}
+                          className="w-full"
                         >
                           {value}
                         </FilterButton>

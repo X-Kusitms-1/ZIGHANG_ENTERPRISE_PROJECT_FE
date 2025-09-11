@@ -93,7 +93,7 @@ function CompanyInfo({
             {companyInfo.isSubscribed ? "소식 받는 중" : "소식받기"}
             {!companyInfo.isSubscribed && (
               <MailCheck
-                className={`mb-0.5 size-4 ${variant === "main" ? "max-tablet:hidden" : ""}`}
+                className={`mb-0.5 size-4 ${variant === "main" ? "max-pc:hidden" : ""}`}
               />
             )}
           </Button>

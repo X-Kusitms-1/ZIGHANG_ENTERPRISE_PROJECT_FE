@@ -39,12 +39,12 @@ function NewsPage() {
           소식 받고 있는 기업
         </FilterButton>
       </section>
-      <section className="max-tablet:hidden mt-12 w-full max-w-[1200px]">
+      <section className="max-pc:hidden mt-12 w-full max-w-[1200px]">
         <Suspense fallback={<TotalNewsSkeleton />}>
           <TotalNews newsData={newsData} />
         </Suspense>
       </section>
-      <section className="max-tablet:mt-12 flex w-full max-w-[1200px] flex-col gap-4">
+      <section className="max-pc:mt-12 flex w-full max-w-[1200px] flex-col gap-4">
         <CompanyRow />
       </section>
     </HydrationBoundary>

@@ -185,7 +185,7 @@ function CarouselPrevious({
       variant={variant}
       size={size}
       className={cn(
-        "bg-bg-transparent-mostdarkest absolute z-10 size-9 cursor-pointer rounded-full",
+        "bg-bg-transparent-mostdarkest absolute z-20 size-9 cursor-pointer rounded-full",
         orientation === "horizontal" ? "max-pc:hidden top-0 left-0 mt-20" : "",
         className
       )}
@@ -212,7 +212,7 @@ function CarouselNext({
       variant={variant}
       size={size}
       className={cn(
-        "bg-bg-transparent-mostdarkest absolute z-10 size-9 cursor-pointer rounded-full",
+        "bg-bg-transparent-mostdarkest absolute z-20 size-9 cursor-pointer rounded-full",
         orientation === "horizontal" ? "max-pc:hidden top-0 right-0 mt-20" : "",
         className
       )}
@@ -232,4 +232,6 @@ export {
   CarouselItem,
   CarouselPrevious,
   CarouselNext,
+  // 내부 컨텍스트 훅 노출
+  useCarousel,
 };
