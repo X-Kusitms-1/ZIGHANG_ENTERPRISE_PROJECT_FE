@@ -2,18 +2,11 @@
 
 import React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
-import { ChevronRight, Send, Plus } from "lucide-react";
+import { ChevronRight, MailCheck } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { Company } from "@/api/type/company";
 import { Button } from "../ui/Button";
-
-interface CompanyInfo {
-  id: string;
-  companyNameKr: string;
-  companyThumbnailUrl: string;
-  companyTypeLabel: string;
-  isSubscribed?: boolean;
-}
 
 const companyInfoVariants = cva("company-info", {
   variants: {
@@ -30,11 +23,17 @@ const companyInfoVariants = cva("company-info", {
 });
 
 interface CompanyInfoProps extends VariantProps<typeof companyInfoVariants> {
-  companyInfo: CompanyInfo;
+  companyInfo: Company;
   className?: string;
+  onSubscribe?: () => void;
 }
 
-function CompanyInfo({ companyInfo, variant, className }: CompanyInfoProps) {
+function CompanyInfo({
+  companyInfo,
+  variant,
+  className,
+  onSubscribe,
+}: CompanyInfoProps) {
   return (
     <div className={companyInfoVariants({ variant, className })}>
       <Link
@@ -84,20 +83,17 @@ function CompanyInfo({ companyInfo, variant, className }: CompanyInfoProps) {
       {(variant === "main" || variant === "sub") && (
         <div className="max-pc:w-auto max-pc:flex max-pc:justify-start w-full">
           <Button
-            variant="neutral"
+            onClick={onSubscribe}
+            variant={companyInfo.isSubscribed ? "neutral" : "subtle"}
             size="md"
             className={`max-pc:text-14-500 flex w-full items-center gap-2 ${
               variant === "main" ? "max-pc:max-w-[92px] max-pc:h-[36px]" : ""
             } ${variant === "sub" ? "max-pc:min-w-[360px] max-pc:min-h-[56px] !text-16-500" : ""} `}
           >
-            {companyInfo.isSubscribed ? "소식받기" : "소식 받는 중"}
-            {companyInfo.isSubscribed ? (
-              <Send
-                className={`mb-0.5 size-4 ${variant === "main" ? "max-tablet:hidden" : ""}`}
-              />
-            ) : (
-              <Plus
-                className={`mb-0.5 size-4 ${variant === "main" ? "max-tablet:hidden" : ""}`}
+            {companyInfo.isSubscribed ? "소식 받는 중" : "소식받기"}
+            {!companyInfo.isSubscribed && (
+              <MailCheck
+                className={`mb-0.5 size-4 ${variant === "main" ? "max-pc:hidden" : ""}`}
               />
             )}
           </Button>

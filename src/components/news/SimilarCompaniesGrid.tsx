@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import CompanyInfo from "@/components/news/CompanyInfo";
@@ -24,13 +26,24 @@ export default function SimilarCompaniesGrid({
               variant="company"
               companyInfo={companyWithNews.company}
             />
-            {companyWithNews.news.slice(0, 3).map((news, index) => (
-              <NewsCard
-                key={`${companyWithNews.company.id}-${index}`}
-                newsCard={news}
-                variant={index === 1 || index === 2 ? "text" : "main"}
-              />
-            ))}
+            <div className="max-pc:hidden">
+              {companyWithNews.news.slice(0, 3).map((news, index) => (
+                <NewsCard
+                  key={`${companyWithNews.company.id}-${index}`}
+                  newsCard={news}
+                  variant={index === 1 || index === 2 ? "text" : "main"}
+                />
+              ))}
+            </div>
+            <div className="pc:hidden w-full">
+              {companyWithNews.news.slice(0, 3).map((news, index) => (
+                <NewsCard
+                  key={`${companyWithNews.company.id}-${index}`}
+                  newsCard={news}
+                  variant="sub"
+                />
+              ))}
+            </div>
           </div>
         ))}
       </div>

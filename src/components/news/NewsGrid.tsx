@@ -39,9 +39,10 @@ export default function NewsGrid({
 }
 
 function NewsGridInternal({ companyId, itemsPerPage = 9 }: NewsGridProps) {
-  const { data } = useGetCompanyWithNews(companyId);
   const [currentPage, setCurrentPage] = useState(1);
   const queryClient = useQueryClient();
+
+  const { data } = useGetCompanyWithNews(companyId, currentPage);
 
   const paginatedData = useMemo(() => {
     if (!data?.newAll) return { items: [], totalPages: 0 };
@@ -62,7 +63,7 @@ function NewsGridInternal({ companyId, itemsPerPage = 9 }: NewsGridProps) {
   useEffect(() => {
     if (currentPage < paginatedData.totalPages) {
       queryClient.prefetchQuery({
-        queryKey: companyQueryKeys.detail(companyId),
+        queryKey: companyQueryKeys.detail(companyId, currentPage + 1),
         queryFn: () => getCompanyWithNews(companyId),
         staleTime: 1000 * 60 * 5, // 5분
       });
@@ -90,7 +91,9 @@ function NewsGridInternal({ companyId, itemsPerPage = 9 }: NewsGridProps) {
     return pages;
   };
 
-  if (!data?.newAll) return null;
+  if (!data) {
+    return <NewsGridSkeleton itemsPerPage={itemsPerPage} />;
+  }
 
   return (
     <>

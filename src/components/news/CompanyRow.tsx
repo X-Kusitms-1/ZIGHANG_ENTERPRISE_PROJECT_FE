@@ -1,76 +1,64 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo } from "react";
 import { ErrorBoundary } from "react-error-boundary";
-import { useGetNewsList } from "@/hooks/news/useGetNewsList";
+import {
+  useGetNewsList,
+  useGetSubscribedCompaniesWithNews,
+} from "@/hooks/news/useGetNewsList";
 import { useIntersect } from "@/hooks/useIntersect";
-import CompanyInfo from "./CompanyInfo";
+import { useNewsFilterContext } from "@/context/NewsFilterContext";
+import { NewsItem } from "@/api/type/news";
 import NewsCarousel from "./NewsCarousel";
 import CompanyRowSkeleton from "./CompanyRowSkeleton";
 import CompanyRowError from "./CompanyRowError";
-import type { NewsItem } from "@/api/type/news";
-import type {
-  SearchWithNewsJobGroupsEnum,
-  SearchWithNewsTypesEnum,
-} from "@/api/generated/api/company-controller-api";
+import CompanyInfoContainer from "./CompanyInfoContainer";
 
 export default function CompanyRow() {
-  const [filters, setFilters] = useState<{
-    types?: Set<SearchWithNewsTypesEnum>;
-    jobGroups?: Set<SearchWithNewsJobGroupsEnum>;
-    regionCodes?: Set<string>;
-    size?: number;
-    sort?: string;
-  }>({ size: 10 });
+  const { filters, showSubscribedOnly, setTotalCount } = useNewsFilterContext();
 
-  useEffect(() => {
-    const handler = (e: Event) => {
-      const detail = (e as CustomEvent).detail as {
-        companyTypes: string[];
-        jobGroups: string[];
-        regionCodes: string[];
-        size?: number;
-        sort?: string;
-      };
-      setFilters({
-        types: detail.companyTypes?.length
-          ? new Set(detail.companyTypes as unknown as SearchWithNewsTypesEnum[])
-          : undefined,
-        jobGroups: detail.jobGroups?.length
-          ? new Set(
-              detail.jobGroups as unknown as SearchWithNewsJobGroupsEnum[]
-            )
-          : undefined,
-        regionCodes: detail.regionCodes?.length
-          ? new Set(detail.regionCodes)
-          : undefined,
-        size: detail.size ?? 10,
-        sort: detail.sort,
-      });
-    };
-    window.addEventListener("zighang:apply_filters", handler as EventListener);
-    return () =>
-      window.removeEventListener(
-        "zighang:apply_filters",
-        handler as EventListener
-      );
-  }, []);
+  // 컨텍스트 기반으로 동작하므로 커스텀 이벤트 불필요
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isFetched } =
     useGetNewsList(filters);
 
+  const { data: subscribedCompaniesWithNews } =
+    useGetSubscribedCompaniesWithNews();
+
   const companies: NewsItem[] = useMemo(() => {
+    if (showSubscribedOnly) {
+      const subscribed = subscribedCompaniesWithNews?.data;
+
+      if (!subscribed) return [];
+      return subscribed;
+    }
     if (!data) return [];
     return data.pages.flatMap((p) => p.content);
-  }, [data]);
+  }, [data, showSubscribedOnly, subscribedCompaniesWithNews]);
 
-  const ref = useIntersect<HTMLDivElement>(() => {
-    if (hasNextPage && !isFetchingNextPage) {
-      fetchNextPage();
+  // 총 개수 업데이트
+  useEffect(() => {
+    if (showSubscribedOnly) {
+      setTotalCount(companies.length);
+    } else if (data) {
+      const lastPage = data.pages[data.pages.length - 1];
+      setTotalCount(lastPage?.totalElements ?? companies.length);
     }
-  }, hasNextPage && !isFetchingNextPage);
+  }, [showSubscribedOnly, companies.length, data, setTotalCount]);
 
-  if (!isFetched) return <CompanyRowSkeleton />;
+  const ref = useIntersect<HTMLDivElement>(
+    () => {
+      if (!showSubscribedOnly && hasNextPage && !isFetchingNextPage) {
+        fetchNextPage();
+      }
+    },
+    !showSubscribedOnly && hasNextPage && !isFetchingNextPage
+  );
+
+  const isReady = showSubscribedOnly
+    ? Boolean(subscribedCompaniesWithNews)
+    : isFetched;
+  if (!isReady) return <CompanyRowSkeleton />;
 
   return (
     <ErrorBoundary fallback={<CompanyRowError />}>
@@ -79,7 +67,7 @@ export default function CompanyRow() {
           key={company.company.id}
           className="max-pc:flex-col max-pc:py-0 max-pc:pb-11 flex w-full gap-6 py-11"
         >
-          <CompanyInfo variant="main" companyInfo={company.company} />
+          <CompanyInfoContainer variant="main" companyInfo={company.company} />
           <NewsCarousel newsCards={company.news} />
         </div>
       ))}

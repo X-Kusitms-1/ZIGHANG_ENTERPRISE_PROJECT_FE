@@ -16,7 +16,7 @@ const newsCardVariants = cva("news-card", {
   variants: {
     variant: {
       main: "flex flex-col space-y-4 w-full max-w-[300px] max-tablet:max-w-[180px] group",
-      sub: "flex flex-col max-tablet:items-center space-x-2 space-y-4 w-full max-w-[300px] max-tablet:max-w-[365px]  max-tablet:flex-row",
+      sub: "flex flex-col max-pc:items-center space-x-2 space-y-4 w-full max-w-[300px] max-pc:max-w-full  max-pc:flex-row",
       text: "border-b-border-line border-b py-3",
     },
   },
@@ -41,8 +41,10 @@ function NewsCard({ newsCard, variant }: NewsCardProps) {
         alt={newsCard.title}
         width={300}
         height={200}
-        className={`min-h-[130px] w-full rounded-[8px] object-cover ${
-          variant === "sub" ? "max-tablet:h-[64px] max-tablet:w-[100px]" : ""
+        className={`pc:min-h-[200px] tablet:min-h-[200px] min-h-[130px] w-full rounded-[8px] object-cover ${
+          variant === "sub"
+            ? "max-pc:h-[64px] max-pc:w-[100px] !min-h-[64px]"
+            : ""
         } ${variant === "text" ? "hidden" : ""}`}
       />
       <div className="flex flex-col gap-2">

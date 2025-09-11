@@ -1,8 +1,9 @@
-import { apiClient, getApiBaseUrl } from "../axios/apiClient";
+import { serverApi, getApiBaseUrl } from "../axios/apiClient";
 import {
   SearchWithNewsTypesEnum,
   SearchWithNewsJobGroupsEnum,
 } from "../generated/api/company-controller-api";
+import { SubscribedCompaniesWithNewsResponse } from "../type/news";
 
 export async function getNewList({
   types,
@@ -35,10 +36,18 @@ export async function getNewList({
   if (typeof sort === "string" && sort) params.set("sort", sort);
 
   const url = `${getApiBaseUrl()}/v1/companies?${params.toString()}`;
-  const response = await apiClient.get(url, {
+  const response = await serverApi.get(url, {
     cache: "force-cache",
     revalidate: 60 * 24,
   });
 
-  return response.data;
+  // API 래퍼 { statusCode, message, data } 중 data만 반환
+  return response.data?.data ?? response.data;
+}
+
+export async function getSubscribedCompaniesWithNews(): Promise<SubscribedCompaniesWithNewsResponse> {
+  const url = `${getApiBaseUrl()}/v1/companies/subscriptions`;
+  const response = await serverApi.get(url);
+
+  return response.data ?? response.data;
 }
