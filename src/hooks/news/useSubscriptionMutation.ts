@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { subscribeCompany, unsubscribeCompany } from "@/api/news/subscribe";
-import { companyQueryKeys } from "./useGetCompanyWithNews";
+
 import { newsQueryKeys } from "./useGetNewsList";
 
 export const useSubscriptionMutation = (companyId: string) => {
@@ -10,11 +10,18 @@ export const useSubscriptionMutation = (companyId: string) => {
     mutationFn: () => subscribeCompany(companyId),
     onSuccess: () => {
       // 회사 상세 쿼리 무효화
+      queryClient.removeQueries({
+        queryKey: ["company", "detail", companyId],
+      });
+      // 구독 기반 데이터 무효화
       queryClient.invalidateQueries({
-        queryKey: companyQueryKeys.detail(companyId),
+        queryKey: ["subscribedCompaniesWithNews"],
       });
       // 뉴스 리스트(무한스크롤) 전체 키 무효화
-      queryClient.refetchQueries({ queryKey: newsQueryKeys.all });
+      queryClient.refetchQueries({
+        queryKey: newsQueryKeys.all,
+        exact: false,
+      });
     },
     onError: (error) => {
       console.error("Error:", error);
@@ -28,10 +35,16 @@ export const useUnsubscriptionMutation = (companyId: string) => {
   return useMutation({
     mutationFn: () => unsubscribeCompany(companyId),
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: companyQueryKeys.detail(companyId),
+      queryClient.removeQueries({
+        queryKey: ["company", "detail", companyId],
       });
-      queryClient.refetchQueries({ queryKey: newsQueryKeys.all });
+      queryClient.invalidateQueries({
+        queryKey: ["subscribedCompaniesWithNews"],
+      });
+      queryClient.refetchQueries({
+        queryKey: newsQueryKeys.all,
+        exact: false,
+      });
     },
     onError: (error) => {
       console.error("Error:", error);

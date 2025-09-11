@@ -4,18 +4,14 @@ import React, { useState } from "react";
 import NewsGrid from "@/components/news/NewsGrid";
 import CompanySidebar from "@/components/news/CompanySidebar";
 import SimilarCompaniesGrid from "@/components/news/SimilarCompaniesGrid";
-import { CompanyDetailWithNewsResponse } from "@/api/type/company";
+import { useGetCompanyWithNews } from "@/hooks/news/useGetCompanyWithNews";
 import CompanyInfoContainer from "./CompanyInfoContainer";
 
 interface CompanyContentProps {
   companyId: string;
-  companyData: CompanyDetailWithNewsResponse;
 }
 
-export default function CompanyContent({
-  companyId,
-  companyData,
-}: CompanyContentProps) {
+export default function CompanyContent({ companyId }: CompanyContentProps) {
   const [activeSection, setActiveSection] = useState("all-news");
 
   const handleSectionChange = (sectionId: string) => {
@@ -32,6 +28,11 @@ export default function CompanyContent({
       }
     }
   };
+
+  const { data: companyData } = useGetCompanyWithNews(companyId);
+  if (!companyData) {
+    return <></>;
+  }
 
   return (
     <>

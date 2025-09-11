@@ -22,12 +22,11 @@ async function CompanyNewsPage({
     <HydrationBoundary state={dehydratedState}>
       <div className="flex w-full max-w-[1200px] gap-8">
         <CompanyInfoAside companyId={companyId} />
-
         <section
           id="all-news"
           className="max-tablet:ml-0 pc:mt-20 max-pc:mt-6 w-full"
         >
-          <CompanyContent companyId={companyId} companyData={companyData} />
+          <CompanyContent companyId={companyId} />
           <div
             id="similar-companies"
             className="max-pc:hidden mt-15 w-full max-w-[900px]"

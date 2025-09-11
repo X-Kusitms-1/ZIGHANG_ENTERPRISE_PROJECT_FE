@@ -1,10 +1,10 @@
 "use client";
 
 import React from "react";
-import CompanyInfo from "@/components/news/CompanyInfo";
 import CompanySidebarPC from "@/components/news/CompanySidebarPC";
 import { useGetCompanyWithNews } from "@/hooks/news/useGetCompanyWithNews";
 import CompanyInfoAsideSkeleton from "./CompanyInfoAsideSkeleton";
+import CompanyInfoContainer from "./CompanyInfoContainer";
 
 interface CompanyInfoAsideProps {
   companyId: string;
@@ -21,7 +21,10 @@ function CompanyInfoAside({ companyId }: CompanyInfoAsideProps) {
     <aside className="max-pc:hidden relative mt-20 mb-15 w-full max-w-[300px]">
       <div className="max-tablet:hidden sticky top-6 float-left">
         <div className="flex flex-col gap-2">
-          <CompanyInfo variant="sub" companyInfo={companyData.company} />
+          <CompanyInfoContainer
+            variant="sub"
+            companyInfo={companyData.company}
+          />
           <div className="mt-10">
             <CompanySidebarPC />
           </div>
