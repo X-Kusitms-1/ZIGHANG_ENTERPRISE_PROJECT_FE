@@ -7,23 +7,26 @@ import FileUploadModal from "./FileUploadModal";
 
 interface PastApplyEachComponentProps {
   item: PastApplyListItem;
-  onUploadClick: (item: PastApplyListItem) => void;
-  onFileManageClick: (item: PastApplyListItem) => void;
+  onUploadClick: (item: PastApplyListItem, files: File[]) => void;
+  onDeleteClick: (item: PastApplyListItem, files: File[]) => void;
   onStatusChange?: (item: PastApplyListItem, newStatus: string) => void;
 }
 
 export default function PastApplyEachComponent({
   item,
   onUploadClick,
-  onFileManageClick,
+  onDeleteClick,
   onStatusChange,
 }: PastApplyEachComponentProps) {
   const [isStatusSelectorOpen, setIsStatusSelectorOpen] = useState(false);
   const statusChipRef = useRef<HTMLButtonElement>(null);
 
   // Handle click outside to close status selector
+  // 상태 선택 드롭다운이 열려 있을 때, 바깥 영역을 클릭하면 드롭다운을 닫아주는 역할
   useEffect(() => {
+    // 바깥 클릭 시 드롭다운 닫기
     const handleClickOutside = (event: MouseEvent) => {
+      // statusChipRef 영역 바깥을 클릭하면 닫힘
       if (
         statusChipRef.current &&
         !statusChipRef.current.contains(event.target as Node)
@@ -32,10 +35,12 @@ export default function PastApplyEachComponent({
       }
     };
 
+    // 드롭다운이 열려 있을 때만 이벤트 리스너 등록
     if (isStatusSelectorOpen) {
       document.addEventListener("mousedown", handleClickOutside);
     }
 
+    // 언마운트 또는 닫힐 때 이벤트 리스너 해제
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
@@ -147,24 +152,21 @@ export default function PastApplyEachComponent({
       {/* File Upload/Management */}
       <div className="flex items-center">
         <div className="flex w-[100px] flex-col items-center justify-center">
-          {item.hasUploadedFile ? (
+          {item.files.length > 0 ? (
             <button
               className="bg-bg-neutral text-12-500 text-text-tertiary flex h-8 w-[74px] cursor-pointer items-center justify-center rounded-[4px] px-3 py-2"
-              onClick={() => onFileManageClick(item)}
             >
               파일 관리
             </button>
           ) : (
             <FileUploadModal
               number={item.number}
-              onFileUpload={(file) => {
-                console.log("File uploaded:", file);
+              onFileUpload={(files) => {
+                // 저장하기 누르면 부모로 파일 정보 전달
+                onUploadClick(item, files);
               }}
-              onCancel={() => {
-                console.log("File upload cancelled");
-              }}
-              onSave={() => {
-                console.log("File saved");
+              onCancel={(files) => {
+                onDeleteClick(item,files);
               }}
             >
               <button className="text-12-500 text-text-tertiary border-border-tertiary bg-bg-base flex h-8 w-[74px] cursor-pointer items-center justify-center gap-[2px] rounded-[4px] border px-3 py-2 leading-4">

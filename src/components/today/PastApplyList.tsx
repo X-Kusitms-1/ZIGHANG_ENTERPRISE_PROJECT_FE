@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import PastApplyEachComponent from "./PastApplyEachComponent";
 
@@ -10,61 +11,79 @@ export interface PastApplyListItem {
   companyName: string;
   jobTitle: string;
   applicationDate: string;
-  hasUploadedFile: boolean;
+  files: File[]; // 백엔드에서 제공하는 파일 배열
 }
 
-export interface PastApplyListProps {
-  items: PastApplyListItem[];
-  currentPage?: number;
-  totalPages?: number;
-  onUploadClick: (item: PastApplyListItem) => void;
-  onFileManageClick: (item: PastApplyListItem) => void;
-  onPageChange?: (page: number) => void;
-}
+// 지난 지원 리스트용 더미데이터 35개
+const samplePastApplyListItems: PastApplyListItem[] = Array.from(
+  { length: 35 },
+  (_, i) => ({
+    id: `past-${i + 1}`,
+    status: ["대기중", "합격", "불합격"][i % 3] as "대기중" | "합격" | "불합격",
+    number: (i + 1).toString().padStart(2, "0"),
+    companyName: `기업명${i + 1}`,
+    jobTitle: `직무명${i + 1}`,
+    applicationDate: `2024-${((i % 12) + 1).toString().padStart(2, "0")}-${((i % 28) + 1).toString().padStart(2, "0")}`,
+    files: i % 3 !== 0 ? [] : [], // 일단 빈 배열로 초기화 (실제로는 백엔드에서 파일 정보 제공)
+  })
+);
 
-export default function PastApplyList({
-  items,
-  currentPage = 1,
-  totalPages,
-  onUploadClick,
-  onFileManageClick,
-  onPageChange,
-}: PastApplyListProps) {
+export default function PastApplyList() {
+  const [items, setItems] = useState<PastApplyListItem[]>(
+    samplePastApplyListItems
+  );
+  const [currentPage, setCurrentPage] = useState(1);
+
+  // 파일 업로드 시 해당 아이템의 files 배열에 추가
+  const handleUploadClick = (item: PastApplyListItem, files: File[]) => {
+    setItems((prev) =>
+      prev.map((i) =>
+        i.id === item.id ? { ...i, files: [...i.files, ...files] } : i
+      )
+    );
+    // TODO: 백엔드 API 호출 - 파일 업로드
+    // await uploadFile(item.id, files);
+  };
+
+  // 파일 삭제 시 해당 아이템의 files 배열을 빈 배열로 만들기
+  const handleFileDeleteClick = (item: PastApplyListItem) => {
+    setItems((prev) =>
+      prev.map((i) => (i.id === item.id ? { ...i, files: [] } : i))
+    );
+    // TODO: 백엔드 API 호출 - 파일 삭제
+    // await deleteFiles(item.id);
+  };
   // 10개씩 페이징
   const itemsPerPage = 10;
-  const calculatedTotalPages =
-    totalPages ?? Math.ceil(items.length / itemsPerPage);
+  const totalPages = Math.ceil(items.length / itemsPerPage);
   const startIdx = (currentPage - 1) * itemsPerPage;
   const endIdx = startIdx + itemsPerPage;
   const pagedItems = items.slice(startIdx, endIdx);
 
   const handlePageClick = (page: number) => {
-    if (onPageChange && page !== currentPage) {
-      onPageChange(page);
+    if (page !== currentPage) {
+      setCurrentPage(page);
     }
   };
 
   const handlePrevClick = () => {
-    if (onPageChange && currentPage > 1) {
-      onPageChange(currentPage - 1);
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
     }
   };
 
   const handleNextClick = () => {
-    if (onPageChange && currentPage < calculatedTotalPages) {
-      onPageChange(currentPage + 1);
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
     }
   };
 
   // 페이지 범위 계산 (한 번에 5개씩)
   const getPageRange = () => {
     const maxPagesToShow = 5;
-    let startPage =
+    const startPage =
       Math.floor((currentPage - 1) / maxPagesToShow) * maxPagesToShow + 1;
-    let endPage = Math.min(
-      startPage + maxPagesToShow - 1,
-      calculatedTotalPages
-    );
+    const endPage = Math.min(startPage + maxPagesToShow - 1, totalPages);
 
     return Array.from(
       { length: endPage - startPage + 1 },
@@ -120,8 +139,8 @@ export default function PastApplyList({
             <PastApplyEachComponent
               key={item.id}
               item={item}
-              onUploadClick={onUploadClick}
-              onFileManageClick={onFileManageClick}
+              onUploadClick={handleUploadClick}
+              onDeleteClick={handleFileDeleteClick}
             />
           ))}
         </div>
@@ -146,7 +165,7 @@ export default function PastApplyList({
             onClick={() => handlePageClick(page)}
           >
             <span
-              className={`text-center leading-5 text-14-500 ${
+              className={`text-14-500 text-center leading-5 ${
                 page === currentPage ? "text-[#2D3139]" : "text-[#686D79]"
               }`}
             >
@@ -159,7 +178,7 @@ export default function PastApplyList({
         <button
           className="flex h-11 w-11 items-center justify-center gap-2.5 rounded-lg bg-white p-3"
           onClick={handleNextClick}
-          disabled={currentPage === calculatedTotalPages}
+          disabled={currentPage === totalPages}
         >
           <ChevronRight size={16} color="#2D3139" />
         </button>
