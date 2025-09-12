@@ -1,5 +1,5 @@
 "use client";
-import { motion, AnimatePresence } from "framer-motion"; // Framer Motion for animations
+import { motion, AnimatePresence } from "framer-motion";
 import React, { useState, useRef } from "react";
 import { FilePlus } from "lucide-react";
 import {
@@ -9,7 +9,6 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/Button";
-import { Progress } from "@/components/ui/progress"; // Assuming you have a Progress component
 import UploadedFile from "./UploadedFile";
 
 interface FileUploadModalProps {
@@ -18,12 +17,14 @@ interface FileUploadModalProps {
   onCancel?: () => void;
   onSave?: () => void;
   number?: string;
-  initialFiles?: { name: string; url: string }[]; // 백엔드에서 받은 초기 파일 목록
+  initialFiles?: { name: string; url: string }[];
 }
 
-interface UploadProgress {
-  file: File;
-  progress: number;
+interface FileWithProgress {
+  name: string;
+  url: string;
+  progress?: number;
+  size?: number;
 }
 
 export default function FileUploadModal({
@@ -37,17 +38,12 @@ export default function FileUploadModal({
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [isDragOver, setIsDragOver] = useState(false);
   const [open, setOpen] = useState(false);
-  const [uploadProgress, setUploadProgress] = useState<UploadProgress[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // 초기 파일을 상태에 반영 (백엔드에서 받은 파일)
-  const [existingFiles, setExistingFiles] =
-    useState<{ name: string; url: string }[]>(initialFiles);
-
-  const handleFileSelect = (file: File) => {
-    setSelectedFiles((prev) => [...prev, file]);
-    startUploadSimulation(file); // 업로드 진행 상황 시뮬레이션
-  };
+  // 파일 목록 (progress 포함)
+  const [existingFiles, setExistingFiles] = useState<FileWithProgress[]>(
+    initialFiles.map((file) => ({ ...file, progress: 100 }))
+  );
 
   const handleFileInputChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -92,39 +88,50 @@ export default function FileUploadModal({
     }
   };
 
-  // 파일 업로드 진행 상황 시뮬레이션 (실제 업로드 로직으로 대체 가능)
+  // 파일 크기를 포맷하는 함수
+  const formatFileSize = (bytes: number): string => {
+    if (bytes === 0) return "0 Bytes";
+
+    const k = 1024;
+    const sizes = ["Bytes", "KB", "MB", "GB"];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + " " + sizes[i];
+  };
+
+  // 파일 업로드 진행 상황 시뮬레이션
   const startUploadSimulation = (file: File) => {
-    setUploadProgress((prev) => [...prev, { file, progress: 0 }]);
+    // 파일을 즉시 리스트에 추가 (progress 0으로 시작)
+    const newFile: FileWithProgress = {
+      name: file.name,
+      url: URL.createObjectURL(file),
+      progress: 0,
+      size: file.size,
+    };
+    setExistingFiles((prev) => [...prev, newFile]);
 
-    // Web Streams API를 사용한 가상 업로드
-    const stream = new ReadableStream({
-      start(controller) {
-        let progress = 0;
-        const interval = setInterval(() => {
-          progress += 10;
-          setUploadProgress((prev) =>
-            prev.map((item) =>
-              item.file === file ? { ...item, progress } : item
-            )
-          );
-          if (progress >= 100) {
-            clearInterval(interval);
-            controller.close();
-            // 업로드 완료 후 파일 목록에 추가
-            setExistingFiles((prev) => [
-              ...prev,
-              { name: file.name, url: URL.createObjectURL(file) },
-            ]);
-            setUploadProgress((prev) =>
-              prev.filter((item) => item.file !== file)
-            );
-          }
-        }, 500);
-      },
-    });
+    // 진행률 시뮬레이션
+    const interval = setInterval(() => {
+      setExistingFiles((prev) =>
+        prev.map((item) =>
+          item.name === file.name &&
+          item.progress !== undefined &&
+          item.progress < 100
+            ? { ...item, progress: Math.min(item.progress + 1, 100) }
+            : item
+        )
+      );
+    }, 100);
 
-    const reader = stream.getReader();
-    reader.read();
+    // 2초 후 완료
+    setTimeout(() => {
+      clearInterval(interval);
+      setExistingFiles((prev) =>
+        prev.map((item) =>
+          item.name === file.name ? { ...item, progress: 100 } : item
+        )
+      );
+    }, 10000);
   };
 
   const handleFileSelectClick = () => {
@@ -134,7 +141,7 @@ export default function FileUploadModal({
   const handleCancel = () => {
     setOpen(false);
     setSelectedFiles([]);
-    setUploadProgress([]);
+    setExistingFiles(initialFiles.map((file) => ({ ...file, progress: 100 })));
     if (onCancel) onCancel();
   };
 
@@ -149,7 +156,7 @@ export default function FileUploadModal({
         {children}
       </DialogTrigger>
       <DialogContent
-        className="w-[400px] border-0 bg-transparent p-0 shadow-none"
+        className="w-[400px] max-w-100 border-0 bg-transparent p-0 shadow-none"
         showCloseButton={false}
       >
         <div className="flex w-full flex-col items-start gap-6 rounded-xl border border-[#F1F5F9] bg-white p-6 shadow-[0_4px_8px_0_rgba(0,0,0,0.04),0_0_12px_0_rgba(0,0,0,0.04)]">
@@ -200,7 +207,7 @@ export default function FileUploadModal({
 
           {/* Uploaded Files List */}
           <AnimatePresence>
-            {(existingFiles.length > 0 || uploadProgress.length > 0) && (
+            {existingFiles.length > 0 && (
               <motion.div
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: "auto" }}
@@ -208,25 +215,21 @@ export default function FileUploadModal({
                 className="w-full"
               >
                 <div className="flex flex-col gap-2">
-                  {uploadProgress.map((item) => (
-                    <div
-                      key={item.file.name}
-                      className="flex items-center gap-2"
-                    >
-                      <span className="text-12-500 text-text-secondary flex-1 truncate">
-                        {item.file.name}
-                      </span>
-                      <Progress value={item.progress} className="w-[100px]" />
-                    </div>
-                  ))}
-                  {existingFiles.map((file) => (
-                    <UploadedFile
-                      key={file.name}
-                      name={file.name}
-                      url={file.url}
-                      onRemove={() => handleRemoveFile(file.name)}
-                    />
-                  ))}
+                  <div className="text-14-500 text-text-tertiary leading-5">
+                    업로드된 파일
+                  </div>
+                  <div className="overflow-y-auto flex h-[186px] w-full flex-col gap-2 bg-white">
+                    {existingFiles.map((file) => (
+                      <UploadedFile
+                        key={file.name}
+                        name={file.name}
+                        url={file.url}
+                        progress={file.progress}
+                        fileSize={formatFileSize(file.size || 0)}
+                        onRemove={() => handleRemoveFile(file.name)}
+                      />
+                    ))}
+                  </div>
                 </div>
               </motion.div>
             )}
@@ -250,7 +253,9 @@ export default function FileUploadModal({
                 if (onFileUpload) onFileUpload(selectedFiles);
                 if (onSave) onSave();
                 setSelectedFiles([]);
-                setUploadProgress([]);
+                setExistingFiles(
+                  initialFiles.map((file) => ({ ...file, progress: 100 }))
+                );
                 setOpen(false);
               }}
             >
