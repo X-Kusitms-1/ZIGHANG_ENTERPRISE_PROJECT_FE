@@ -8,8 +8,6 @@ import CompanyRow from "@/components/news/CompanyRow";
 import getQueryClient from "@/utils/getQueryClient";
 import TotalNewsSkeleton from "@/components/news/TotalNewsSkeleton";
 import { NewsFilterProvider } from "@/context/NewsFilterContext";
-import AccuracyModal from "@/components/today/AccuracyModal";
-import { Button } from "@/components/ui/Button";
 
 function NewsPage() {
   const queryClient = getQueryClient();
@@ -34,11 +32,6 @@ function NewsPage() {
             <FilterModal />
           </div>
           <SubscribedFilterButton className="gap-1" />
-          <AccuracyModal>
-            <Button variant="filled" size="lg">
-              공고 추천받기
-            </Button>
-          </AccuracyModal>
         </section>
         <section className="max-pc:hidden mt-12 w-full max-w-[1200px]">
           <Suspense fallback={<TotalNewsSkeleton />}>
