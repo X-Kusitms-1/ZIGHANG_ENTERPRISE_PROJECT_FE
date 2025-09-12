@@ -582,6 +582,36 @@
   }
 }
 
+/* 커스텀 스크롤바 */
+.custom-scrollbar::-webkit-scrollbar {
+  height: 8px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #e0e5f0;
+  border-radius: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #ccd0d6;
+  border-radius: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #ccd0d6;
+}
+.custom-scrollbar::-moz-scrollbar {
+  height: 8px;
+}
+.custom-scrollbar::-moz-scrollbar-track {
+  background: #e0e5f0;
+  border-radius: 4px;
+}
+.custom-scrollbar::-moz-scrollbar-thumb {
+  background: #ccd0d6;
+  border-radius: 4px;
+}
+.custom-scrollbar::-moz-scrollbar-thumb:hover {
+  background: #ccd0d6;
+}
+
 /* 말줄임표 처리 유틸리티 */
 @utility text-ellipsis-1 {
   overflow: hidden;
