@@ -121,7 +121,7 @@ export default function FileUploadModal({
             : item
         )
       );
-    }, 100);
+    }, 10);
 
     // 2초 후 완료
     setTimeout(() => {
@@ -131,7 +131,7 @@ export default function FileUploadModal({
           item.name === file.name ? { ...item, progress: 100 } : item
         )
       );
-    }, 10000);
+    }, 2000);
   };
 
   const handleFileSelectClick = () => {
@@ -151,15 +151,16 @@ export default function FileUploadModal({
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+  <Dialog open={open} onOpenChange={(v) => { /* 바깥 클릭 무시 */ }}>
       <DialogTrigger asChild onClick={() => setOpen(true)}>
         {children}
       </DialogTrigger>
       <DialogContent
         className="w-[400px] max-w-100 border-0 bg-transparent p-0 shadow-none"
         showCloseButton={false}
+        closeOnOverlayClick={false}
       >
-        <div className="flex w-full flex-col items-start gap-6 rounded-xl border border-[#F1F5F9] bg-white p-6 shadow-[0_4px_8px_0_rgba(0,0,0,0.04),0_0_12px_0_rgba(0,0,0,0.04)]">
+        <div className="flex w-full max-w-[400px] flex-col items-start gap-6 rounded-xl border border-[#F1F5F9] bg-white p-6 shadow-[0_4px_8px_0_rgba(0,0,0,0.04),0_0_12px_0_rgba(0,0,0,0.04)]">
           {/* Header */}
           <div className="flex flex-col gap-1">
             <DialogTitle className="text-16-600 text-text-secondary leading-6">
