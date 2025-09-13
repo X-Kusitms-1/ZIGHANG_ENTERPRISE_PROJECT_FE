@@ -4,7 +4,7 @@ import * as React from "react";
 import useEmblaCarousel, {
   type UseEmblaCarouselType,
 } from "embla-carousel-react";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/ShadcnButton";
@@ -185,18 +185,15 @@ function CarouselPrevious({
       variant={variant}
       size={size}
       className={cn(
-        "absolute size-8 rounded-full",
-        orientation === "horizontal"
-          ? "top-1/2 -left-12 -translate-y-1/2"
-          : "-top-12 left-1/2 -translate-x-1/2 rotate-90",
+        "bg-bg-transparent-mostdarkest absolute z-20 size-9 cursor-pointer rounded-full",
+        orientation === "horizontal" ? "max-pc:hidden top-0 left-0 mt-20" : "",
         className
       )}
       disabled={!canScrollPrev}
       onClick={scrollPrev}
       {...props}
     >
-      <ArrowLeft />
-      <span className="sr-only">Previous slide</span>
+      <ChevronLeft color="#fff" />
     </Button>
   );
 }
@@ -215,18 +212,15 @@ function CarouselNext({
       variant={variant}
       size={size}
       className={cn(
-        "absolute size-8 rounded-full",
-        orientation === "horizontal"
-          ? "top-1/2 -right-12 -translate-y-1/2"
-          : "-bottom-12 left-1/2 -translate-x-1/2 rotate-90",
+        "bg-bg-transparent-mostdarkest absolute z-20 size-9 cursor-pointer rounded-full",
+        orientation === "horizontal" ? "max-pc:hidden top-0 right-0 mt-20" : "",
         className
       )}
       disabled={!canScrollNext}
       onClick={scrollNext}
       {...props}
     >
-      <ArrowRight />
-      <span className="sr-only">Next slide</span>
+      <ChevronRight color="#fff" />
     </Button>
   );
 }
@@ -238,4 +232,6 @@ export {
   CarouselItem,
   CarouselPrevious,
   CarouselNext,
+  // 내부 컨텍스트 훅 노출
+  useCarousel,
 };

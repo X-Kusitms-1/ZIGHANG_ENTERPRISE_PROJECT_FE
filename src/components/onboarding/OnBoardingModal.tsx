@@ -75,7 +75,6 @@ export default function OnBoardingModal({
         addressList: locationList,
         industryList: jobList,
       };
-      console.log("온보딩 데이터 전송:", payload);
 
       // 실제 API 전송 예시
       const response = await serverApiClient.post(

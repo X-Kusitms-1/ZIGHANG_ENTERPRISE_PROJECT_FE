@@ -1,38 +1,73 @@
 "use client";
 
-import React, { useMemo } from "react";
-import { useGetNewsList } from "@/hooks/news/useGetNewsList";
+import React, { useEffect, useMemo } from "react";
+import { ErrorBoundary } from "react-error-boundary";
+import {
+  useGetNewsList,
+  useGetSubscribedCompaniesWithNews,
+} from "@/hooks/news/useGetNewsList";
 import { useIntersect } from "@/hooks/useIntersect";
-import CompanyInfo from "./CompanyInfo";
+import { useNewsFilterContext } from "@/context/NewsFilterContext";
+import { NewsItem } from "@/api/type/news";
 import NewsCarousel from "./NewsCarousel";
-import type { NewsItem } from "@/api/type/news";
+import CompanyRowSkeleton from "./CompanyRowSkeleton";
+import CompanyRowError from "./CompanyRowError";
+import CompanyInfoContainer from "./CompanyInfoContainer";
 
-function CompanyRow() {
+export default function CompanyRow() {
+  const { filters, showSubscribedOnly, setTotalCount } = useNewsFilterContext();
+
+  // 컨텍스트 기반으로 동작하므로 커스텀 이벤트 불필요
+
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isFetched } =
-    useGetNewsList({ size: 10 });
+    useGetNewsList(filters);
+
+  const { data: subscribedCompaniesWithNews } =
+    useGetSubscribedCompaniesWithNews();
 
   const companies: NewsItem[] = useMemo(() => {
+    if (showSubscribedOnly) {
+      const subscribed = subscribedCompaniesWithNews?.data;
+
+      if (!subscribed) return [];
+      return subscribed;
+    }
     if (!data) return [];
     return data.pages.flatMap((p) => p.content);
-  }, [data]);
+  }, [data, showSubscribedOnly, subscribedCompaniesWithNews]);
+
+  // 총 개수 업데이트
+  useEffect(() => {
+    if (showSubscribedOnly) {
+      setTotalCount(companies.length);
+    } else if (data) {
+      const lastPage = data.pages[data.pages.length - 1];
+      setTotalCount(lastPage?.totalElements ?? companies.length);
+    }
+  }, [showSubscribedOnly, companies.length, data, setTotalCount]);
 
   const ref = useIntersect<HTMLDivElement>(
     () => {
-      if (hasNextPage && !isFetchingNextPage) {
+      if (!showSubscribedOnly && hasNextPage && !isFetchingNextPage) {
         fetchNextPage();
       }
     },
-    hasNextPage && !isFetchingNextPage && isFetched
+    !showSubscribedOnly && hasNextPage && !isFetchingNextPage
   );
 
+  const isReady = showSubscribedOnly
+    ? Boolean(subscribedCompaniesWithNews)
+    : isFetched;
+  if (!isReady) return <CompanyRowSkeleton />;
+
   return (
-    <>
+    <ErrorBoundary fallback={<CompanyRowError />}>
       {companies.map((company) => (
         <div
           key={company.company.id}
-          className="max-tablet:flex-col max-tablet:py-0 max-tablet:pb-11 flex w-full gap-6 py-11"
+          className="max-pc:flex-col max-pc:py-0 max-pc:pb-11 flex w-full gap-6 py-11"
         >
-          <CompanyInfo variant="main" companyInfo={company.company} />
+          <CompanyInfoContainer variant="main" companyInfo={company.company} />
           <NewsCarousel newsCards={company.news} />
         </div>
       ))}
@@ -42,8 +77,6 @@ function CompanyRow() {
         ref={ref}
         style={{ width: "1px", height: "1px", marginTop: "10px" }}
       />
-    </>
+    </ErrorBoundary>
   );
 }
-
-export default CompanyRow;

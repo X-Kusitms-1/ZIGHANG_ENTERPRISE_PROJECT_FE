@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { Funnel, Check, X, RotateCw } from "lucide-react";
 import {
   Dialog,
@@ -9,13 +10,24 @@ import {
   DialogHeader,
   DialogTitle,
   DialogFooter,
+  DialogClose,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/Button";
 import { filterData, type FilterOption } from "@/constants/filterData";
+import { useGetNewsList } from "@/hooks/news/useGetNewsList";
+import {
+  mapCompanyTypes,
+  mapJobGroups,
+  mapRegionsToCodes,
+  normalizeKoreanLabel,
+} from "@/constants/filterMappings";
+import { useNewsFilterContext } from "@/context/NewsFilterContext";
 import { FilterButton } from "../ui/FilterButton";
 import { Chip } from "../ui/Chip";
 
 function FilterModal() {
+  const queryClient = useQueryClient();
+  const { setFilters } = useNewsFilterContext();
   const [selectedCategory, setSelectedCategory] = useState<string>("기업 형태");
   const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
   const [selectedFilters, setSelectedFilters] = useState<{
@@ -25,6 +37,33 @@ function FilterModal() {
     직군: [],
     지역: [],
   });
+
+  const apiFilters = useMemo(() => {
+    const companyTypes = mapCompanyTypes(selectedFilters["기업 형태"] || []);
+    const jobGroups = mapJobGroups(selectedFilters["직군"] || []);
+    const regionCodes = mapRegionsToCodes(selectedFilters);
+
+    return {
+      types: companyTypes.length ? (new Set(companyTypes) as any) : undefined,
+      jobGroups: jobGroups.length ? (new Set(jobGroups) as any) : undefined,
+      regionCodes: regionCodes.length
+        ? (new Set(regionCodes) as any)
+        : undefined,
+      size: 10,
+      sort: undefined,
+    } as const;
+  }, [selectedFilters]);
+
+  const { data: TotalNewData, isFetching } = useGetNewsList(apiFilters);
+
+  // 최소 1초 동안 로딩 유지
+  const [delayDone, setDelayDone] = useState(true);
+  useEffect(() => {
+    setDelayDone(false);
+    const t = setTimeout(() => setDelayDone(true), 1000);
+    return () => clearTimeout(t);
+  }, [selectedFilters]);
+  const isLoadingUI = isFetching || !delayDone;
 
   // 현재 선택된 카테고리의 데이터 가져오기
   const currentCategoryData = filterData.find(
@@ -48,6 +87,7 @@ function FilterModal() {
 
   // 필터 선택/해제
   const toggleFilter = (value: string) => {
+    value = normalizeKoreanLabel(value);
     const categoryKey =
       selectedCategory === "지역" && selectedRegion
         ? `${selectedCategory}-${selectedRegion}`
@@ -226,9 +266,9 @@ function FilterModal() {
                 </div>
               </div>
             ) : (
-              /* 기업 형태, 직군의 경우 기존 구조 */
+              /* 기업 형태, 직군: 2열 그리드로 버튼 배치 */
               <div>
-                <div className="flex flex-wrap gap-2">
+                <div className="grid grid-cols-2 gap-2">
                   {getCurrentOptions().map(
                     (option: string | FilterOption, index: number) => {
                       const value =
@@ -261,6 +301,7 @@ function FilterModal() {
                           size="lg"
                           selected={isSelected}
                           onClick={() => toggleFilter(value)}
+                          className="w-full"
                         >
                           {value}
                         </FilterButton>
@@ -321,11 +362,52 @@ function FilterModal() {
             <RotateCw className="size-5" />
             초기화
           </Button>
-          <Button type="submit" variant="filled" className="w-full" size="lg">
-            {getTotalSelectedCount() > 0
-              ? `${getTotalSelectedCount()}개 필터로 검색`
-              : "전체 결과 보기"}
-          </Button>
+          <DialogClose asChild>
+            <Button
+              type="button"
+              variant="filled"
+              className="w-full"
+              size="lg"
+              disabled={isLoadingUI}
+              onClick={() => {
+                const f = apiFilters;
+                // 1) 필터 키의 캐시에 현재 결과 선반영 (선택)
+                queryClient.setQueryData(
+                  [
+                    "news",
+                    "list",
+                    {
+                      types: f.types
+                        ? Array.from(f.types as Set<string>).sort()
+                        : undefined,
+                      jobGroups: f.jobGroups
+                        ? Array.from(f.jobGroups as Set<string>).sort()
+                        : undefined,
+                      regionCodes: f.regionCodes
+                        ? Array.from(f.regionCodes as Set<string>).sort()
+                        : undefined,
+                      size: f.size,
+                      sort: undefined,
+                    },
+                  ],
+                  TotalNewData
+                );
+
+                // 2) 컨텍스트로 필터 상태 적용
+                setFilters({
+                  types: f.types as any,
+                  jobGroups: f.jobGroups as any,
+                  regionCodes: f.regionCodes as any,
+                  size: f.size,
+                  sort: undefined,
+                });
+              }}
+            >
+              {isLoadingUI
+                ? "로딩중..."
+                : `${TotalNewData?.pages?.[0]?.totalElements ?? 0}건 소식 보기`}
+            </Button>
+          </DialogClose>
         </DialogFooter>
       </DialogContent>
     </Dialog>

@@ -1,15 +1,11 @@
-export interface Company {
-  id: string;
-  companyNameKr: string;
-  companyThumbnailUrl: string;
-  companyTypeLabel: string;
-}
+import { Company } from "./company";
 
 export interface News {
   title: string;
   url: string;
   publishedAt: string;
   thumbnailUrl: string;
+  isSubscribed?: boolean;
 }
 
 export interface NewsItem {
@@ -23,6 +19,7 @@ export interface Sort {
   ascending: boolean;
   property: string;
   ignoreCase: boolean;
+  descending?: boolean;
 }
 
 export interface Pageable {
@@ -46,4 +43,8 @@ export interface NewsResponse {
   number: number;
   sort: Sort[];
   empty: boolean;
+}
+
+export interface SubscribedCompaniesWithNewsResponse {
+  data: NewsItem[];
 }
