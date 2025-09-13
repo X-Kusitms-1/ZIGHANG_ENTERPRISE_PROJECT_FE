@@ -151,14 +151,14 @@ export default function FileUploadModal({
   };
 
   return (
-  <Dialog open={open} onOpenChange={(v) => { /* 바깥 클릭 무시 */ }}>
+  <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild onClick={() => setOpen(true)}>
         {children}
       </DialogTrigger>
       <DialogContent
         className="w-[400px] max-w-100 border-0 bg-transparent p-0 shadow-none"
         showCloseButton={false}
-        closeOnOverlayClick={false}
+        onPointerDownOutside={(e) => e.preventDefault()}
       >
         <div className="flex w-full max-w-[400px] flex-col items-start gap-6 rounded-xl border border-[#F1F5F9] bg-white p-6 shadow-[0_4px_8px_0_rgba(0,0,0,0.04),0_0_12px_0_rgba(0,0,0,0.04)]">
           {/* Header */}
