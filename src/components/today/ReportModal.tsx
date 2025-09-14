@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import BubbleChart from "./BubbleChart";
 import ReportChart from "./ReportChart";
+import FailedJobTags from "./FailedJobTags";
 
 function ReportModal() {
   return (
@@ -34,6 +35,7 @@ function ReportModal() {
         <div className="scrollbar-hide my-6 flex-1 space-y-8 overflow-y-auto rounded-[12px] bg-white p-6">
           <ReportChart />
           <BubbleChart />
+          <FailedJobTags />
         </div>
       </DialogContent>
     </Dialog>
