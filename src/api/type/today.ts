@@ -10,6 +10,7 @@ export interface UserTodayApply {
   workSummary: string;
   recruitmentOriginUrl: string;
   depthTwo: string[];
+  companyLogoUrl: string | null;
 }
 
 export interface UserReportResponse {

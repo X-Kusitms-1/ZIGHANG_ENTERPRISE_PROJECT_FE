@@ -22,13 +22,19 @@ function AnnouncementCard({
 
   return (
     <div className="flex min-h-[270px] w-[220px] flex-shrink-0 flex-col rounded-[12px] bg-white p-4">
-      <Image
-        src={""}
-        alt={companyName}
-        width={28}
-        height={28}
-        className="h-[28px] w-[28px] flex-shrink-0 rounded-[4.5px]"
-      />
+      {userTodayApply.companyLogoUrl ? (
+        <Image
+          src={userTodayApply.companyLogoUrl}
+          alt={companyName}
+          width={28}
+          height={28}
+          className="h-[28px] w-[28px] flex-shrink-0 rounded-[4.5px]"
+        />
+      ) : (
+        <div className="border-border-tertiary text-14-500 text-bold h-[28px] w-[28px] flex-shrink-0 rounded-[4.5px] border bg-[#BA74E6] py-[2px] text-center text-white">
+          {companyName.charAt(0)}
+        </div>
+      )}
       <div className="mt-3 flex flex-shrink-0 flex-col gap-1">
         <p className="text-16-600 text-text-primary min-h-[20px]">
           {companyName}

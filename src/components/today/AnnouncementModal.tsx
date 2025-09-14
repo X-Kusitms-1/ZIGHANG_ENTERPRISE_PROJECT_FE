@@ -35,8 +35,6 @@ function AnnouncementModal() {
     });
   };
 
-  if (!userTodayApply) return null;
-
   const handleToggleSelection = (id: string) => {
     setSelectedIds((prev) =>
       prev.includes(id)
@@ -62,16 +60,20 @@ function AnnouncementModal() {
           </DialogDescription>
         </DialogHeader>
 
-        <div className="custom-scrollbar bg-bg-neutral flex min-h-[340px] gap-5 overflow-x-auto p-5">
-          {userTodayApply.map((announcement) => (
-            <AnnouncementCard
-              key={announcement.recruitmentId}
-              userTodayApply={announcement}
-              onSelect={() => handleToggleSelection(announcement.recruitmentId)}
-              selected={selectedIds.includes(announcement.recruitmentId)}
-            />
-          ))}
-        </div>
+        {userTodayApply && (
+          <div className="custom-scrollbar bg-bg-neutral flex min-h-[340px] gap-5 overflow-x-auto p-5">
+            {userTodayApply.map((announcement) => (
+              <AnnouncementCard
+                key={announcement.recruitmentId}
+                userTodayApply={announcement}
+                onSelect={() =>
+                  handleToggleSelection(announcement.recruitmentId)
+                }
+                selected={selectedIds.includes(announcement.recruitmentId)}
+              />
+            ))}
+          </div>
+        )}
         <DialogFooter className="flex w-full items-center justify-end gap-6">
           <AccuracyModal onClose={() => setIsOpen(false)}>
             <Button variant="outlined" size="lg">
