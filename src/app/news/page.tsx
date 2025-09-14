@@ -8,6 +8,7 @@ import CompanyRow from "@/components/news/CompanyRow";
 import getQueryClient from "@/utils/getQueryClient";
 import TotalNewsSkeleton from "@/components/news/TotalNewsSkeleton";
 import { NewsFilterProvider } from "@/context/NewsFilterContext";
+import ReportModal from "@/components/today/ReportModal";
 
 function NewsPage() {
   const queryClient = getQueryClient();
@@ -32,6 +33,7 @@ function NewsPage() {
             <FilterModal />
           </div>
           <SubscribedFilterButton className="gap-1" />
+          <ReportModal />
         </section>
         <section className="max-pc:hidden mt-12 w-full max-w-[1200px]">
           <Suspense fallback={<TotalNewsSkeleton />}>

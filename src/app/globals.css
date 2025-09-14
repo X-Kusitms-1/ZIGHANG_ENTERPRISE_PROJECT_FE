@@ -654,3 +654,22 @@
   display: inline-block;
   /* 텍스트 사이 간격 */
 }
+
+/* Recharts 포커스 스타일 제거 */
+.recharts-wrapper,
+.recharts-wrapper:focus,
+.recharts-wrapper:focus-visible,
+.recharts-surface,
+.recharts-surface:focus,
+.recharts-surface:focus-visible,
+.recharts-pie,
+.recharts-pie:focus,
+.recharts-pie:focus-visible,
+.recharts-pie-sector,
+.recharts-pie-sector:focus,
+.recharts-pie-sector:focus-visible {
+  outline: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  pointer-events: none !important;
+}
