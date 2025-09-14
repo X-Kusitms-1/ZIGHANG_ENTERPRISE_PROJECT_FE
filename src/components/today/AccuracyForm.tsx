@@ -16,7 +16,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import WorkTypeSection from "./WorkTypeSection";
+import { stepData } from "@/constants/accuracyFormData";
 import CertificationSection from "./CertificationSection";
 
 interface AccuracyFormProps {
@@ -24,10 +24,24 @@ interface AccuracyFormProps {
 }
 
 function AccuracyForm({ onSave }: AccuracyFormProps) {
-  const [workTypeSelections, setWorkTypeSelections] = useState<string[]>([]);
-  const [certificationSelections, setCertificationSelections] = useState<
-    string[]
-  >([]);
+  const [currentStep, setCurrentStep] = useState(0);
+  const [allSelections, setAllSelections] = useState<string[][]>(
+    Array(10).fill([])
+  );
+
+  const handleSelectionChange = (stepIndex: number, selections: string[]) => {
+    const newSelections = [...allSelections];
+    newSelections[stepIndex] = selections;
+    setAllSelections(newSelections);
+  };
+
+  const handleCarouselApi = (api: any) => {
+    if (!api) return;
+
+    api.on("select", () => {
+      setCurrentStep(api.selectedScrollSnap());
+    });
+  };
 
   return (
     <DialogContent className="flex min-h-[620px] min-w-[1000px] flex-col bg-white p-0">
@@ -39,23 +53,27 @@ function AccuracyForm({ onSave }: AccuracyFormProps) {
           원하는 항목을 선택해 주세요! 답변은 정확도 탭에서 언제든지 수정할 수
           있어요.
         </DialogDescription>
+        {/* 진행 단계 표시 */}
+        <div className="text-14-500 text-text-tertiary mt-6">
+          {currentStep + 1} / {stepData.length}
+        </div>
       </DialogHeader>
 
       <div className="flex-1 px-11 py-8">
-        <Carousel className="w-full">
+        <Carousel className="w-full" setApi={handleCarouselApi}>
           <CarouselContent>
-            <CarouselItem>
-              <WorkTypeSection
-                selectedValues={workTypeSelections}
-                onSelectionChange={setWorkTypeSelections}
-              />
-            </CarouselItem>
-            <CarouselItem>
-              <CertificationSection
-                selectedValues={certificationSelections}
-                onSelectionChange={setCertificationSelections}
-              />
-            </CarouselItem>
+            {stepData.map((step, index) => (
+              <CarouselItem key={index}>
+                <CertificationSection
+                  title={step.title}
+                  options={step.options}
+                  selectedValues={allSelections[index]}
+                  onSelectionChange={(selections) =>
+                    handleSelectionChange(index, selections)
+                  }
+                />
+              </CarouselItem>
+            ))}
           </CarouselContent>
           <CarouselPrevious />
           <CarouselNext />

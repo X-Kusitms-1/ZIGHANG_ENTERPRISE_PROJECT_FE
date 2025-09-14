@@ -1,49 +1,42 @@
 import React from "react";
 import { FilterButton } from "../ui/FilterButton";
 
-const certificationOptions = [
-  { id: "none", label: "없음" },
-  { id: "driver", label: "운전면허" },
-  { id: "toeic", label: "토익 800+" },
-  { id: "computer", label: "컴활 2급" },
-  { id: "korean-history", label: "한국사" },
-  { id: "other", label: "기타" },
-];
-
 interface CertificationSectionProps {
+  title: string;
+  options: string[];
   selectedValues: string[];
   // eslint-disable-next-line no-unused-vars
   onSelectionChange: (values: string[]) => void;
 }
 
 function CertificationSection({
+  title,
+  options,
   selectedValues,
   onSelectionChange,
 }: CertificationSectionProps) {
-  const handleToggle = (id: string) => {
-    if (selectedValues.includes(id)) {
-      onSelectionChange(selectedValues.filter((value) => value !== id));
+  const handleToggle = (option: string) => {
+    if (selectedValues.includes(option)) {
+      onSelectionChange(selectedValues.filter((value) => value !== option));
     } else {
-      onSelectionChange([...selectedValues, id]);
+      onSelectionChange([...selectedValues, option]);
     }
   };
 
   return (
-    <div className="mx-auto flex w-[560px] flex-col gap-5">
-      <h3 className="text-24-600 text-text-primary">
-        보유 자격 / 어학을 선택해주세요!
-      </h3>
-      <div className="grid grid-cols-2 grid-rows-[55px_55px_55px] gap-3">
-        {certificationOptions.map((option) => (
+    <div className="mx-auto flex max-w-[760px] flex-col gap-5">
+      <h3 className="text-24-600 text-text-primary">{title}</h3>
+      <div className="grid grid-cols-2 gap-3">
+        {options.map((option, index) => (
           <FilterButton
-            key={option.id}
+            key={index}
             variant="today"
             size="lg"
-            onClick={() => handleToggle(option.id)}
-            selected={selectedValues.includes(option.id)}
-            className="h-full"
+            onClick={() => handleToggle(option)}
+            selected={selectedValues.includes(option)}
+            className="h-[55px]"
           >
-            {option.label}
+            {option}
           </FilterButton>
         ))}
       </div>
