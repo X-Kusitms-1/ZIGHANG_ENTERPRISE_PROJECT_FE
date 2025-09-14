@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getTodayApplyList } from "@/api/today/getTodayApplyList";
 import NowApplyEachComponent from "./NowApplyEachComponent";
 
 export interface ApplyListItem {
-  id: string;
+  recruitmentId: number;
   number: string;
   companyName: string;
   companyType: string;
@@ -12,95 +13,86 @@ export interface ApplyListItem {
   isApplied: boolean;
 }
 
-// 더미데이터를 컴포넌트 내부로 이동
-const sampleApplyListItems: ApplyListItem[] = [
-  {
-    id: "1",
-    number: "01",
-    companyName: "기업명",
-    companyType: "기업 형태",
-    jobTitle: "직무명",
-    isApplied: false,
-  },
-  {
-    id: "2",
-    number: "02",
-    companyName: "기업명",
-    companyType: "기업 형태",
-    jobTitle: "직무명",
-    isApplied: false,
-  },
-  {
-    id: "3",
-    number: "03",
-    companyName: "기업명",
-    companyType: "기업 형태",
-    jobTitle: "직무명",
-    isApplied: true,
-  },
-  {
-    id: "4",
-    number: "04",
-    companyName: "기업명",
-    companyType: "기업 형태",
-    jobTitle: "직무명",
-    isApplied: true,
-  },
-  {
-    id: "5",
-    number: "05",
-    companyName: "기업명",
-    companyType: "기업 형태",
-    jobTitle: "직무명",
-    isApplied: true,
-  },
-  {
-    id: "6",
-    number: "06",
-    companyName: "기업명",
-    companyType: "기업 형태",
-    jobTitle: "직무명",
-    isApplied: true,
-  },
-  {
-    id: "7",
-    number: "07",
-    companyName: "기업명",
-    companyType: "기업 형태",
-    jobTitle: "직무명",
-    isApplied: true,
-  },
-  {
-    id: "8",
-    number: "08",
-    companyName:
-      "기업명ㅁㄴㅇㅁㄴㅇㅁㄴㅇㅁㄴㅇㅁㄴㅇㅁㄴㅇㅁㄴㅇㅁㄴㅇㅁㄴㅇㅁㄴㅇㅁㄴ",
-    companyType: "기업 형태",
-    jobTitle: "직무명",
-    isApplied: true,
-  },
-];
+// API 응답 데이터 타입 (가정)
+// TODO: 실제 API 응답 타입에 맞게 수정해야 합니다.
+export interface ApiApplyItem {
+  recruitmentId: number;
+  viewCount: number;
+  title: string;
+  recruitmentRegion: string;
+  minCareer: number;
+  maxCareer: number;
+  recruitmentEndDate: string | null;
+  companyName: string;
+  workSummary: string;
+  recruitmentOriginUrl: string;
+  depthTwo: string[];
+  isApplied: boolean;
+}
 
 export default function NowApplyList() {
-  const [items, setItems] = useState<ApplyListItem[]>(sampleApplyListItems);
+  const [items, setItems] = useState<ApplyListItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchApplyList = async () => {
+      try {
+        setLoading(true);
+        const data = await getTodayApplyList();
+        // API 데이터를 UI에 맞는 형태로 변환
+        const formattedData = data.map((item:ApiApplyItem, index:number) => ({
+          ...item,
+          recruitmentId: item.recruitmentId, // API 응답의 recruitmentId 사용
+          number: String(index + 1).padStart(2, "0"), // 번호 생성
+        }));
+
+        setItems(formattedData);
+      } catch (err) {
+        setError("데이터를 불러오는 중 오류가 발생했습니다.");
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchApplyList();
+  }, []);
 
   const handleApplyClick = (item: ApplyListItem) => {
     console.log("Apply clicked for:", item);
     // TODO: 백엔드 API 호출 - 지원하기
-    // await applyToJob(item.id);
+    // await applyToJob(item.recruitmentId);
   };
 
-  const handleApplicationStatusChange = (id: string, checked: boolean) => {
+  const handleApplicationStatusChange = (recruitmentId: number, checked: boolean) => {
     // 로컬 상태 업데이트
     setItems((prev) =>
       prev.map((item) =>
-        item.id === id ? { ...item, isApplied: checked } : item
+        item.recruitmentId === recruitmentId ? { ...item, isApplied: checked } : item
       )
     );
 
     // TODO: 백엔드 API 호출 - 지원 상태 업데이트
     // await updateApplicationStatus(id, checked);
   };
+
+  if (loading) {
+    return (
+      <div className="mr-5 flex w-full items-center justify-center rounded-[12px] bg-white p-10">
+        <span className="text-12-500 text-text-primary">로딩 중...</span>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="mr-5 flex w-full items-center justify-center rounded-[12px] bg-white p-10">
+        <span className="text-12-500 text-text-primary">{error}</span>
+      </div>
+    );
+  }
+
   return (
     <div className="mr-5 flex w-full flex-col gap-1 rounded-[12px] bg-white pb-1">
       {/* Header Row */}
@@ -134,16 +126,27 @@ export default function NowApplyList() {
       </div>
 
       {/* Data Rows */}
-      <div className="flex flex-col px-1">
-        {items.map((item) => (
-          <NowApplyEachComponent
-            key={item.id}
-            item={item}
-            onApplyClick={handleApplyClick}
-            onApplicationStatusChange={handleApplicationStatusChange}
-          />
-        ))}
-      </div>
+      {items.length === 0 ? (
+        <div className="10 flex h-[294px] w-full flex-col items-center justify-center gap-1">
+          <span className="text-14-500 text-text-tertiary leading-5">
+            오늘의 지원 리스트를 생성하지 않았어요.
+          </span>
+          <span className="text-14-500 text-text-tertiary leading-5">
+            지원할 공고 개수를 입력하면 적합한 공고를 추천해드려요.
+          </span>
+        </div>
+      ) : (
+        <div className="flex flex-col px-1">
+          {items.map((item) => (
+            <NowApplyEachComponent
+              key={item.recruitmentId}
+              item={item}
+              onApplyClick={handleApplyClick}
+              onApplicationStatusChange={handleApplicationStatusChange}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

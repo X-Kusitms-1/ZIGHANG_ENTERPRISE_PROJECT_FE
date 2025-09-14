@@ -7,9 +7,9 @@ import FileUploadModal from "./FileUploadModal";
 
 interface PastApplyEachComponentProps {
   item: PastApplyListItem;
-  onUploadClick: (item: PastApplyListItem, files: File[]) => void;
-  onDeleteClick: (item: PastApplyListItem, files: File[]) => void;
-  onStatusChange?: (item: PastApplyListItem, newStatus: string) => void;
+  onUploadClick: (_item: PastApplyListItem, _files: File[]) => void;
+  onDeleteClick: (_item: PastApplyListItem) => void;
+  onStatusChange?: (_item: PastApplyListItem, _newStatus: string) => void;
 }
 
 export default function PastApplyEachComponent({
@@ -153,9 +153,7 @@ export default function PastApplyEachComponent({
       <div className="flex items-center">
         <div className="flex w-[100px] flex-col items-center justify-center">
           {item.files.length > 0 ? (
-            <button
-              className="bg-bg-neutral text-12-500 text-text-tertiary flex h-8 w-[74px] cursor-pointer items-center justify-center rounded-[4px] px-3 py-2"
-            >
+            <button className="bg-bg-neutral text-12-500 text-text-tertiary flex h-8 w-[74px] cursor-pointer items-center justify-center rounded-[4px] px-3 py-2">
               파일 관리
             </button>
           ) : (
@@ -165,8 +163,9 @@ export default function PastApplyEachComponent({
                 // 저장하기 누르면 부모로 파일 정보 전달
                 onUploadClick(item, files);
               }}
-              onCancel={(files) => {
-                onDeleteClick(item,files);
+              onCancel={() => {
+                // 취소 시에는 아무 작업도 하지 않고 모달만 닫음
+                console.log("Upload cancelled - no changes made");
               }}
             >
               <button className="text-12-500 text-text-tertiary border-border-tertiary bg-bg-base flex h-8 w-[74px] cursor-pointer items-center justify-center gap-[2px] rounded-[4px] border px-3 py-2 leading-4">

@@ -2,7 +2,7 @@ import React from "react";
 
 interface StatusSelectorProps {
   currentStatus: string;
-  onStatusChange: (status: string) => void;
+  onStatusChange: (_status: string) => void;
   onClose: () => void;
 }
 

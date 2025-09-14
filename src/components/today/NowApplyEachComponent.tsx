@@ -4,7 +4,7 @@ import { ApplyListItem } from "./NowApplyList";
 interface NowApplyEachComponentProps {
   item: ApplyListItem;
   onApplyClick: (_item: ApplyListItem) => void;
-  onApplicationStatusChange: (_id: string, _checked: boolean) => void;
+  onApplicationStatusChange: (_recruitmentId: number, _checked: boolean) => void;
 }
 
 export default function NowApplyEachComponent({
@@ -49,7 +49,7 @@ export default function NowApplyEachComponent({
           <Checkbox
             checked={item.isApplied}
             onCheckedChange={(checked) =>
-              onApplicationStatusChange(item.id, checked === true)
+              onApplicationStatusChange(item.recruitmentId, checked === true)
             }
             bgColor="default"
           />
