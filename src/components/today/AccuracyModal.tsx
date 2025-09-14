@@ -7,9 +7,10 @@ import AccuracySuccess from "./AccuracySuccess";
 
 interface AccuracyModalProps {
   children: React.ReactNode;
+  onClose?: () => void;
 }
 
-function AccuracyModal({ children }: AccuracyModalProps) {
+function AccuracyModal({ children, onClose }: AccuracyModalProps) {
   const [isSuccess, setIsSuccess] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -20,6 +21,7 @@ function AccuracyModal({ children }: AccuracyModalProps) {
   const handleClose = () => {
     setIsOpen(false);
     setIsSuccess(false);
+    onClose?.();
   };
 
   return (
