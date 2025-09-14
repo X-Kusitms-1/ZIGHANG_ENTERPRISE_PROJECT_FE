@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
+import { UserReportResponse } from "@/api/type/today";
 
 interface BubbleData {
   id: string;
@@ -8,12 +9,14 @@ interface BubbleData {
   priority: number; // 1-6 (1이 가장 높은 우선순위)
 }
 
-function BubbleChart() {
+function BubbleChart({ userReport }: { userReport: UserReportResponse }) {
   // 애니메이션 상태 관리
   const [visibleBubbles, setVisibleBubbles] = useState<Set<string>>(new Set());
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isInView, setIsInView] = useState(false);
   const chartRef = useRef<HTMLDivElement>(null);
+
+  const { passed_features } = userReport.reportData;
 
   // 우선순위별 색상 배열 (총 6가지)
   const colors = [
@@ -30,44 +33,24 @@ function BubbleChart() {
     return colors[(priority - 1) % colors.length];
   };
 
-  // 버블 차트 데이터
-  const data: BubbleData[] = [
-    {
-      id: "1",
-      content: "운전면허 소지자",
-      priority: 1, // 가장 높은 우선순위
-    },
-    {
-      id: "2",
-      content: "3년차",
-      priority: 2,
-    },
-    {
-      id: "3",
-      content: "중소기업",
-      priority: 3,
-    },
-    {
-      id: "4",
-      content: "언어 자격증",
-      priority: 4,
-    },
-    {
-      id: "5",
-      content: "언어 자격증",
-      priority: 5,
-    },
-    {
-      id: "6",
-      content: "언어 자격증",
-      priority: 6,
-    },
-  ];
+  // passed_features 배열을 사용해서 동적으로 데이터 생성
+  const data: BubbleData[] = passed_features.map((feature, index) => ({
+    id: (index + 1).toString(),
+    content: feature,
+    priority: index + 1, // 인덱스 0부터 시작하므로 +1
+  }));
 
   const title = "이런 공고에서 많이 합격했어요.";
   const subtitle = "합격 공고의 공통점을 분석한 결과예요.";
+
+  // 상위 2개 항목을 사용해서 동적 결론 생성
+  const topFeatures = passed_features.slice(0, 2);
   const conclusion =
-    "우대사항의 '운전면허 소지자', 경력 '3년차' 공고에서의 합격률이 높은 걸로 보여요.";
+    topFeatures.length >= 2
+      ? `'${topFeatures[0]}', '${topFeatures[1]}' 공고에서의 합격률이 높은 걸로 보여요.`
+      : topFeatures.length === 1
+        ? `'${topFeatures[0]}' 공고에서의 합격률이 높은 걸로 보여요.`
+        : "합격 공고의 공통점을 분석한 결과예요.";
 
   // 우선순위 순으로 정렬된 데이터
   const sortedData = [...data].sort((a, b) => a.priority - b.priority);

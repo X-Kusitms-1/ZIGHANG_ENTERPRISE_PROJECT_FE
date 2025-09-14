@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import {
   Dialog,
@@ -11,38 +11,72 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/Button";
 import { generateWeekOptions } from "@/utils/weekCalculator";
+import { usePostUserReport } from "@/hooks/today/useUserReport";
 import BubbleChart from "./BubbleChart";
 import ReportChart from "./ReportChart";
 import FailedJobTags from "./FailedJobTags";
 import ImprovementSuggestions from "./ImprovementSuggestions";
+// import ReportCreate from "./ReportCreate";
+import ReportError from "./ReportError";
+import ReportLoading from "./ReportLoading";
 
 function ReportModal() {
   // 현재 주차를 기본값으로 설정 (인덱스 1)
+  const [isOpen, setIsOpen] = useState(false);
   const [currentWeekIndex, setCurrentWeekIndex] = useState(1);
 
   // 주차 배열 생성 (이전 주, 현재 주, 다음 주)
   const weeks = generateWeekOptions();
 
+  // 현재 선택된 주차 정보 파싱
+  const currentWeekText = weeks[currentWeekIndex];
+  const [monthPart, weekPart] = currentWeekText.split("월 ");
+  const month = monthPart;
+  const weekOfMonth = weekPart.replace("주차", "");
+
+  // 현재 연도 가져오기
+  const currentYear = new Date().getFullYear().toString();
+
+  const {
+    mutate: postUserReport,
+    data: userReport,
+    isError,
+    error,
+  } = usePostUserReport({
+    year: currentYear,
+    month: month,
+    weekOfMonth: weekOfMonth,
+  });
+
+  useEffect(() => {
+    if (isOpen) {
+      postUserReport();
+    }
+  }, [postUserReport, isOpen]);
+
   const handlePreviousWeek = () => {
     if (currentWeekIndex > 0) {
       setCurrentWeekIndex(currentWeekIndex - 1);
+      // 주차 변경 시 리포트 데이터 새로 가져오기
+      postUserReport();
     }
   };
 
   const handleNextWeek = () => {
     if (currentWeekIndex < weeks.length - 1) {
       setCurrentWeekIndex(currentWeekIndex + 1);
+      // 주차 변경 시 리포트 데이터 새로 가져오기
+      postUserReport();
     }
   };
 
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger>Open</DialogTrigger>
       <DialogContent
         className="bg-bg-tertiary max-w-4xl !grid-cols-none !grid-rows-none !gap-0 !p-6"
         style={{
           maxHeight: "670px",
-          height: "670px",
           display: "flex",
           flexDirection: "column",
         }}
@@ -71,10 +105,23 @@ function ReportModal() {
           </DialogTitle>
         </DialogHeader>
         <div className="scrollbar-hide my-6 flex-1 space-y-8 overflow-y-auto rounded-[12px] bg-white p-6">
-          <ReportChart />
-          <BubbleChart />
-          <FailedJobTags />
-          <ImprovementSuggestions />
+          {isError ? (
+            <ReportError
+              error={error}
+              onRetry={() => postUserReport()}
+              onClose={() => setIsOpen(false)}
+            />
+          ) : userReport ? (
+            <>
+              {/* <ReportCreate /> */}
+              <ReportChart userReport={userReport} />
+              <BubbleChart userReport={userReport} />
+              <FailedJobTags userReport={userReport} />
+              <ImprovementSuggestions userReport={userReport} />
+            </>
+          ) : (
+            <ReportLoading />
+          )}
         </div>
       </DialogContent>
     </Dialog>
