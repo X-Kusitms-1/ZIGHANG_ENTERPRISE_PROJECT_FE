@@ -1,8 +1,21 @@
 import React from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/Button";
+import { usePostUserReport } from "@/hooks/today/useUserReport";
 
-function ReportCreate() {
+interface ReportCreateProps {
+  currentYear: string;
+  month: string;
+  weekOfMonth: string;
+}
+
+function ReportCreate({ currentYear, month, weekOfMonth }: ReportCreateProps) {
+  const { mutate: postUserReport } = usePostUserReport({
+    year: currentYear,
+    month: month,
+    weekOfMonth: weekOfMonth,
+  });
+
   return (
     <div className="mt-10 flex flex-col items-center justify-center gap-11">
       <Image
@@ -21,7 +34,7 @@ function ReportCreate() {
           그동안 창을 닫아도 생성은 계속 진행돼요.
         </p>
       </div>
-      <Button className="w-full" size="lg">
+      <Button className="w-full" size="lg" onClick={() => postUserReport()}>
         8월 3주차 레포트 생성
       </Button>
     </div>

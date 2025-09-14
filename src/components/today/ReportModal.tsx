@@ -11,12 +11,15 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/Button";
 import { generateWeekOptions } from "@/utils/weekCalculator";
-import { usePostUserReport } from "@/hooks/today/useUserReport";
+import {
+  useGetUserReport,
+  usePostUserReport,
+} from "@/hooks/today/useUserReport";
 import BubbleChart from "./BubbleChart";
 import ReportChart from "./ReportChart";
 import FailedJobTags from "./FailedJobTags";
 import ImprovementSuggestions from "./ImprovementSuggestions";
-// import ReportCreate from "./ReportCreate";
+import ReportCreate from "./ReportCreate";
 import ReportError from "./ReportError";
 import ReportLoading from "./ReportLoading";
 
@@ -37,28 +40,31 @@ function ReportModal() {
   // 현재 연도 가져오기
   const currentYear = new Date().getFullYear().toString();
 
-  const {
-    mutate: postUserReport,
-    data: userReport,
-    isError,
-    error,
-  } = usePostUserReport({
+  const { mutate: postUserReport, data: userReport } = usePostUserReport({
     year: currentYear,
     month: month,
     weekOfMonth: weekOfMonth,
   });
 
+  const {
+    data: userReportCheck,
+    isError,
+    error,
+  } = useGetUserReport(currentYear, month, weekOfMonth, isOpen);
+
   useEffect(() => {
-    if (isOpen) {
+    if (isOpen && userReportCheck) {
       postUserReport();
     }
-  }, [postUserReport, isOpen]);
+  }, [postUserReport, isOpen, userReportCheck]);
 
   const handlePreviousWeek = () => {
     if (currentWeekIndex > 0) {
       setCurrentWeekIndex(currentWeekIndex - 1);
       // 주차 변경 시 리포트 데이터 새로 가져오기
-      postUserReport();
+      if (userReportCheck) {
+        postUserReport();
+      }
     }
   };
 
@@ -66,7 +72,9 @@ function ReportModal() {
     if (currentWeekIndex < weeks.length - 1) {
       setCurrentWeekIndex(currentWeekIndex + 1);
       // 주차 변경 시 리포트 데이터 새로 가져오기
-      postUserReport();
+      if (userReportCheck) {
+        postUserReport();
+      }
     }
   };
 
@@ -111,9 +119,14 @@ function ReportModal() {
               onRetry={() => postUserReport()}
               onClose={() => setIsOpen(false)}
             />
+          ) : !userReportCheck ? (
+            <ReportCreate
+              currentYear={currentYear}
+              month={month}
+              weekOfMonth={weekOfMonth}
+            />
           ) : userReport ? (
             <>
-              {/* <ReportCreate /> */}
               <ReportChart userReport={userReport} />
               <BubbleChart userReport={userReport} />
               <FailedJobTags userReport={userReport} />
