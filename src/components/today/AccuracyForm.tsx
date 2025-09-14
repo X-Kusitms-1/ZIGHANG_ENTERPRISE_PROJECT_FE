@@ -17,6 +17,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { stepData } from "@/constants/accuracyFormData";
+import { usePostUserAccuracy } from "@/hooks/today/useUserAccuracy";
 import CertificationSection from "./CertificationSection";
 
 interface AccuracyFormProps {
@@ -28,6 +29,25 @@ function AccuracyForm({ onSave }: AccuracyFormProps) {
   const [allSelections, setAllSelections] = useState<string[][]>(
     Array(10).fill([])
   );
+
+  const { mutate: postUserAccuracy } = usePostUserAccuracy();
+
+  const handlePostUserAccuracy = () => {
+    const requestBody = {
+      question1: allSelections[0] || [],
+      question2: allSelections[1] || [],
+      question3: allSelections[2] || [],
+      question4: allSelections[3] || [],
+      question5: allSelections[4] || [],
+      question6: allSelections[5] || [],
+      question7: allSelections[6] || [],
+      question8: allSelections[7] || [],
+      question9: allSelections[8] || [],
+      question10: allSelections[9] || [],
+    };
+    postUserAccuracy(requestBody);
+    onSave();
+  };
 
   const handleSelectionChange = (stepIndex: number, selections: string[]) => {
     const newSelections = [...allSelections];
@@ -89,7 +109,7 @@ function AccuracyForm({ onSave }: AccuracyFormProps) {
             variant="filled"
             size="lg"
             className="w-[320px]"
-            onClick={onSave}
+            onClick={handlePostUserAccuracy}
           >
             저장하기
           </Button>
