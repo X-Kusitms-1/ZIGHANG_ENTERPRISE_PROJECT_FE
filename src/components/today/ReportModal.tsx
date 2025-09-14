@@ -11,6 +11,7 @@ import {
 import BubbleChart from "./BubbleChart";
 import ReportChart from "./ReportChart";
 import FailedJobTags from "./FailedJobTags";
+import ImprovementSuggestions from "./ImprovementSuggestions";
 
 function ReportModal() {
   return (
@@ -36,6 +37,7 @@ function ReportModal() {
           <ReportChart />
           <BubbleChart />
           <FailedJobTags />
+          <ImprovementSuggestions />
         </div>
       </DialogContent>
     </Dialog>
