@@ -13,6 +13,8 @@ const chipVariants = cva(
           "border-transparent bg-bg-info !text-text-info hover:bg-bg-info-hovered h-8 text-14-500 rounded-md px-3 py-[6px]",
         rounded:
           "border-transparent bg-bg-info !text-text-info hover:bg-bg-info-hovered h-5 text-12-500 rounded-lg px-2 py-0.5",
+        today:
+          "bg-bg-neutral !text-text-secondary text-12-500 rounded-[4px] px-1.5 py-1",
       },
     },
     defaultVariants: {

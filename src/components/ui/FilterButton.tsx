@@ -16,11 +16,14 @@ const filterButtonVariants = cva(
           "bg-bg-base border border-border-tertiary hover:bg-bg-base-hovered hover:border-border-inverse text-text-secondary data-[selected=true]:bg-bg-base-focused data-[selected=true]:border-border-inverse [&_img]:brightness-0 [&_img]:saturate-100 hover:[&_img]:brightness-0 hover:[&_img]:saturate-100 data-[selected=true]:[&_img]:brightness-0 data-[selected=true]:[&_img]:saturate-100",
         filled:
           "bg-bg-neutral hover:bg-bg-neutral-hovered !text-text-tertiary data-[selected=true]:bg-bg-info data-[selected=true]:border-border-secondary data-[selected=true]:!text-text-info [&_img]:brightness-0 [&_img]:saturate-100 [&_img]:opacity-70 hover:[&_img]:opacity-80 data-[selected=true]:[&_img]:brightness-0 data-[selected=true]:[&_img]:saturate-100 data-[selected=true]:[&_img]:hue-rotate-[210deg] data-[selected=true]:[&_img]:opacity-100",
+        today:
+          "bg-bg-neutral border border-border-tertiary hover:bg-bg-neutral-hovered hover:border-border-tertiary !text-text-secondary data-[selected=true]:bg-bg-info data-[selected=true]:border-border-primary [&_img]:brightness-0 [&_img]:saturate-100 [&_img]:opacity-70 hover:[&_img]:opacity-80 data-[selected=true]:[&_img]:brightness-0 data-[selected=true]:[&_img]:saturate-100 data-[selected=true]:[&_img]:hue-rotate-[210deg] data-[selected=true]:[&_img]:opacity-100",
       },
       size: {
         sm: "h-8 rounded-sm px-3 py-[6px] text-14-500",
         md: "h-9 rounded-md px-3 py-2 text-14-500",
         lg: "h-9 rounded-sm px-4 py-[6px] text-16-500",
+        xl: "rounded-sm px-4 px-6 text-16-600",
       },
     },
     defaultVariants: {
