@@ -9,6 +9,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/Button";
+import CustomScrollbar from "@/components/ui/CustomScrollbar";
 import UploadedFile from "./UploadedFile";
 
 interface FileUploadModalProps {
@@ -151,7 +152,7 @@ export default function FileUploadModal({
   };
 
   return (
-  <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild onClick={() => setOpen(true)}>
         {children}
       </DialogTrigger>
@@ -219,18 +220,22 @@ export default function FileUploadModal({
                   <div className="text-14-500 text-text-tertiary leading-5">
                     업로드된 파일
                   </div>
-                  <div className="overflow-y-auto flex h-[186px] w-full flex-col gap-2 bg-white">
-                    {existingFiles.map((file) => (
-                      <UploadedFile
-                        key={file.name}
-                        name={file.name}
-                        url={file.url}
-                        progress={file.progress}
-                        fileSize={formatFileSize(file.size || 0)}
-                        onRemove={() => handleRemoveFile(file.name)}
-                      />
-                    ))}
-                  </div>
+                  <CustomScrollbar variant="fileUpload">
+                    <div
+                      className={`flex w-full flex-col gap-2 bg-white ${existingFiles.length <= 4 ? "pr-3" : "pr-0"}`}
+                    >
+                      {existingFiles.map((file) => (
+                        <UploadedFile
+                          key={file.name}
+                          name={file.name}
+                          url={file.url}
+                          progress={file.progress}
+                          fileSize={formatFileSize(file.size || 0)}
+                          onRemove={() => handleRemoveFile(file.name)}
+                        />
+                      ))}
+                    </div>
+                  </CustomScrollbar>
                 </div>
               </motion.div>
             )}
