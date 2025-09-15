@@ -1,15 +1,16 @@
 import { Checkbox } from "@/components/ui/checkbox";
-import { ApplyListItem } from "./NowApplyList";
+import { ApiApplyItem } from "./NowApplyList";
 
 interface NowApplyEachComponentProps {
-  item: ApplyListItem;
-  onApplyClick: (_item: ApplyListItem) => void;
-  onApplicationStatusChange: (_recruitmentId: number, _checked: boolean) => void;
+  item: ApiApplyItem;
+  onApplicationStatusChange: (
+    _recruitmentId: number,
+    _isApplied: boolean
+  ) => void;
 }
 
 export default function NowApplyEachComponent({
   item,
-  onApplyClick,
   onApplicationStatusChange,
 }: NowApplyEachComponentProps) {
   return (
@@ -20,19 +21,21 @@ export default function NowApplyEachComponent({
             {item.number}
           </span>
         </div>
-        <div className="flex w-[120px] items-center px-2.5">
+        <div className="flex w-[180px] items-center pl-2.5">
           <span className="text-12-500 text-text-secondary w-full overflow-hidden text-ellipsis whitespace-nowrap">
             {item.companyName}
           </span>
         </div>
-        <div className="flex w-[120px] items-center px-2.5">
-          <span className="text-12-500 text-text-secondary block">
-            {item.companyType}
+        <div className="flex w-[180px] items-center pl-2.5">
+          <span className="text-12-500 text-text-secondary w-full overflow-hidden text-ellipsis whitespace-nowrap">
+            {Array.isArray(item.depthTwo)
+              ? item.depthTwo.join(", ")
+              : item.depthTwo}
           </span>
         </div>
-        <div className="flex w-[120px] items-center px-2.5">
-          <span className="text-12-500 text-text-secondary">
-            {item.jobTitle}
+        <div className="flex w-[180px] items-center pl-2.5">
+          <span className="text-12-500 text-text-secondary w-full overflow-hidden text-ellipsis whitespace-nowrap">
+            {item.workSummary}
           </span>
         </div>
       </div>
@@ -40,7 +43,13 @@ export default function NowApplyEachComponent({
         <div className="flex w-20 items-center justify-center">
           <button
             className="text-12-500 text-text-tertiary bg-bg-neutral h-8 w-[66px] cursor-pointer rounded-[4px] px-3 py-2"
-            onClick={() => onApplyClick(item)}
+            onClick={() => {
+              if (item.recruitmentOriginUrl) {
+                window.open(item.recruitmentOriginUrl, "_blank");
+              } else {
+                console.log("지원 URL이 없습니다:", item);
+              }
+            }}
           >
             지원하기
           </button>
@@ -48,8 +57,8 @@ export default function NowApplyEachComponent({
         <div className="flex h-8 w-20 items-center justify-center">
           <Checkbox
             checked={item.isApplied}
-            onCheckedChange={(checked) =>
-              onApplicationStatusChange(item.recruitmentId, checked === true)
+            onCheckedChange={() =>
+              onApplicationStatusChange(item.recruitmentId, item.isApplied)
             }
             bgColor="default"
           />

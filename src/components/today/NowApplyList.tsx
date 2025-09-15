@@ -1,17 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { getTodayApplyList } from "@/api/today/getTodayApplyList";
+import { useGetTodayApplyList } from "@/hooks/today/useGetTodayApplyList";
 import NowApplyEachComponent from "./NowApplyEachComponent";
-
-export interface ApplyListItem {
-  recruitmentId: number;
-  number: string;
-  companyName: string;
-  companyType: string;
-  jobTitle: string;
-  isApplied: boolean;
-}
+import { useGetApplyStatus } from "@/hooks/today/useGetApplyStatus";
 
 // API 응답 데이터 타입 (가정)
 // TODO: 실제 API 응답 타입에 맞게 수정해야 합니다.
@@ -28,73 +19,49 @@ export interface ApiApplyItem {
   recruitmentOriginUrl: string;
   depthTwo: string[];
   isApplied: boolean;
+  number?: string;
 }
 
 export default function NowApplyList() {
-  const [items, setItems] = useState<ApplyListItem[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const { data, isLoading, refreshTodayApplyList } = useGetTodayApplyList();
+  const { refetchApplyStatus} = useGetApplyStatus();
 
-  useEffect(() => {
-    const fetchApplyList = async () => {
-      try {
-        setLoading(true);
-        const data = await getTodayApplyList();
-        // API 데이터를 UI에 맞는 형태로 변환
-        const formattedData = data.map((item:ApiApplyItem, index:number) => ({
-          ...item,
-          recruitmentId: item.recruitmentId, // API 응답의 recruitmentId 사용
-          number: String(index + 1).padStart(2, "0"), // 번호 생성
-        }));
-
-        setItems(formattedData);
-      } catch (err) {
-        setError("데이터를 불러오는 중 오류가 발생했습니다.");
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchApplyList();
-  }, []);
-
-  const handleApplyClick = (item: ApplyListItem) => {
-    console.log("Apply clicked for:", item);
-    // TODO: 백엔드 API 호출 - 지원하기
-    // await applyToJob(item.recruitmentId);
+  const handleApplicationStatusChange = (
+    recruitmentId: number,
+    isApplied: boolean
+  ) => {
+    import("@/api/today/ChangeApplyStatus").then(({ ChangeApplyStatus }) => {
+      // isApplied가 true면 DELETE 요청, false면 POST 요청
+      const method = isApplied ? "DELETE" : "POST";
+      ChangeApplyStatus(recruitmentId, method)
+        .then(() => {
+          refreshTodayApplyList();
+          refetchApplyStatus();
+        })
+        .catch((err) => {
+          console.error("지원 상태 업데이트 에러:", err);
+        });
+    });
   };
 
-  const handleApplicationStatusChange = (recruitmentId: number, checked: boolean) => {
-    // 로컬 상태 업데이트
-    setItems((prev) =>
-      prev.map((item) =>
-        item.recruitmentId === recruitmentId ? { ...item, isApplied: checked } : item
-      )
-    );
-
-    // TODO: 백엔드 API 호출 - 지원 상태 업데이트
-    // await updateApplicationStatus(id, checked);
-  };
-
-  if (loading) {
+  if (isLoading) {
     return (
-      <div className="mr-5 flex w-full items-center justify-center rounded-[12px] bg-white p-10">
-        <span className="text-12-500 text-text-primary">로딩 중...</span>
+      <div className="10 flex h-[294px] w-full flex-col items-center justify-center gap-1 rounded-[12px]">
+        <div className="h-16 w-16 animate-spin rounded-full border-4 border-gray-200 border-t-purple-500" />
       </div>
     );
   }
 
-  if (error) {
-    return (
-      <div className="mr-5 flex w-full items-center justify-center rounded-[12px] bg-white p-10">
-        <span className="text-12-500 text-text-primary">{error}</span>
-      </div>
-    );
-  }
+  // number 필드 추가
+  const formattedData = data
+    ? data.map((item: ApiApplyItem, idx: number) => ({
+        ...item,
+        number: String(idx + 1).padStart(2, "0"),
+      }))
+    : [];
 
   return (
-    <div className="mr-5 flex w-full flex-col gap-1 rounded-[12px] bg-white pb-1">
+    <div className="mr-5 flex w-full max-w-[836px] flex-col gap-1 rounded-[12px] bg-white pb-1">
       {/* Header Row */}
       <div className="border-border-line flex items-center justify-between border-b px-6 py-4">
         <div className="flex items-center gap-2">
@@ -103,13 +70,13 @@ export default function NowApplyList() {
               번호
             </span>
           </div>
-          <div className="flex w-[120px] items-center px-2.5">
+          <div className="flex w-[180px] items-center pl-2.5">
             <span className="text-12-500 text-text-tertiary">기업명</span>
           </div>
-          <div className="flex w-[120px] items-center px-2.5">
+          <div className="flex w-[180px] items-center pl-2.5">
             <span className="text-12-500 text-text-tertiary">기업 형태</span>
           </div>
-          <div className="flex w-[120px] items-center px-2.5">
+          <div className="flex w-[180px] items-center pl-2.5">
             <span className="text-12-500 text-text-tertiary">직무명</span>
           </div>
         </div>
@@ -126,7 +93,7 @@ export default function NowApplyList() {
       </div>
 
       {/* Data Rows */}
-      {items.length === 0 ? (
+      {!formattedData || formattedData.length === 0 ? (
         <div className="10 flex h-[294px] w-full flex-col items-center justify-center gap-1">
           <span className="text-14-500 text-text-tertiary leading-5">
             오늘의 지원 리스트를 생성하지 않았어요.
@@ -137,11 +104,10 @@ export default function NowApplyList() {
         </div>
       ) : (
         <div className="flex flex-col px-1">
-          {items.map((item) => (
+          {formattedData.map((item: ApiApplyItem) => (
             <NowApplyEachComponent
               key={item.recruitmentId}
               item={item}
-              onApplyClick={handleApplyClick}
               onApplicationStatusChange={handleApplicationStatusChange}
             />
           ))}
