@@ -1,30 +1,17 @@
 "use client";
 
-import { useGetTodayApplyList } from "@/hooks/today/useGetTodayApplyList";
-import NowApplyEachComponent from "./NowApplyEachComponent";
+import {
+  useGetTodayApplyList,
+  useGetPastApplyList,
+} from "@/hooks/today/useGetApplyList";
 import { useGetApplyStatus } from "@/hooks/today/useGetApplyStatus";
-
-// API 응답 데이터 타입 (가정)
-// TODO: 실제 API 응답 타입에 맞게 수정해야 합니다.
-export interface ApiApplyItem {
-  recruitmentId: number;
-  viewCount: number;
-  title: string;
-  recruitmentRegion: string;
-  minCareer: number;
-  maxCareer: number;
-  recruitmentEndDate: string | null;
-  companyName: string;
-  workSummary: string;
-  recruitmentOriginUrl: string;
-  depthTwo: string[];
-  isApplied: boolean;
-  number?: string;
-}
+import { ApiApplyItem } from "@/api/today/getTodayApplyList";
+import NowApplyEachComponent from "./NowApplyEachComponent";
 
 export default function NowApplyList() {
   const { data, isLoading, refreshTodayApplyList } = useGetTodayApplyList();
-  const { refetchApplyStatus} = useGetApplyStatus();
+  const { refreshPastApplyList } = useGetPastApplyList();
+  const { refetchApplyStatus } = useGetApplyStatus();
 
   const handleApplicationStatusChange = (
     recruitmentId: number,
@@ -36,6 +23,7 @@ export default function NowApplyList() {
       ChangeApplyStatus(recruitmentId, method)
         .then(() => {
           refreshTodayApplyList();
+          refreshPastApplyList();
           refetchApplyStatus();
         })
         .catch((err) => {
