@@ -7,7 +7,8 @@ export interface PastApplyItem {
   recruitmentOriginUrl: string;
   depthTwo: string[];
   applyStatus: string;
-  number?: string;
+  applicationDate?: string; // 지원 날짜
+  number?: string; // 리스트 번호
 }
 
 export const getPastApplyList = async (): Promise<PastApplyItem[]> => {
