@@ -582,6 +582,36 @@
   }
 }
 
+/* 커스텀 스크롤바 */
+.custom-scrollbar::-webkit-scrollbar {
+  height: 8px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #e0e5f0;
+  border-radius: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #ccd0d6;
+  border-radius: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #ccd0d6;
+}
+.custom-scrollbar::-moz-scrollbar {
+  height: 8px;
+}
+.custom-scrollbar::-moz-scrollbar-track {
+  background: #e0e5f0;
+  border-radius: 4px;
+}
+.custom-scrollbar::-moz-scrollbar-thumb {
+  background: #ccd0d6;
+  border-radius: 4px;
+}
+.custom-scrollbar::-moz-scrollbar-thumb:hover {
+  background: #ccd0d6;
+}
+
 /* 말줄임표 처리 유틸리티 */
 @utility text-ellipsis-1 {
   overflow: hidden;
@@ -623,4 +653,23 @@
 .scroll-content span {
   display: inline-block;
   /* 텍스트 사이 간격 */
+}
+
+/* Recharts 포커스 스타일 제거 */
+.recharts-wrapper,
+.recharts-wrapper:focus,
+.recharts-wrapper:focus-visible,
+.recharts-surface,
+.recharts-surface:focus,
+.recharts-surface:focus-visible,
+.recharts-pie,
+.recharts-pie:focus,
+.recharts-pie:focus-visible,
+.recharts-pie-sector,
+.recharts-pie-sector:focus,
+.recharts-pie-sector:focus-visible {
+  outline: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  pointer-events: none !important;
 }
