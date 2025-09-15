@@ -2,63 +2,25 @@
 
 import { useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useGetPastApplyList } from "@/hooks/today/useGetApplyList";
 import PastApplyEachComponent from "./PastApplyEachComponent";
 
-export interface PastApplyListItem {
-  id: string;
-  status: "대기중" | "합격" | "불합격";
-  number: string;
-  companyName: string;
-  jobTitle: string;
-  applicationDate: string;
-  files: File[]; // 백엔드에서 제공하는 파일 배열
-}
-
-// 지난 지원 리스트용 더미데이터 35개
-const samplePastApplyListItems: PastApplyListItem[] = Array.from(
-  { length: 35 },
-  (_, i) => ({
-    id: `past-${i + 1}`,
-    status: ["대기중", "합격", "불합격"][i % 3] as "대기중" | "합격" | "불합격",
-    number: (i + 1).toString().padStart(2, "0"),
-    companyName: `기업명${i + 1}`,
-    jobTitle: `직무명${i + 1}`,
-    applicationDate: `2024-${((i % 12) + 1).toString().padStart(2, "0")}-${((i % 28) + 1).toString().padStart(2, "0")}`,
-    files: i % 3 !== 0 ? [] : [], // 일단 빈 배열로 초기화 (실제로는 백엔드에서 파일 정보 제공)
-  })
-);
-
 export default function PastApplyList() {
-  const [items, setItems] = useState<PastApplyListItem[]>(
-    samplePastApplyListItems
-  );
+  const { data, isLoading } = useGetPastApplyList();
+  const items = Array.isArray(data) ? data : [];
   const [currentPage, setCurrentPage] = useState(1);
 
-  // 파일 업로드 시 해당 아이템의 files 배열에 추가
-  const handleUploadClick = (item: PastApplyListItem, files: File[]) => {
-    setItems((prev) =>
-      prev.map((i) =>
-        i.id === item.id ? { ...i, files: [...i.files, ...files] } : i
-      )
-    );
-    // TODO: 백엔드 API 호출 - 파일 업로드
-    // await uploadFile(item.id, files);
-  };
-
-  // 파일 삭제 시 해당 아이템의 files 배열을 빈 배열로 만들기
-  const handleFileDeleteClick = (item: PastApplyListItem) => {
-    setItems((prev) =>
-      prev.map((i) => (i.id === item.id ? { ...i, files: [] } : i))
-    );
-    // TODO: 백엔드 API 호출 - 파일 삭제
-    // await deleteFiles(item.id);
-  };
   // 10개씩 페이징
   const itemsPerPage = 10;
   const totalPages = Math.ceil(items.length / itemsPerPage);
   const startIdx = (currentPage - 1) * itemsPerPage;
   const endIdx = startIdx + itemsPerPage;
-  const pagedItems = items.slice(startIdx, endIdx);
+  // number 필드 추가
+  const formattedItems = items.map((item: any, idx: number) => ({
+    ...item,
+    number: String(idx + 1).padStart(2, "0"),
+  }));
+  const pagedItems = formattedItems.slice(startIdx, endIdx);
 
   const handlePageClick = (page: number) => {
     if (page !== currentPage) {
@@ -108,17 +70,17 @@ export default function PastApplyList() {
                 번호
               </span>
             </div>
-            <div className="flex w-[100px] items-center px-2.5">
+            <div className="flex w-[180px] items-center px-2.5">
               <span className="text-center text-xs leading-4 font-medium text-[#686D79]">
                 기업명
               </span>
             </div>
-            <div className="flex w-[100px] items-center px-2.5">
+            <div className="flex w-[180px] items-center px-2.5">
               <span className="text-center text-xs leading-4 font-medium text-[#686D79]">
                 직무명
               </span>
             </div>
-            <div className="flex w-[100px] items-center px-2.5">
+            <div className="flex w-[150px] items-center px-2.5">
               <span className="text-center text-xs leading-4 font-medium text-[#686D79]">
                 지원날짜
               </span>
@@ -135,14 +97,21 @@ export default function PastApplyList() {
 
         {/* Data Rows */}
         <div className="flex flex-col px-1">
-          {pagedItems.map((item) => (
-            <PastApplyEachComponent
-              key={item.id}
-              item={item}
-              onUploadClick={handleUploadClick}
-              onDeleteClick={handleFileDeleteClick}
-            />
-          ))}
+          {isLoading ? (
+            <div className="py-8 text-center text-gray-400">불러오는 중...</div>
+          ) : pagedItems.length === 0 ? (
+            <div className="py-8 text-center text-gray-400">
+              지난 지원 내역이 없습니다.
+            </div>
+          ) : (
+            pagedItems.map((item: any) => (
+              <PastApplyEachComponent
+                key={item.id || item.recruitmentId}
+                item={item}
+                // 파일 업로드/삭제 기능은 실제 API에 맞게 구현 필요
+              />
+            ))
+          )}
         </div>
       </div>
 

@@ -1,23 +1,19 @@
 import Image from "next/image";
 import { Upload } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
-import { PastApplyListItem } from "./PastApplyList";
+import { PastApplyItem } from "@/api/today/getPastApplyList";
 import StatusSelector from "./StatusSelector";
 import FileUploadModal from "./FileUploadModal";
 
 interface PastApplyEachComponentProps {
-  item: PastApplyListItem;
-  onUploadClick: (_item: PastApplyListItem, _files: File[]) => void;
-  onDeleteClick: (_item: PastApplyListItem) => void;
-  onStatusChange?: (_item: PastApplyListItem, _newStatus: string) => void;
+  item: PastApplyItem;
 }
 
 export default function PastApplyEachComponent({
   item,
-  onUploadClick,
-  onDeleteClick,
-  onStatusChange,
 }: PastApplyEachComponentProps) {
+  // 파일 상태를 별도로 관리
+  const [files, setFiles] = useState<File[]>([]);
   const [isStatusSelectorOpen, setIsStatusSelectorOpen] = useState(false);
   const statusChipRef = useRef<HTMLButtonElement>(null);
 
@@ -50,13 +46,6 @@ export default function PastApplyEachComponent({
     setIsStatusSelectorOpen(!isStatusSelectorOpen);
   };
 
-  const handleStatusChange = (newStatus: string) => {
-    if (onStatusChange) {
-      onStatusChange(item, newStatus);
-    }
-    setIsStatusSelectorOpen(false);
-  };
-
   const getStatusConfig = (status: string) => {
     switch (status) {
       case "합격":
@@ -65,6 +54,7 @@ export default function PastApplyEachComponent({
           textClass: "text-[#16A800]",
           label: "합격",
         };
+      case "탈락":
       case "불합격":
         return {
           bgClass: "bg-[#FAE1E1]",
@@ -81,7 +71,7 @@ export default function PastApplyEachComponent({
     }
   };
 
-  const statusConfig = getStatusConfig(item.status);
+  const statusConfig = getStatusConfig(item.applyStatus);
 
   return (
     <div
@@ -112,8 +102,10 @@ export default function PastApplyEachComponent({
           {isStatusSelectorOpen && (
             <div className="absolute top-[-6px] left-[-4px] z-50 mt-1 w-full">
               <StatusSelector
-                currentStatus={item.status}
-                onStatusChange={handleStatusChange}
+                currentStatus={
+                  item.applyStatus as "대기중" | "합격" | "불합격" | "탈락"
+                }
+                recruitmentId={item.recruitmentId}
                 onClose={() => setIsStatusSelectorOpen(false)}
               />
             </div>
@@ -128,21 +120,21 @@ export default function PastApplyEachComponent({
         </div>
 
         {/* Company Name */}
-        <div className="flex w-[100px] items-center px-2.5">
+        <div className="flex w-[180px] items-center px-2.5">
           <span className="text-12-500 text-text-secondary leading-4">
             {item.companyName}
           </span>
         </div>
 
         {/* Job Title */}
-        <div className="flex w-[100px] items-center px-2.5">
+        <div className="flex w-[180px] items-center px-2.5">
           <span className="text-12-500 text-text-secondary leading-4">
-            {item.jobTitle}
+            {item.recruitmentOriginUrl}
           </span>
         </div>
 
         {/* Application Date */}
-        <div className="flex w-[100px] items-center px-2.5">
+        <div className="flex w-[150px] items-center px-2.5">
           <span className="text-12-500 text-text-secondary leading-4">
             {item.applicationDate}
           </span>
@@ -152,16 +144,16 @@ export default function PastApplyEachComponent({
       {/* File Upload/Management */}
       <div className="flex items-center">
         <div className="flex w-[100px] flex-col items-center justify-center">
-          {item.files.length > 0 ? (
+          {files.length > 0 ? (
             <button className="bg-bg-neutral text-12-500 text-text-tertiary flex h-8 w-[74px] cursor-pointer items-center justify-center rounded-[4px] px-3 py-2">
               파일 관리
             </button>
           ) : (
             <FileUploadModal
               number={item.number}
-              onFileUpload={(files) => {
+              onFileUpload={(newFiles) => {
                 // 저장하기 누르면 부모로 파일 정보 전달
-                onUploadClick(item, files);
+                setFiles(newFiles); // 업로드 후 파일 상태 갱신
               }}
               onCancel={() => {
                 // 취소 시에는 아무 작업도 하지 않고 모달만 닫음
