@@ -14,7 +14,7 @@ import UploadedFile from "./UploadedFile";
 
 interface FileUploadModalProps {
   children: React.ReactNode;
-  onFileUpload?: (files: File[]) => void;
+  onFileUpload?: (_files: File[]) => void;
   onCancel?: () => void;
   onSave?: () => void;
   number?: string;

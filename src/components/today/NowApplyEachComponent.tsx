@@ -1,5 +1,5 @@
 import { Checkbox } from "@/components/ui/checkbox";
-import { ApiApplyItem } from "./NowApplyList";
+import { ApiApplyItem } from "@/api/today/getTodayApplyList";
 
 interface NowApplyEachComponentProps {
   item: ApiApplyItem;
