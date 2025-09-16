@@ -86,7 +86,7 @@ function ReportModal({ children }: ReportModalProps) {
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent
-        className="bg-bg-tertiary max-w-4xl !grid-cols-none !grid-rows-none !gap-0 !p-6"
+        className="bg-bg-tertiary max-w-[490px] !grid-cols-none !grid-rows-none !gap-0 !p-6"
         style={{
           maxHeight: "670px",
           display: "flex",
