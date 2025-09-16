@@ -17,8 +17,15 @@ export const usePostUserTodayApply = () => {
   return useMutation({
     mutationFn: (recruitmentId: string[]) => postUserTodayApply(recruitmentId),
     onSuccess: () => {
+      // 관련 쿼리키들 초기화
       queryClient.invalidateQueries({
         queryKey: ["userTodayApply"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["todayApplyList"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["news", "list"],
       });
     },
     onError: (error) => {
