@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { Plus, Minus } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { postApplyCountApi } from "@/api/today/userTodayApply";
 
 // 지원할 공고 개수를 입력하는 컴포넌트 (PC/노트북 해상도에 유연하게 반응)
 export default function ApplyCountInput() {
@@ -11,11 +12,17 @@ export default function ApplyCountInput() {
 
   // 개수 감소
   const handleDecrement = () => {
-    if (count > 1) setCount(count - 1);
+    if (count > 1) {
+      const newCount = count - 1;
+      setCount(newCount);
+      postApplyCountApi(newCount);
+    }
   };
   // 개수 증가
   const handleIncrement = () => {
-    setCount(count + 1);
+    const newCount = count + 1;
+    setCount(newCount);
+    postApplyCountApi(newCount);
   };
   // 제출
   const handleSubmit = () => {
@@ -68,7 +75,7 @@ export default function ApplyCountInput() {
           onClick={handleSubmit}
           variant="filled"
           size="lg"
-          className="h-[52px] w-[92px] rounded-[10px] cursor-pointer"
+          className="h-[52px] w-[92px] cursor-pointer rounded-[10px]"
         >
           <span className="text-base">공고 확인</span>
         </Button>
