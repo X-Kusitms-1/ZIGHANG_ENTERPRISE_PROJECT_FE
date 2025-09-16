@@ -24,13 +24,32 @@ function AccuracyModal({ children, onClose }: AccuracyModalProps) {
     onClose?.();
   };
 
+  const handleCancel = () => {
+    setIsOpen(false);
+    setIsSuccess(false);
+    onClose?.();
+  };
+
+  const handleEdit = () => {
+    setIsSuccess(false); // 성공 화면에서 폼으로 돌아가기
+  };
+
+  const handleOpenChange = (open: boolean) => {
+    if (!open) {
+      // X 버튼으로 닫을 때도 초기화
+      handleCancel();
+    } else {
+      setIsOpen(open);
+    }
+  };
+
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>{children}</DialogTrigger>
       {isSuccess ? (
-        <AccuracySuccess onClose={handleClose} />
+        <AccuracySuccess onClose={handleClose} onEdit={handleEdit} />
       ) : (
-        <AccuracyForm onSave={handleSave} />
+        <AccuracyForm onSave={handleSave} onCancel={handleCancel} />
       )}
     </Dialog>
   );
