@@ -20,13 +20,13 @@ export default function SimilarCompaniesGrid({
         {companies.map((companyWithNews) => (
           <div
             key={companyWithNews.company.id}
-            className="flex flex-col space-y-4"
+            className="flex h-full flex-col space-y-4"
           >
             <CompanyInfo
               variant="company"
               companyInfo={companyWithNews.company}
             />
-            <div className="max-pc:hidden">
+            <div className="max-pc:hidden grid grid-cols-1 gap-4">
               {companyWithNews.news.slice(0, 3).map((news, index) => (
                 <NewsCard
                   key={`${companyWithNews.company.id}-${index}`}

@@ -20,7 +20,6 @@ const Header = () => {
             className="tablet:h-[40px] tablet:w-[76px] h-[24px] w-[60.5px]"
           />
         </Link>
-
         <NavMenu className="tablet:block hidden" />
       </div>
       <div className="pc:flex hidden items-center gap-5">

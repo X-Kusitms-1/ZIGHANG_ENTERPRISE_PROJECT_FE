@@ -32,7 +32,7 @@ async function CompanyNewsPage({
             className="max-pc:hidden mt-15 w-full max-w-[900px]"
           >
             <h3 className="text-24-600 text-text-secondary">
-              같은 금융권 기업의 소식을 보여드릴까요?
+              유사 기업의 소식
             </h3>
             <SimilarCompaniesGrid companies={companyData.similarCompanies} />
           </div>

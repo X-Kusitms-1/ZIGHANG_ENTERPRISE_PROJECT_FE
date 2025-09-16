@@ -24,7 +24,8 @@ function NavMenu({
         className={`flex items-center ${orientation === "vertical" ? "flex-col gap-4" : "gap-9"}`}
       >
         {headerMenu.map((menu) => {
-          const isActive = pathname === menu.href;
+          const isActive =
+            pathname === menu.href || pathname.startsWith(menu.href + "/");
           return (
             <li key={menu.title} className="text-base">
               <Link

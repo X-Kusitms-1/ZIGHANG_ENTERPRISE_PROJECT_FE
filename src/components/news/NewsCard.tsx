@@ -41,7 +41,7 @@ function NewsCard({ newsCard, variant }: NewsCardProps) {
         alt={newsCard.title}
         width={300}
         height={200}
-        className={`pc:min-h-[200px] tablet:min-h-[200px] max-h-[200px] min-h-[130px] w-full rounded-[8px] object-cover ${
+        className={`pc:min-h-[200px] tablet:min-h-[200px] max-h-[200px] min-h-[130px] w-full rounded-[8px] object-cover transition-transform duration-300 ease-in-out group-hover:scale-105 ${
           variant === "sub"
             ? "max-pc:h-[64px] max-pc:w-[100px] !min-h-[64px]"
             : ""
@@ -49,9 +49,15 @@ function NewsCard({ newsCard, variant }: NewsCardProps) {
       />
       <div className="flex flex-col gap-2">
         <h2
-          className={`text-16-600 text-text-primary max-tablet:text-14-600 group-hover:underline ${
+          className={`text-18-600 text-text-primary max-tablet:text-14-600 overflow-hidden text-ellipsis group-hover:underline ${
             variant === "text" ? "hover:underline" : ""
           }`}
+          style={{
+            lineHeight: "28px",
+            display: "-webkit-box",
+            WebkitLineClamp: 2,
+            WebkitBoxOrient: "vertical",
+          }}
         >
           {newsCard.title}
         </h2>

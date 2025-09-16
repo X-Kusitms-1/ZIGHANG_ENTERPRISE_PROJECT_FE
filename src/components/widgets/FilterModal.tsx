@@ -25,9 +25,33 @@ import { useNewsFilterContext } from "@/context/NewsFilterContext";
 import { FilterButton } from "../ui/FilterButton";
 import { Chip } from "../ui/Chip";
 
+// 로컬 스토리지 키
+const FILTER_STORAGE_KEY = "newsFilterSettings";
+
+// 로컬 스토리지에 필터 정보 저장
+const saveFiltersToStorage = (filters: { [key: string]: string[] }) => {
+  try {
+    localStorage.setItem(FILTER_STORAGE_KEY, JSON.stringify(filters));
+  } catch (error) {
+    console.error("필터 정보 저장 실패:", error);
+  }
+};
+
+// 로컬 스토리지에서 필터 정보 불러오기
+const loadFiltersFromStorage = (): { [key: string]: string[] } | null => {
+  try {
+    const saved = localStorage.getItem(FILTER_STORAGE_KEY);
+    return saved ? JSON.parse(saved) : null;
+  } catch (error) {
+    console.error("필터 정보 불러오기 실패:", error);
+    return null;
+  }
+};
+
 function FilterModal() {
   const queryClient = useQueryClient();
   const { setFilters } = useNewsFilterContext();
+  const [isOpen, setIsOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string>("기업 형태");
   const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
   const [selectedFilters, setSelectedFilters] = useState<{
@@ -55,6 +79,25 @@ function FilterModal() {
   }, [selectedFilters]);
 
   const { data: TotalNewData, isFetching } = useGetNewsList(apiFilters);
+
+  // 모달이 열릴 때 로컬 스토리지에서 필터 정보 불러오기
+  useEffect(() => {
+    if (isOpen) {
+      const savedFilters = loadFiltersFromStorage();
+      if (savedFilters) {
+        setSelectedFilters(savedFilters);
+
+        // 지역 필터가 있는 경우 첫 번째 지역을 선택
+        const regionKeys = Object.keys(savedFilters).filter((key) =>
+          key.startsWith("지역-")
+        );
+        if (regionKeys.length > 0) {
+          const firstRegion = regionKeys[0].replace("지역-", "");
+          setSelectedRegion(firstRegion);
+        }
+      }
+    }
+  }, [isOpen]);
 
   // 최소 1초 동안 로딩 유지
   const [delayDone, setDelayDone] = useState(true);
@@ -130,6 +173,15 @@ function FilterModal() {
     setSelectedRegion(null);
   };
 
+  // 모달 닫기 처리 (X 버튼으로 닫을 때 필터 초기화)
+  const handleModalClose = (open: boolean) => {
+    if (!open) {
+      // 모달이 닫힐 때 필터 초기화
+      resetFilters();
+    }
+    setIsOpen(open);
+  };
+
   // 선택된 필터 개수 계산
   const getTotalSelectedCount = () => {
     return Object.values(selectedFilters).reduce(
@@ -139,7 +191,7 @@ function FilterModal() {
   };
 
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={handleModalClose}>
       <DialogTrigger asChild>
         <FilterButton size="sm">
           <Funnel className="size-3" />
@@ -176,7 +228,7 @@ function FilterModal() {
           </div>
 
           {/* 오른쪽 옵션 목록 */}
-          <div className="min-h-0 flex-1 p-2">
+          <div className="min-h-0 flex-1 p-5">
             {/* 지역의 경우 2단계 구조 */}
             {selectedCategory === "지역" ? (
               <div className="flex h-full gap-3">
@@ -401,6 +453,9 @@ function FilterModal() {
                   size: f.size,
                   sort: undefined,
                 });
+
+                // 3) 로컬 스토리지에 필터 정보 저장
+                saveFiltersToStorage(selectedFilters);
               }}
             >
               {isLoadingUI
