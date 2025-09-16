@@ -2,8 +2,9 @@ import Image from "next/image";
 import { Upload } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { PastApplyItem } from "@/api/today/getPastApplyList";
+// import { FileUploadResult } from "@/utils/multiFileUploader"; // 파일 관리 로직 주석 처리로 인해 미사용
 import StatusSelector from "./StatusSelector";
-import FileUploadModal from "./FileUploadModal";
+import FileUploadModalEnhanced from "./FileUploadModalEnhanced";
 
 interface PastApplyEachComponentProps {
   item: PastApplyItem;
@@ -12,8 +13,9 @@ interface PastApplyEachComponentProps {
 export default function PastApplyEachComponent({
   item,
 }: PastApplyEachComponentProps) {
-  // 파일 상태를 별도로 관리
-  const [files, setFiles] = useState<File[]>([]);
+  // 파일 상태를 별도로 관리 (주석 처리: 백엔드에서 파일 데이터를 내려주지 않음)
+  // const [files, setFiles] = useState<File[]>([]);
+  // const [uploadResults, setUploadResults] = useState<FileUploadResult[]>([]);
   const [isStatusSelectorOpen, setIsStatusSelectorOpen] = useState(false);
   const statusChipRef = useRef<HTMLButtonElement>(null);
 
@@ -136,38 +138,49 @@ export default function PastApplyEachComponent({
         {/* Application Date */}
         <div className="flex w-[150px] items-center px-2.5">
           <span className="text-12-500 text-text-secondary leading-4">
-            {item.applicationDate}
+            {item.createdAt}
           </span>
         </div>
       </div>
 
-      {/* File Upload/Management */}
+      {/* File Upload/Management - 파일 관리 로직 주석 처리 (백엔드에서 파일 데이터를 내려주지 않음) */}
       <div className="flex items-center">
         <div className="flex w-[100px] flex-col items-center justify-center">
-          {files.length > 0 ? (
+          {/* 파일이 있을 때와 없을 때 조건부 렌더링 주석 처리 */}
+          {/* {files.length > 0 ? (
             <button className="bg-bg-neutral text-12-500 text-text-tertiary flex h-8 w-[74px] cursor-pointer items-center justify-center rounded-[4px] px-3 py-2">
               파일 관리
             </button>
-          ) : (
-            <FileUploadModal
-              number={item.number}
-              onFileUpload={(newFiles) => {
-                // 저장하기 누르면 부모로 파일 정보 전달
-                setFiles(newFiles); // 업로드 후 파일 상태 갱신
-              }}
-              onCancel={() => {
-                // 취소 시에는 아무 작업도 하지 않고 모달만 닫음
-                console.log("Upload cancelled - no changes made");
-              }}
-            >
-              <button className="text-12-500 text-text-tertiary border-border-tertiary bg-bg-base flex h-8 w-[74px] cursor-pointer items-center justify-center gap-[2px] rounded-[4px] border px-3 py-2 leading-4">
-                업로드
-                <div className="flex h-3 w-3 items-center justify-center">
-                  <Upload size={10.8} color="#686D79" />
-                </div>
-              </button>
-            </FileUploadModal>
-          )}
+          ) : ( */}
+          <FileUploadModalEnhanced
+            number={item.number}
+            recruitmentId={item.recruitmentId}
+            // onFileUpload={(newFiles: File[]) => {
+            //   // 파일 선택 시 처리
+            //   setFiles(newFiles);
+            // }}
+            // onUploadComplete={(results: FileUploadResult[]) => {
+            //   // 업로드 완료 시 처리
+            //   setUploadResults(results);
+            //   const successFiles = results
+            //     .filter((r) => r.success)
+            //     .map((r) => r.file);
+            //   setFiles(successFiles);
+            //   console.log("업로드 완료:", results);
+            // }}
+            onCancel={() => {
+              // 취소 시에는 아무 작업도 하지 않고 모달만 닫음
+              console.log("Upload cancelled - no changes made");
+            }}
+          >
+            <button className="text-12-500 text-text-tertiary border-border-tertiary bg-bg-base flex h-8 w-[74px] cursor-pointer items-center justify-center gap-[2px] rounded-[4px] border px-3 py-2 leading-4">
+              업로드
+              <div className="flex h-3 w-3 items-center justify-center">
+                <Upload size={10.8} color="#686D79" />
+              </div>
+            </button>
+          </FileUploadModalEnhanced>
+          {/* )} */}
         </div>
       </div>
     </div>

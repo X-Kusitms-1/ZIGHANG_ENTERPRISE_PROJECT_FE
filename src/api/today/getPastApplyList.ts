@@ -7,7 +7,7 @@ export interface PastApplyItem {
   recruitmentOriginUrl: string;
   depthTwo: string[];
   applyStatus: string;
-  applicationDate?: string; // 지원 날짜
+  createdAt?: string; // 지원 날짜
   number?: string; // 리스트 번호
 }
 
