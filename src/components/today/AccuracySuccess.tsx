@@ -33,7 +33,7 @@ function AccuracySuccess({ onClose, onEdit }: AccuracySuccessProps) {
           animationData={accuracyAnimation}
           loop={true}
           autoplay={true}
-          style={{ width: 400, height: 400 }}
+          style={{ width: 280, height: 280 }}
         />
       </div>
 
