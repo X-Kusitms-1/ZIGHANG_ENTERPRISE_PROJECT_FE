@@ -4,7 +4,7 @@ import { Scrollbar } from "react-scrollbars-custom";
 interface CustomScrollbarProps {
   children: React.ReactNode;
   height?: string;
-  variant?: "job" | "location";
+  variant?: "job" | "location" | "fileUpload";
   className?: string;
 }
 
@@ -25,6 +25,9 @@ export default function CustomScrollbar({
           return "324px"; // 340px - 16px (padding)
         else if (window.innerWidth >= 768) return "60.53dvh"; // 원래 JobCategoryGrid와 동일
         return "53.78dvh"; // 원래 JobCategoryGrid와 동일
+      } else if (variant === "fileUpload") {
+        // FileUpload 모달 높이
+        return "186px"; // 파일 업로드 모달의 고정 높이
       } else {
         // LocationGrid 높이
         if (window.innerWidth >= 1024)
@@ -33,13 +36,19 @@ export default function CustomScrollbar({
         return "57.78dvh"; // 60.78dvh - 4dvh (padding)
       }
     }
-    return variant === "job" ? "324px" : "364px";
+    return variant === "job"
+      ? "324px"
+      : variant === "fileUpload"
+        ? "186px"
+        : "364px";
   };
 
   const trackYHeight = getTrackYHeight();
 
   return (
-    <div className={`h-full w-full ${className}`}>
+    <div
+      className={`${variant === "fileUpload" ? "h-[186px]" : "h-full"} w-full ${className}`}
+    >
       <Scrollbar
         style={{ width: "100%", height: "100%" }}
         thumbXProps={{
