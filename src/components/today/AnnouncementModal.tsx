@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Dialog,
   DialogTrigger,
@@ -15,16 +15,24 @@ import {
   usePostUserTodayApply,
 } from "@/hooks/today/useUserToadayApply";
 import { getUserName } from "@/utils/localStorage";
-import { Button } from "../ui/Button";
+import { cn } from "@/lib/utils";
+import { Button, buttonVariants } from "../ui/Button";
 import AnnouncementCard from "./AnnouncementCard";
 import AccuracyModal from "./AccuracyModal";
 
 function AnnouncementModal() {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [isOpen, setIsOpen] = useState(false);
+  const [userName, setUserName] = useState<string>("");
 
   const { data: userTodayApply } = useUserTodayApply();
   const { mutate: postUserTodayApply } = usePostUserTodayApply();
+
+  // 하이드레이션 오류 방지를 위해 useEffect에서 userName 설정
+  useEffect(() => {
+    const name = getUserName();
+    setUserName(name || "");
+  }, []);
 
   const handlePostUserTodayApply = () => {
     postUserTodayApply(selectedIds, {
@@ -45,15 +53,22 @@ function AnnouncementModal() {
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger>
-        <Button variant="filled" size="lg">
-          공고 추천받기
-        </Button>
+      <DialogTrigger asChild>
+        <div
+          className={cn(
+            buttonVariants({ variant: "filled", size: "lg" }),
+            "h-[52px] w-[92px] cursor-pointer rounded-[10px]"
+          )}
+        >
+          <span className="text-base">공고 확인</span>
+        </div>
       </DialogTrigger>
       <DialogContent className="flex min-h-[620px] min-w-[1000px] flex-col gap-8 bg-white p-11">
         <DialogHeader>
           <DialogTitle className="!text-32-700 text-text-secondary">
-            {`${getUserName()} 님을 위해 선택지를 여유있게 준비했어요!`}
+            {userName
+              ? `${userName} 님을 위해 선택지를 여유있게 준비했어요!`
+              : "선택지를 여유있게 준비했어요!"}
           </DialogTitle>
           <DialogDescription className="!text-16-500 text-text-tertiary">
             앞에서 입력한 개수와는 상관 없이 리스트에 담을 수 있어요.

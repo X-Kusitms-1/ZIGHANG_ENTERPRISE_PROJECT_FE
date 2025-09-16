@@ -3,8 +3,8 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { Plus, Minus } from "lucide-react";
-import { Button } from "@/components/ui/Button";
 import { postApplyCountApi } from "@/api/today/userTodayApply";
+import AnnouncementModal from "./AnnouncementModal";
 
 // 지원할 공고 개수를 입력하는 컴포넌트 (PC/노트북 해상도에 유연하게 반응)
 export default function ApplyCountInput() {
@@ -23,10 +23,6 @@ export default function ApplyCountInput() {
     const newCount = count + 1;
     setCount(newCount);
     postApplyCountApi(newCount);
-  };
-  // 제출
-  const handleSubmit = () => {
-    console.log(`선택된 공고 개수: ${count}`);
   };
 
   return (
@@ -69,16 +65,8 @@ export default function ApplyCountInput() {
           </button>
         </div>
       </div>
-      {/* 제출 버튼 */}
       <div className="absolute right-4 bottom-3 z-10">
-        <Button
-          onClick={handleSubmit}
-          variant="filled"
-          size="lg"
-          className="h-[52px] w-[92px] cursor-pointer rounded-[10px]"
-        >
-          <span className="text-base">공고 확인</span>
-        </Button>
+        <AnnouncementModal />
       </div>
     </div>
   );

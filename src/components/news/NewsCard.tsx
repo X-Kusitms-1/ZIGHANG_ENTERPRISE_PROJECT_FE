@@ -41,7 +41,7 @@ function NewsCard({ newsCard, variant }: NewsCardProps) {
         alt={newsCard.title}
         width={300}
         height={200}
-        className={`pc:min-h-[200px] tablet:min-h-[200px] min-h-[130px] w-full rounded-[8px] object-cover ${
+        className={`pc:min-h-[200px] tablet:min-h-[200px] max-h-[200px] min-h-[130px] w-full rounded-[8px] object-cover ${
           variant === "sub"
             ? "max-pc:h-[64px] max-pc:w-[100px] !min-h-[64px]"
             : ""

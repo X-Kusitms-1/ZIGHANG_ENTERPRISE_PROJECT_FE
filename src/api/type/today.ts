@@ -11,6 +11,7 @@ export interface UserTodayApply {
   recruitmentOriginUrl: string;
   depthTwo: string[];
   companyLogoUrl: string | null;
+  isApplied: boolean;
 }
 
 export interface UserReportResponse {

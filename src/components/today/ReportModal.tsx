@@ -104,7 +104,7 @@ function ReportModal({ children }: ReportModalProps) {
             >
               <ChevronLeft color="#000" size={20} />
             </Button>
-            <h2>{weeks[currentWeekIndex]} 리포트</h2>
+            <span>{weeks[currentWeekIndex]} 리포트</span>
             <Button
               variant="outlined"
               size="sm"
