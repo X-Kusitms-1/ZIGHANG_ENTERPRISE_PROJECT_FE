@@ -23,7 +23,11 @@ import ReportCreate from "./ReportCreate";
 import ReportError from "./ReportError";
 import ReportLoading from "./ReportLoading";
 
-function ReportModal() {
+interface ReportModalProps {
+  children?: React.ReactNode;
+}
+
+function ReportModal({ children }: ReportModalProps) {
   // 현재 주차를 기본값으로 설정 (인덱스 1)
   const [isOpen, setIsOpen] = useState(false);
   const [currentWeekIndex, setCurrentWeekIndex] = useState(1);
@@ -80,7 +84,7 @@ function ReportModal() {
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger>Open</DialogTrigger>
+      <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent
         className="bg-bg-tertiary max-w-4xl !grid-cols-none !grid-rows-none !gap-0 !p-6"
         style={{

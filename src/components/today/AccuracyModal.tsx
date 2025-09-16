@@ -26,7 +26,7 @@ function AccuracyModal({ children, onClose }: AccuracyModalProps) {
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger>{children}</DialogTrigger>
+      <DialogTrigger asChild>{children}</DialogTrigger>
       {isSuccess ? (
         <AccuracySuccess onClose={handleClose} />
       ) : (
