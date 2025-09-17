@@ -18,7 +18,7 @@ export const useGetTodayApplyList = () => {
   const query = useQuery({
     queryKey: todayApplyQueryKeys.list(),
     queryFn: getTodayApplyList,
-    staleTime: 1000 * 60 * 60 * 24, // 24시간 (평상시에는 캐시 사용)
+    // staleTime: 1000 * 60 * 10, 
     refetchOnWindowFocus: false, // 창 포커스 시 재요청 안함
     refetchOnMount: false, // 컴포넌트 마운트 시 재요청 안함 (캐시 있으면)
     retry: 1,
@@ -41,7 +41,7 @@ export const useGetPastApplyList = () => {
   const query = useQuery({
     queryKey: pastApplyQueryKeys.list(),
     queryFn: getPastApplyList,
-    staleTime: 1000 * 60 * 60 * 24, // 24시간 (평상시에는 캐시 사용)
+    staleTime: 1000 * 60 * 10, // 10분 (평상시에는 캐시 사용)
     refetchOnWindowFocus: false, // 창 포커스 시 재요청 안함
     refetchOnMount: false, // 컴포넌트 마운트 시 재요청 안함 (캐시 있으면)
     retry: 1,

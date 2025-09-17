@@ -13,7 +13,7 @@ export const useGetApplyStatus = () => {
   const query = useQuery({
     queryKey: applyStatusQueryKeys.list(),
     queryFn: getApplyStatus,
-    staleTime: 1000 * 60 * 60, // 1시간 캐시
+    staleTime: 1000 * 60 * 10,
     refetchOnWindowFocus: false,
     refetchOnMount: false,
     retry: 1,
