@@ -16,6 +16,7 @@ import {
 } from "@/hooks/today/useUserToadayApply";
 import { getUserName } from "@/utils/localStorage";
 import { cn } from "@/lib/utils";
+import { UserTodayApply } from "@/api/type/today";
 import { Button, buttonVariants } from "../ui/Button";
 import AnnouncementCard from "./AnnouncementCard";
 import AccuracyModal from "./AccuracyModal";
@@ -23,16 +24,34 @@ import AccuracyModal from "./AccuracyModal";
 function AnnouncementModal() {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [isOpen, setIsOpen] = useState(false);
+  const [isFirstApiCall, setIsFirstApiCall] = useState(true);
   const [userName, setUserName] = useState<string>("");
 
-  const { data: userTodayApply } = useUserTodayApply();
+  const [requireRefreshRecruitmentId, setRequireRefreshRecruitmentId] =
+    useState<UserTodayApply[]>([]);
+
+  const { mutate: getUserTodayApply } = useUserTodayApply();
   const { mutate: postUserTodayApply } = usePostUserTodayApply();
 
   // 하이드레이션 오류 방지를 위해 useEffect에서 userName 설정
   useEffect(() => {
     const name = getUserName();
     setUserName(name || "");
-  }, []);
+    if (isOpen && isFirstApiCall) {
+      getUserTodayApply(
+        {
+          isFirstApiCall: true,
+          requireRefreshRecruitmentId: "0",
+        },
+        {
+          onSuccess: (data) => {
+            setRequireRefreshRecruitmentId(data);
+          },
+        }
+      );
+      setIsFirstApiCall(false);
+    }
+  }, [getUserTodayApply, isOpen, isFirstApiCall]);
 
   const handlePostUserTodayApply = () => {
     postUserTodayApply(selectedIds, {
@@ -41,6 +60,24 @@ function AnnouncementModal() {
         setSelectedIds([]); // 선택된 항목들 초기화
       },
     });
+  };
+
+  const handleGetUserTodayApply = (
+    isFirstApiCall: boolean,
+    requireRefreshRecruitmentId: string
+  ) => {
+    getUserTodayApply(
+      {
+        isFirstApiCall: isFirstApiCall,
+        requireRefreshRecruitmentId: requireRefreshRecruitmentId,
+      },
+      {
+        onSuccess: (data) => {
+          setRequireRefreshRecruitmentId(data);
+        },
+      }
+    );
+    // hendleFilterRecruitmentId(requireRefreshRecruitmentId);
   };
 
   const handleToggleSelection = (id: string) => {
@@ -75,15 +112,16 @@ function AnnouncementModal() {
           </DialogDescription>
         </DialogHeader>
 
-        {userTodayApply && (
+        {requireRefreshRecruitmentId && (
           <div className="custom-scrollbar bg-bg-neutral flex min-h-[340px] gap-5 overflow-x-auto p-5">
-            {userTodayApply.map((announcement) => (
+            {requireRefreshRecruitmentId.map((announcement) => (
               <AnnouncementCard
                 key={announcement.recruitmentId}
                 userTodayApply={announcement}
                 onSelect={() =>
                   handleToggleSelection(announcement.recruitmentId)
                 }
+                handleGetUserTodayApply={handleGetUserTodayApply}
                 selected={selectedIds.includes(announcement.recruitmentId)}
               />
             ))}
