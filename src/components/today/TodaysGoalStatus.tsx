@@ -40,9 +40,12 @@ export function TodaysGoalStatus({}) {
       const elapsed = Date.now() - startTime;
       const progress = Math.min(elapsed / duration, 1);
 
-      // easeOutCubic 함수로 자연스러운 애니메이션
-      const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
-      const easedProgress = easeOutCubic(progress);
+      // 기존: easeOutCubic (끝에서 느려짐)
+      // const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
+      // const easedProgress = easeOutCubic(progress);
+
+      // 현재: linear (일정한 속도)
+      const easedProgress = progress;
 
       const currentValue = startValue + (endValue - startValue) * easedProgress;
       setAnimatedPercentage(Math.round(currentValue));
