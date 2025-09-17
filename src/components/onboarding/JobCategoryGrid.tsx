@@ -125,7 +125,7 @@ export default function JobCategoryGrid(props: JobCategoryGridProps) {
                       onClick={() => handleCategoryClick(category.name)}
                       className={`flex h-[40px] w-full items-center justify-between rounded-lg py-2 pr-4 pl-5 text-left transition-colors ${
                         isUndecided
-                          ? "text-text-disabled cursor-not-allowed bg-transparent"
+                          ? "text-text-disabled bg-transparent"
                           : isSelectedCategory
                             ? "bg-bg-info text-text-info text-16-600"
                             : hasSelectedRoles

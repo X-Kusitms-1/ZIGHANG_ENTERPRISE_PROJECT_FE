@@ -8,24 +8,17 @@ import Banner from "@/components/widgets/Banner";
 import OnBoardingModal from "@/components/onboarding/OnBoardingModal";
 
 export default function Home() {
-  
   const [showOnboarding, setShowOnboarding] = useState(false);
-  
+
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const shouldShowOnboarding = urlParams.get("showOnboarding");
     if (shouldShowOnboarding === "true") {
       // 백엔드에서 온보딩 완료 여부 검증
-      import("@/api").then(({ serverApiClient }) => {
-        serverApiClient
-          .get("/v1/user/status")
-          .then((response) => {
-            const onboardingComplete = response.data.data.isOnboarded;
-            if (!onboardingComplete) {
-              setShowOnboarding(true);
-            } else {
-              setShowOnboarding(false);
-            }
+      import("@/api/header/getIsOnboarding").then(({ getIsOnboarding }) => {
+        getIsOnboarding()
+          .then((onboardingComplete) => {
+            setShowOnboarding(!onboardingComplete);
           })
           .catch(() => {
             setShowOnboarding(false);

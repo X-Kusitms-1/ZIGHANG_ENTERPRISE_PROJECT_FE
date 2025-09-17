@@ -176,7 +176,7 @@ export default function OnBoardingModal({
       {children && <DialogTrigger asChild>{children}</DialogTrigger>}
       <DialogContent
         onInteractOutside={(e) => e.preventDefault()}
-        className={`flex !h-[640px] !w-[680px] w-full !max-w-[680px] flex-col items-center gap-0 rounded-lg bg-white ${isCompleted ? "px-6 pt-[60px]" : ""} ${currentStep === 0 ? "px-22" : currentStep === 2 || 3 ? "px-[90px]" : ""} pt-6 pb-[44px] [&>button]:hidden`}
+        className={`flex !h-[640px] !w-[680px] w-full !max-w-[680px] flex-col items-center gap-0 rounded-lg bg-white pt-6 ${isCompleted ? "px-6 pt-[60px]" : ""} ${currentStep === 0 ? "px-22" : currentStep === 2 || 3 ? "px-[90px]" : ""}  pb-[44px] [&>button]:hidden`}
       >
         {isCompleted ? (
           // 완료 화면
@@ -189,14 +189,14 @@ export default function OnBoardingModal({
               </div>
             </DialogTitle>
             <DialogDescription className="text-16-500 text-text-tertiary leading-6">
-              {displayName}님의 경력에 맞는 공고들을 앞으로 추천해드릴게요!
+              {displayName}님에게 맞는 맞춤형 공고들을 앞으로 추천해드릴게요!
             </DialogDescription>
             <Image
               src="/onboarding/congratulation.svg"
               alt="축하 이미지"
               width={280}
               height={280}
-              className="my-8"
+              className="my-16"
             />
             <DialogFooter>
               <Button
