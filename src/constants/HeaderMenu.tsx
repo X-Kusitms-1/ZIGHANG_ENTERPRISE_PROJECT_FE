@@ -13,10 +13,6 @@ export const headerMenu: HeaderMenu[] = [
     href: "/company",
   },
   {
-    title: "실시간 공고",
-    href: "/realtime",
-  },
-  {
     title: "기업 소식",
     href: "/news",
   },
