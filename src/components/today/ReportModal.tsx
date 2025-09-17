@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import {
   Dialog,
@@ -11,17 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/Button";
 import { generateWeekOptions } from "@/utils/weekCalculator";
-import {
-  useGetUserReport,
-  usePostUserReport,
-} from "@/hooks/today/useUserReport";
-import BubbleChart from "./BubbleChart";
-import ReportChart from "./ReportChart";
-import FailedJobTags from "./FailedJobTags";
-import ImprovementSuggestions from "./ImprovementSuggestions";
 import ReportCreate from "./ReportCreate";
-import ReportError from "./ReportError";
-import ReportLoading from "./ReportLoading";
 
 interface ReportModalProps {
   children?: React.ReactNode;
@@ -44,41 +34,15 @@ function ReportModal({ children }: ReportModalProps) {
   // 현재 연도 가져오기
   const currentYear = new Date().getFullYear().toString();
 
-  const { mutate: postUserReport, data: userReport } = usePostUserReport({
-    year: currentYear,
-    month: month,
-    weekOfMonth: weekOfMonth,
-  });
-
-  const {
-    data: userReportCheck,
-    isError,
-    error,
-  } = useGetUserReport(currentYear, month, weekOfMonth, isOpen);
-
-  useEffect(() => {
-    if (isOpen && userReportCheck) {
-      postUserReport();
-    }
-  }, [postUserReport, isOpen, userReportCheck]);
-
   const handlePreviousWeek = () => {
     if (currentWeekIndex > 0) {
       setCurrentWeekIndex(currentWeekIndex - 1);
-      // 주차 변경 시 리포트 데이터 새로 가져오기
-      if (userReportCheck) {
-        postUserReport();
-      }
     }
   };
 
   const handleNextWeek = () => {
     if (currentWeekIndex < weeks.length - 1) {
       setCurrentWeekIndex(currentWeekIndex + 1);
-      // 주차 변경 시 리포트 데이터 새로 가져오기
-      if (userReportCheck) {
-        postUserReport();
-      }
     }
   };
 
@@ -117,28 +81,12 @@ function ReportModal({ children }: ReportModalProps) {
           </DialogTitle>
         </DialogHeader>
         <div className="scrollbar-hide my-6 flex-1 space-y-8 overflow-y-auto rounded-[12px] bg-white p-6">
-          {isError ? (
-            <ReportError
-              error={error}
-              onRetry={() => postUserReport()}
-              onClose={() => setIsOpen(false)}
-            />
-          ) : !userReportCheck ? (
-            <ReportCreate
-              currentYear={currentYear}
-              month={month}
-              weekOfMonth={weekOfMonth}
-            />
-          ) : userReport ? (
-            <>
-              <ReportChart userReport={userReport} />
-              <BubbleChart userReport={userReport} />
-              <FailedJobTags userReport={userReport} />
-              <ImprovementSuggestions userReport={userReport} />
-            </>
-          ) : (
-            <ReportLoading />
-          )}
+          <ReportCreate
+            currentYear={currentYear}
+            month={month}
+            weekOfMonth={weekOfMonth}
+            isOpen={isOpen}
+          />
         </div>
       </DialogContent>
     </Dialog>
