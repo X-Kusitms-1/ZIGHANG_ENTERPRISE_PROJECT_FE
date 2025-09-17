@@ -17,9 +17,7 @@ interface LocationGridProps {
 export default function LocationGrid(props: LocationGridProps) {
   const { locationList, setLocationList } = props;
 
-  const [selectedCity, setSelectedCity] = useState<string | null>(
-    LOCATION_DATA.length > 0 ? LOCATION_DATA[0].city : null
-  );
+  const [selectedCity, setSelectedCity] = useState<string | null>(null);
   // 도시별 선택된 지역구를 저장하는 객체
   const [selectedDistricts, setSelectedDistricts] = useState<{
     [city: string]: Set<string>;
