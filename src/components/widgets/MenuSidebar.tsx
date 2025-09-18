@@ -12,7 +12,11 @@ import {
 import { Button } from "../ui/Button";
 import NavMenu from "./NavMenu";
 
-function MenuSidebar() {
+interface MenuSidebarProps {
+  apiSuccess?: boolean | null;
+}
+
+function MenuSidebar({ apiSuccess }: MenuSidebarProps) {
   const router = useRouter();
 
   // 모바일 로그인 버튼 핸들러
@@ -34,17 +38,46 @@ function MenuSidebar() {
           <SheetTitle className="sr-only">메뉴</SheetTitle>
         </SheetHeader>
 
-        <div className="w-[70px]">
-          <NavMenu className="mt-5" orientation="vertical" />
-        </div>
-        <Button
-          variant="filled"
-          size="md"
-          className="mr-auto w-[110px] h-11"
-          onClick={handleMobileLogin}
-        >
-          로그인
-        </Button>
+        {apiSuccess === true ? (
+          <>
+            <div className="mt-2 mb-2 flex flex-col items-start gap-3">
+              <Image
+                src="/header/userProfile.svg"
+                alt="user profile"
+                width={48}
+                height={48}
+                className="h-12 w-12 rounded-full object-cover"
+              />
+            </div>
+            <div className="w-[70px]">
+              <NavMenu className="mt-5" orientation="vertical" />
+            </div>
+            <Button
+              variant="filled"
+              size="md"
+              className="mt-6 mr-auto h-11 w-[110px]"
+              onClick={() => {
+                /* 로그아웃 로직 구현 필요 */
+              }}
+            >
+              로그아웃
+            </Button>
+          </>
+        ) : (
+          <div>
+            <div className="w-[70px]">
+              <NavMenu className="mt-5" orientation="vertical" />
+            </div>
+            <Button
+              variant="filled"
+              size="md"
+              className="mt-6 mr-auto h-11 w-[110px]"
+              onClick={handleMobileLogin}
+            >
+              로그인
+            </Button>
+          </div>
+        )}
       </SheetContent>
     </Sheet>
   );

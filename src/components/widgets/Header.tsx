@@ -55,7 +55,7 @@ const Header = () => {
         </div>
       </div>
       <div className="max-pc:flex hidden items-center gap-5">
-        <MenuSidebar />
+        <MenuSidebar apiSuccess={apiSuccess} />
       </div>
     </header>
   );
