@@ -130,7 +130,7 @@ export default function PastApplyEachComponent({
 
         {/* Job Title */}
         <div className="flex w-[180px] items-center px-2.5">
-          <span className="text-12-500 text-text-secondary leading-4">
+          <span className="text-12-500 text-text-secondary leading-4 overflow-hidden text-ellipsis whitespace-nowrap">
             {item.recruitmentOriginUrl}
           </span>
         </div>
