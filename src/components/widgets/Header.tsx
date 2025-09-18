@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { getOnboardingStatus } from "@/api/header/getIsOnboarding";
-import Link from "next/link";
 import LoginModal from "../login/LoginModal";
 import { Button } from "../ui/Button";
 import NavMenu from "./NavMenu";
@@ -18,7 +17,7 @@ const Header = () => {
   }, []);
 
   return (
-    <header className="tablet:px-8 pc:px-8 mx-auto flex w-full items-center justify-between py-3">
+    <header className="tablet:px-8 pc:px-8 fixed top-0 left-0 z-50 mx-auto flex w-full items-center justify-between bg-white py-3">
       <div className="flex items-center gap-6">
         <Image
           src="/icons/dev/logo.svg"

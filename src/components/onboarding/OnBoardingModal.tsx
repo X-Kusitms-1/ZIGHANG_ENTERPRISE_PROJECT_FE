@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import Image from "next/image";
+import Lottie from "lottie-react";
 import { serverApiClient } from "@/api";
 import {
   Dialog,
@@ -11,6 +11,7 @@ import {
   DialogFooter,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import onBoardingAnimation from "../../../public/animation/onboarding.json";
 import { Button } from "../ui/Button";
 import OnBoardingTitle from "./OnBoardingTitle";
 import CareerStep from "./CareerStep";
@@ -120,7 +121,7 @@ export default function OnBoardingModal({
   const steps = [
     {
       title: `${displayName}님, 경력이신가요?`,
-      subtitle: "당신의 경력을 알려주세요",
+      subtitle: "단 1분, 프로필을 작성하시면 맞춤형 공고를 추천해드릴게요.",
       content: (
         <CareerStep
           value={career}
@@ -191,13 +192,14 @@ export default function OnBoardingModal({
             <DialogDescription className="text-16-500 text-text-tertiary leading-6">
               {displayName}님에게 맞는 맞춤형 공고들을 앞으로 추천해드릴게요!
             </DialogDescription>
-            <Image
-              src="/onboarding/congratulation.svg"
-              alt="축하 이미지"
-              width={280}
-              height={280}
-              className="my-16"
-            />
+            <div className="flex flex-1 items-center justify-center">
+              <Lottie
+                animationData={onBoardingAnimation}
+                loop={true}
+                autoplay={true}
+                style={{ width: 280, height: 280 }}
+              />
+            </div>
             <DialogFooter>
               <Button
                 variant="filled"

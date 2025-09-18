@@ -35,7 +35,7 @@ export default function NowApplyEachComponent({
         </div>
         <div className="flex w-[180px] items-center pl-2.5">
           <span className="text-12-500 text-text-secondary w-full overflow-hidden text-ellipsis whitespace-nowrap">
-            {item.workSummary}
+            {item.title}
           </span>
         </div>
       </div>

@@ -8,7 +8,7 @@ type OnboardingBoxProps = {
 };
 type CareerStepProps = {
   value: number; // -1: 초기값, 0: 신입, 1~n: 경력
-  onSelect:  React.Dispatch<React.SetStateAction<number>>;
+  onSelect: React.Dispatch<React.SetStateAction<number>>;
   setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
 };
 function OnboardingBox({
@@ -19,8 +19,10 @@ function OnboardingBox({
   return (
     <div
       className={
-        (selected ? "bg-bg-info " : "bg-bg-tertiary ") +
-        "flex pc:h-[195px] pc:w-[240px] mobile:flex-1 mobile:h-[160px] cursor-pointer flex-col items-center justify-center gap-5 rounded-[12px] transition-colors duration-100 ease-in-out"
+        (selected
+          ? "bg-bg-info border-bg-primary border-[1.6px] "
+          : "bg-bg-tertiary ") +
+        "pc:h-[195px] pc:w-[240px] mobile:flex-1 mobile:h-[160px] flex cursor-pointer flex-col items-center justify-center gap-5 rounded-[12px] transition-colors duration-100 ease-in-out"
       }
       onClick={onClick}
     >
@@ -46,8 +48,8 @@ export default function CareerStep({
     }
   };
   return (
-    <div className="flex h-full flex-col items-center justify-between mobile:flex-1">
-      <div className="flex w-full pc:flex-1 items-center justify-center gap-6">
+    <div className="mobile:flex-1 flex h-full flex-col items-center justify-between">
+      <div className="pc:flex-1 flex w-full items-center justify-center gap-6">
         <OnboardingBox selected={value === 0} onClick={() => onSelect(0)}>
           <Image
             src={
@@ -60,7 +62,7 @@ export default function CareerStep({
             height={56}
             priority
           />
-          <div className="text-28-600 text-text-secondary">신입</div>
+          <div className="pc:text-28-600 mobile:text-18-600 text-text-secondary ">신입</div>
         </OnboardingBox>
         <OnboardingBox selected={value === -1} onClick={() => onSelect(-1)}>
           <Image
@@ -74,17 +76,18 @@ export default function CareerStep({
             height={56}
             priority
           />
-          <div className="text-28-600 text-text-secondary">경력</div>
+          <div className="pc:text-28-600 mobile:text-18-600 text-text-secondary">경력</div>
         </OnboardingBox>
       </div>
-        <Button
-          variant="filled"
-          size="lg"
-          className="pc:w-[353px] mobile:w-full"
-          onClick={handleNext}
-        >
-          다음으로
-        </Button>
+      <Button
+        variant="filled"
+        size="lg"
+        className="pc:w-[353px] mobile:w-full"
+        onClick={handleNext}
+        disabled={value === -2}
+      >
+        다음으로
+      </Button>
     </div>
   );
 }
