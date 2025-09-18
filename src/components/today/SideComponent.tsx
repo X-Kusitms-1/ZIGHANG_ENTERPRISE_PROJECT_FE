@@ -49,9 +49,9 @@ export default function SideGroup() {
     <div className="flex flex-col gap-3">
       <SideComponent
         tag="Weekly Report"
-        title="나의 강약점을 알려주는 주간 레포트."
-        subtitle="지난 한 주 동안 업로드된 파일을 분석해 레포트를 생성해요."
-        image="/today/report.svg"
+        title="나의 강약점을 알려주는 주간 리포트"
+        subtitle="지난 한 주 동안 업로드된 파일을 분석해 리포트를 생성해요."
+        image="/today/page-report.svg"
         className="gap-[30px]"
       >
         <ReportModal>

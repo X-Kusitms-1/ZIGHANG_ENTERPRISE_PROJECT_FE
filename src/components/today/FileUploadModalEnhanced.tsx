@@ -93,9 +93,7 @@ export default function FileUploadModal({
           event.target.value = "";
           return;
         }
-        alert(
-          `최대 5개까지만 업로드할 수 있습니다. (${availableCount}개만 추가됩니다)`
-        );
+       
         pdfFiles.length = availableCount;
       }
 
@@ -330,7 +328,7 @@ export default function FileUploadModal({
               {number ? `${number}번` : "01번"} 파일 업로드
             </DialogTitle>
             <div className="text-12-500 text-text-tertiary leading-4">
-              500MB의 제한이 있어요. 최대 5개 파일 업로드 가능.
+              500MB의 제한이 있어요. 최대 5개의 pdf파일을 첨부할 수 있어요!.
             </div>
           </div>
 

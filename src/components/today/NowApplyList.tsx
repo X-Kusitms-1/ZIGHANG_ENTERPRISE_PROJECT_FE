@@ -62,10 +62,10 @@ export default function NowApplyList() {
             <span className="text-12-500 text-text-tertiary">기업명</span>
           </div>
           <div className="flex w-[180px] items-center pl-2.5">
-            <span className="text-12-500 text-text-tertiary">기업 형태</span>
+            <span className="text-12-500 text-text-tertiary">직무명</span>
           </div>
           <div className="flex w-[180px] items-center pl-2.5">
-            <span className="text-12-500 text-text-tertiary">직무명</span>
+            <span className="text-12-500 text-text-tertiary">공고명</span>
           </div>
         </div>
         <div className="flex items-center">

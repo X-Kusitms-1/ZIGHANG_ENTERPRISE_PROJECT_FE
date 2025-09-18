@@ -62,7 +62,7 @@ export default function ApplyCountInput() {
             style={{ zIndex: 0 }}
           />
         </div>
-        <button className="bg-bg-info text-16-500 absolute right-3 bottom-3 left-3 flex h-[52px] w-[calc(100%-24px)] items-center justify-center rounded-[10px] px-4 py-4 text-[rgba(112,29,165,1)] shadow">
+        <button className="bg-bg-info text-16-500 absolute right-3 bottom-3 left-3 flex h-[52px] w-[calc(100%-24px)] items-center justify-center rounded-[10px] px-4 py-4 text-[rgba(112,29,165,1)]">
           오늘의 지원리스트는 이미 생성했어요
         </button>
       </div>
