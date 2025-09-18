@@ -18,7 +18,7 @@ const Header = () => {
   }, []);
 
   return (
-    <header className="tablet:px-8 pc:px-8 mx-auto flex w-full items-center justify-between py-3">
+    <header className="tablet:px-8 pc:px-30 mx-auto flex w-full items-center justify-between py-4">
       <div className="flex items-center gap-6">
         <Link href="/">
           <Image
@@ -55,7 +55,7 @@ const Header = () => {
         </div>
       </div>
       <div className="max-pc:flex hidden items-center gap-5">
-        <MenuSidebar />
+        <MenuSidebar apiSuccess={apiSuccess} />
       </div>
     </header>
   );
