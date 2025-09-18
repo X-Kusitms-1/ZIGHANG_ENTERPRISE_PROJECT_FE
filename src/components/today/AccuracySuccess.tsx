@@ -21,7 +21,7 @@ function AccuracySuccess({ onClose, onEdit }: AccuracySuccessProps) {
     <DialogContent className="flex min-h-[620px] min-w-[1000px] flex-col justify-between bg-white">
       <DialogHeader className="border-border-line w-full border-b px-11 pt-11 pb-6 text-center">
         <DialogTitle className="!text-40-700 text-text-secondary text-center">
-          {getUserName()}님의 답변을 성곡적으로 저장했어요!
+          {getUserName()}님의 답변을 성공적으로 저장했어요!
         </DialogTitle>
         <DialogDescription className="!text-18-500 text-text-tertiary mt-2 text-center">
           입력하신 답변을 바탕으로 더 적합한 공고를 보여드릴게요.
