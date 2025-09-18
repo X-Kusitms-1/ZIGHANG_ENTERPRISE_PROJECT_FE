@@ -29,11 +29,11 @@ function NavMenu({
           return (
             <li
               key={menu.title}
-              className="mobile:text-left mobile:text-18-500 pc:w-auto w-full text-base"
+              className="mobile:text-left pc:w-auto w-full text-base"
             >
               <Link
                 href={menu.href}
-                className={`text-14-400 text-text-primary mobile:border-none block pc:border-b-2 py-2 transition-colors ${
+                className={`text-14-400 text-text-primary block border-b-2 py-2 transition-colors ${
                   isActive
                     ? "text-14-600 border-[#6F00B6]"
                     : "border-transparent hover:text-[#6F00B6]"

@@ -33,7 +33,10 @@ function MenuSidebar() {
         <SheetHeader className="flex flex-row items-center justify-end">
           <SheetTitle className="sr-only">메뉴</SheetTitle>
         </SheetHeader>
-        <NavMenu className="mt-5" orientation="vertical" />
+
+        <div className="w-[70px]">
+          <NavMenu className="mt-5" orientation="vertical" />
+        </div>
         <Button
           variant="filled"
           size="md"
