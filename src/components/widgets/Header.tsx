@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { getOnboardingStatus } from "@/api/header/getIsOnboarding";
+import Link from "next/link";
 import LoginModal from "../login/LoginModal";
 import { Button } from "../ui/Button";
 import NavMenu from "./NavMenu";

@@ -24,15 +24,16 @@ function NavMenu({
         className={`flex items-center ${orientation === "vertical" ? "flex-col gap-4" : "gap-[56px]"}`}
       >
         {headerMenu.map((menu) => {
-          const isActive = pathname === menu.href;
+          const isActive =
+            pathname === menu.href || pathname.startsWith(menu.href + "/");
           return (
             <li key={menu.title} className="text-base">
               <Link
                 href={menu.href}
-                className={`block border-b-2 py-2 transition-colors ${
+                className={`text-14-400 text-text-primary block border-b-2 py-2 transition-colors ${
                   isActive
-                    ? "border-[#6F00B6] text-[#6F00B6] text-14-500"
-                    : "border-transparent text-gray-700 text-14-500 hover:text-[#6F00B6]"
+                    ? "text-14-600 border-[#6F00B6]"
+                    : "border-transparent hover:text-[#6F00B6]"
                 } ${itemClassName}`}
               >
                 {menu.title}

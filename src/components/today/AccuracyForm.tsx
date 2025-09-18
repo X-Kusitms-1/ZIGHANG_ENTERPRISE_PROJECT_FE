@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   DialogContent,
   DialogHeader,
@@ -17,20 +17,51 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { stepData } from "@/constants/accuracyFormData";
-import { usePostUserAccuracy } from "@/hooks/today/useUserAccuracy";
+import {
+  usePostUserAccuracy,
+  useGetUserAccuracy,
+  usePutUserAccuracy,
+} from "@/hooks/today/useUserAccuracy";
+import { getUserName } from "@/utils/localStorage";
 import CertificationSection from "./CertificationSection";
 
 interface AccuracyFormProps {
   onSave: () => void;
+  onCancel: () => void;
 }
 
-function AccuracyForm({ onSave }: AccuracyFormProps) {
+function AccuracyForm({ onSave, onCancel }: AccuracyFormProps) {
   const [currentStep, setCurrentStep] = useState(0);
   const [allSelections, setAllSelections] = useState<string[][]>(
     Array(10).fill([])
   );
+  const [hasExistingData, setHasExistingData] = useState(false);
+  const { data: userAccuracy } = useGetUserAccuracy();
 
   const { mutate: postUserAccuracy } = usePostUserAccuracy();
+  const { mutate: putUserAccuracy } = usePutUserAccuracy();
+
+  // userAccuracy 데이터가 있을 때 초기값 설정
+  useEffect(() => {
+    if (userAccuracy) {
+      const initialSelections = [
+        userAccuracy.question1 || [],
+        userAccuracy.question2 || [],
+        userAccuracy.question3 || [],
+        userAccuracy.question4 || [],
+        userAccuracy.question5 || [],
+        userAccuracy.question6 || [],
+        userAccuracy.question7 || [],
+        [], // question8, question9, question10은 UserAccuracy 타입에 없으므로 빈 배열
+        [],
+        [],
+      ];
+      setAllSelections(initialSelections);
+      setHasExistingData(true);
+    } else {
+      setHasExistingData(false);
+    }
+  }, [userAccuracy]);
 
   const handlePostUserAccuracy = () => {
     const requestBody = {
@@ -45,7 +76,11 @@ function AccuracyForm({ onSave }: AccuracyFormProps) {
       question9: allSelections[8] || [],
       question10: allSelections[9] || [],
     };
-    postUserAccuracy(requestBody);
+    if (hasExistingData) {
+      putUserAccuracy(requestBody);
+    } else {
+      postUserAccuracy(requestBody);
+    }
     onSave();
   };
 
@@ -53,6 +88,14 @@ function AccuracyForm({ onSave }: AccuracyFormProps) {
     const newSelections = [...allSelections];
     newSelections[stepIndex] = selections;
     setAllSelections(newSelections);
+  };
+
+  const handleCancel = () => {
+    // 선택된 항목들 초기화
+    setAllSelections(Array(10).fill([]));
+    setCurrentStep(0);
+    // 모달 닫기
+    onCancel();
   };
 
   const handleCarouselApi = (api: any) => {
@@ -67,7 +110,7 @@ function AccuracyForm({ onSave }: AccuracyFormProps) {
     <DialogContent className="flex min-h-[620px] min-w-[1000px] flex-col bg-white p-0">
       <DialogHeader className="border-border-line w-full border-b px-11 pt-11 pb-6 text-center">
         <DialogTitle className="!text-32-700 text-text-secondary text-center">
-          소현님의 공고의 정확도를 올려드릴게요!
+          {getUserName()}님의 공고의 정확도를 올려드릴게요!
         </DialogTitle>
         <DialogDescription className="!text-16-500 text-text-tertiary mt-2 text-center">
           원하는 항목을 선택해 주세요! 답변은 정확도 탭에서 언제든지 수정할 수
@@ -102,7 +145,7 @@ function AccuracyForm({ onSave }: AccuracyFormProps) {
 
       <DialogFooter className="w-ful px-11 py-6">
         <div className="flex w-full items-center justify-end gap-6">
-          <Button variant="outlined" size="lg">
+          <Button variant="outlined" size="lg" onClick={handleCancel}>
             저장 없이 돌아가기
           </Button>
           <Button

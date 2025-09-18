@@ -1,11 +1,14 @@
 import { getApiBaseUrl, serverApi } from "../axios";
 import { UserTodayApply } from "../type/today";
 
-export const getUserTodayApply = async (): Promise<UserTodayApply[]> => {
+export const getUserTodayApply = async (
+  isFirstApiCall: boolean,
+  requireRefreshRecruitmentId: string
+): Promise<UserTodayApply[]> => {
   const url = `${getApiBaseUrl()}/api/post/today-apply/recommend`;
   const response = await serverApi.post(url, {
-    isFirstApiCall: true,
-    requireRefreshRecruitmentId: 0,
+    isFirstApiCall: isFirstApiCall,
+    requireRefreshRecruitmentId: requireRefreshRecruitmentId,
   });
 
   return response.data.data;

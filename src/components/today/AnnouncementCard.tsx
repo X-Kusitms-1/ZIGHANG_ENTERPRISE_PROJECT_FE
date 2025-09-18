@@ -9,19 +9,30 @@ interface AnnouncementCardProps {
   userTodayApply: UserTodayApply;
   onSelect: () => void;
   selected: boolean;
+  handleGetUserTodayApply: (
+    // eslint-disable-next-line no-unused-vars
+    isFirstApiCall: boolean,
+    // eslint-disable-next-line no-unused-vars
+    requireRefreshRecruitmentId: string
+  ) => void;
 }
 
 function AnnouncementCard({
   userTodayApply,
   onSelect,
   selected,
+  handleGetUserTodayApply,
 }: AnnouncementCardProps) {
   const companyName = userTodayApply.companyName || "회사명 없음";
   const workSummary = userTodayApply.workSummary || "업무 내용 없음";
   const depthTwo = userTodayApply.depthTwo || [];
 
   return (
-    <div className="flex min-h-[270px] w-[220px] flex-shrink-0 flex-col rounded-[12px] bg-white p-4">
+    <div
+      className={`flex min-h-[270px] w-[220px] flex-shrink-0 flex-col rounded-[12px] bg-white p-4 ${
+        selected ? "border-border-primary border-[1.6px]" : ""
+      }`}
+    >
       {userTodayApply.companyLogoUrl ? (
         <Image
           src={userTodayApply.companyLogoUrl}
@@ -66,7 +77,14 @@ function AnnouncementCard({
           </Button>
         ) : (
           <>
-            <Button variant="neutral" size="sm" className="h-8 w-8 p-2">
+            <Button
+              variant="neutral"
+              size="sm"
+              className="h-8 w-8 p-2"
+              onClick={() =>
+                handleGetUserTodayApply(false, userTodayApply.recruitmentId)
+              }
+            >
               <RotateCwIcon className="size-4" />
             </Button>
             <Button
