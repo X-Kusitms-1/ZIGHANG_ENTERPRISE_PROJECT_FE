@@ -41,7 +41,7 @@ export default function CompanySidebar({
           }`}
           onClick={() => onSectionChange("similar-companies")}
         >
-          같은 직군 기업의 소식
+          유사 기업의 소식
         </Button>
       </div>
 

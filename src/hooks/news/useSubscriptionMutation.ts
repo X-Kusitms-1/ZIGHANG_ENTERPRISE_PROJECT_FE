@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { subscribeCompany, unsubscribeCompany } from "@/api/news/subscribe";
-
+import { companyQueryKeys } from "./useGetCompanyWithNews";
 import { newsQueryKeys } from "./useGetNewsList";
 
 export const useSubscriptionMutation = (companyId: string) => {
@@ -10,8 +10,9 @@ export const useSubscriptionMutation = (companyId: string) => {
     mutationFn: () => subscribeCompany(companyId),
     onSuccess: () => {
       // 회사 상세 쿼리 무효화
-      queryClient.removeQueries({
-        queryKey: ["company", "detail", companyId],
+      const stringCompanyId = companyId.toString();
+      queryClient.invalidateQueries({
+        queryKey: companyQueryKeys.detail(stringCompanyId),
       });
       // 구독 기반 데이터 무효화
       queryClient.invalidateQueries({
@@ -35,8 +36,9 @@ export const useUnsubscriptionMutation = (companyId: string) => {
   return useMutation({
     mutationFn: () => unsubscribeCompany(companyId),
     onSuccess: () => {
-      queryClient.removeQueries({
-        queryKey: ["company", "detail", companyId],
+      const stringCompanyId = companyId.toString();
+      queryClient.invalidateQueries({
+        queryKey: companyQueryKeys.detail(stringCompanyId),
       });
       queryClient.invalidateQueries({
         queryKey: ["subscribedCompaniesWithNews"],

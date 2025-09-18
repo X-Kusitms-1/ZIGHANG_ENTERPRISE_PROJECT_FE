@@ -59,7 +59,7 @@ export default function CompanyContent({ companyId }: CompanyContentProps) {
       ) : (
         <div id="similar-companies" className="w-full max-w-[900px]">
           <h2 className="text-24-600 text-text-secondary max-pc:mt-6">
-            같은 직군 기업의 소식
+            유사 기업의 소식
           </h2>
           <SimilarCompaniesGrid companies={companyData.similarCompanies} />
         </div>
