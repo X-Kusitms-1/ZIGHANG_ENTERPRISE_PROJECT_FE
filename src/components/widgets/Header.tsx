@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { getOnboardingStatus } from "@/api/header/getIsOnboarding";
 import LoginModal from "../login/LoginModal";
 import { Button } from "../ui/Button";
@@ -17,15 +18,17 @@ const Header = () => {
   }, []);
 
   return (
-    <header className="tablet:px-8 pc:px-8 fixed top-0 left-0 z-50 mx-auto flex w-full items-center justify-between bg-white py-3">
+    <header className="tablet:px-8 pc:px-8 mx-auto flex w-full items-center justify-between py-3">
       <div className="flex items-center gap-6">
-        <Image
-          src="/icons/dev/logo.svg"
-          alt="logo"
-          width={0}
-          height={0}
-          className="tablet:h-[40px] tablet:w-[76px] h-[24px] w-[60.5px]"
-        />
+        <Link href="/">
+          <Image
+            src="/icons/dev/logo.svg"
+            alt="logo"
+            width={0}
+            height={0}
+            className="tablet:h-[40px] tablet:w-[76px] h-[24px] w-[60.5px] cursor-pointer"
+          />
+        </Link>
         <NavMenu className="tablet:block hidden" />
       </div>
       <div className="pc:flex hidden items-center gap-5">
