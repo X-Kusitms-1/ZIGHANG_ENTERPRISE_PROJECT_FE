@@ -25,7 +25,7 @@ export default function ConditionalLayout({
       {showHeaderFooter ? (
         <>
           <Header />
-          <main className="tablet:px-6 flex flex-col items-center justify-center px-4">
+          <main className="tablet:px-6 flex flex-col items-center justify-center px-4 pt-16">
             {children}
           </main>
           <Footer />

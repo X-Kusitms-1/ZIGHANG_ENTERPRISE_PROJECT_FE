@@ -21,16 +21,19 @@ function NavMenu({
   return (
     <nav className={className}>
       <ul
-        className={`flex items-center ${orientation === "vertical" ? "flex-col gap-4" : "gap-[56px]"}`}
+        className={`flex items-center ${orientation === "vertical" ? "flex-col gap-4" : "gap-[56px]"} mobile:items-start pc:items-center`}
       >
         {headerMenu.map((menu) => {
           const isActive =
             pathname === menu.href || pathname.startsWith(menu.href + "/");
           return (
-            <li key={menu.title} className="text-base">
+            <li
+              key={menu.title}
+              className="mobile:text-left mobile:text-18-500 pc:w-auto w-full text-base"
+            >
               <Link
                 href={menu.href}
-                className={`text-14-400 text-text-primary block border-b-2 py-2 transition-colors ${
+                className={`text-14-400 text-text-primary mobile:border-none block pc:border-b-2 py-2 transition-colors ${
                   isActive
                     ? "text-14-600 border-[#6F00B6]"
                     : "border-transparent hover:text-[#6F00B6]"

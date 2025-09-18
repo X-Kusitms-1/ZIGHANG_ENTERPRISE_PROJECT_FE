@@ -148,7 +148,7 @@ export default function OnBoardingPage() {
         totalSteps={steps.length}
       />
       <div
-        className={`tablet:px-8 pc:w-[768px] pc:mx-auto pc:px-0 mobile:pb-5 tablet:pb-8 flex flex-col ${currentStep === 2 ? "mobile:px-3" : "mobile:px-5"}`}
+        className={"tablet:px-8 pc:w-[768px] pc:mx-auto pc:px-0 mobile:pb-5 tablet:pb-8 flex flex-col mobile:px-5"}
         style={{ minHeight: "calc(100dvh - 72px)" }}
       >
         <div

@@ -29,15 +29,15 @@ function MenuSidebar() {
           height={24}
         />
       </SheetTrigger>
-      <SheetContent className="rounded-l-2xl bg-white px-5">
-        <SheetHeader>
+      <SheetContent className="flex flex-col rounded-l-2xl bg-white px-5 pt-6">
+        <SheetHeader className="flex flex-row items-center justify-end">
           <SheetTitle className="sr-only">메뉴</SheetTitle>
         </SheetHeader>
         <NavMenu className="mt-5" orientation="vertical" />
         <Button
           variant="filled"
-          size="sm"
-          className="mx-auto"
+          size="md"
+          className="mr-auto w-[110px] h-11"
           onClick={handleMobileLogin}
         >
           로그인
