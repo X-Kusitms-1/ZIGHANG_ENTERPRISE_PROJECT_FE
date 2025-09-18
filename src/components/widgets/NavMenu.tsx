@@ -21,7 +21,7 @@ function NavMenu({
   return (
     <nav className={className}>
       <ul
-        className={`flex items-center ${orientation === "vertical" ? "flex-col gap-4" : "gap-9"}`}
+        className={`flex items-center ${orientation === "vertical" ? "flex-col gap-4" : "gap-[56px]"}`}
       >
         {headerMenu.map((menu) => {
           const isActive =

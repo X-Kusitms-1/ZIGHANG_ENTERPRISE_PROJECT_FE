@@ -136,7 +136,7 @@
 </linearGradient>
 <linearGradient id="paint2_linear_3603_57031" x1="0" y1="1.13048" x2="36.1752" y2="1.13048" gradientUnits="userSpaceOnUse">
 <stop stop-color="#F3F1FE"/>
-<stop offset="1" stop-color="#DBD3FD"/>
+<stop offset="1" stop-color="#212124ff"/>
 </linearGradient>
 <linearGradient id="paint3_linear_3603_57031" x1="99.5987" y1="47.5615" x2="66.7651" y2="62.9334" gradientUnits="userSpaceOnUse">
 <stop stop-color="#A794F7"/>

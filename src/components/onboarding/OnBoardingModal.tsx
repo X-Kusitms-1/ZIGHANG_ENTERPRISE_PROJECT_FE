@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import Image from "next/image";
 import { serverApiClient } from "@/api";
 import {
   Dialog,
@@ -34,7 +35,7 @@ interface OnBoardingModalProps {
 export default function OnBoardingModal({
   // ...existing code...
   // 사용자 이름 가져오기
- 
+
   children,
   defaultOpen = false,
 }: OnBoardingModalProps) {
@@ -169,29 +170,34 @@ export default function OnBoardingModal({
       ),
     },
   ];
- 
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       {children && <DialogTrigger asChild>{children}</DialogTrigger>}
       <DialogContent
         onInteractOutside={(e) => e.preventDefault()}
-        className={`flex !h-[640px] !w-[680px] w-full !max-w-[680px] flex-col items-center gap-0 rounded-lg bg-white ${currentStep === 0 ? "px-22" : currentStep === 2 || 3 ? "px-[90px]" : ""} pt-6 pb-[44px] [&>button]:hidden`}
+        className={`flex !h-[640px] !w-[680px] w-full !max-w-[680px] flex-col items-center gap-0 rounded-lg bg-white pt-6 ${isCompleted ? "px-6 pt-[60px]" : ""} ${currentStep === 0 ? "px-22" : currentStep === 2 || 3 ? "px-[90px]" : ""}  pb-[44px] [&>button]:hidden`}
       >
         {isCompleted ? (
           // 완료 화면
           <>
             <DialogTitle>
               <div className="text-32-600 text-text-secondary mb-2 leading-10">
-                회원가입을 축하해요!
+                {career === 0
+                  ? "회원가입을 축하해요!"
+                  : "맞춤 추천을 위한 준비가 끝났어요!"}
               </div>
             </DialogTitle>
             <DialogDescription className="text-16-500 text-text-tertiary leading-6">
               {displayName}님에게 맞는 맞춤형 공고들을 앞으로 추천해드릴게요!
             </DialogDescription>
-            <div className="flex flex-1 items-center justify-center">
-              <div className="h-40 w-50">이미지</div>
-            </div>
+            <Image
+              src="/onboarding/congratulation.svg"
+              alt="축하 이미지"
+              width={280}
+              height={280}
+              className="my-16"
+            />
             <DialogFooter>
               <Button
                 variant="filled"

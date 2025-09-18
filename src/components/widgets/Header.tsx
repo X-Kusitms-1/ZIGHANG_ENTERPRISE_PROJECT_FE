@@ -1,6 +1,7 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
+import { getOnboardingStatus } from "@/api/header/getIsOnboarding";
 import Link from "next/link";
 import LoginModal from "../login/LoginModal";
 import { Button } from "../ui/Button";
@@ -8,28 +9,47 @@ import NavMenu from "./NavMenu";
 import MenuSidebar from "./MenuSidebar";
 
 const Header = () => {
+  const [apiSuccess, setApiSuccess] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    getOnboardingStatus()
+      .then((status) => setApiSuccess(status === 200))
+      .catch(() => setApiSuccess(false));
+  }, []);
+
   return (
     <header className="tablet:px-8 pc:px-8 mx-auto flex w-full items-center justify-between py-3">
-      <div className="flex items-center gap-8">
-        <Link href="/">
-          <Image
-            src="/icons/dev/logo.svg"
-            alt="logo"
-            width={0}
-            height={0}
-            className="tablet:h-[40px] tablet:w-[76px] h-[24px] w-[60.5px]"
-          />
-        </Link>
+      <div className="flex items-center gap-6">
+        <Image
+          src="/icons/dev/logo.svg"
+          alt="logo"
+          width={0}
+          height={0}
+          className="tablet:h-[40px] tablet:w-[76px] h-[24px] w-[60.5px]"
+        />
         <NavMenu className="tablet:block hidden" />
       </div>
       <div className="pc:flex hidden items-center gap-5">
-        <div className="flex items-center gap-4">
-          <Button variant="inversed" size="sm">
-            기업 회원
-          </Button>
-          <LoginModal>
-            <Button size="sm">로그인</Button>
-          </LoginModal>
+        <Image src="/header/search.svg" alt="search" width={308} height={36} />
+        <div className="flex items-center gap-3">
+          {apiSuccess === true ? (
+            <Image
+              src="/header/userProfile.svg"
+              alt="user profile"
+              width={36}
+              height={36}
+              className="h-9 w-9 rounded-full object-cover"
+            />
+          ) : (
+            <>
+              <Button variant="inversed" size="sm">
+                기업 회원
+              </Button>
+              <LoginModal>
+                <Button size="sm">로그인</Button>
+              </LoginModal>
+            </>
+          )}
         </div>
       </div>
       <div className="max-pc:flex hidden items-center gap-5">

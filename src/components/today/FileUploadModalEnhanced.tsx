@@ -84,12 +84,42 @@ export default function FileUploadModal({
         alert("PDF 파일만 업로드 가능합니다.");
       }
 
-      if (pdfFiles.length > 0 && recruitmentId) {
+      // 최대 5개 제한 체크
+      const totalCount = existingFiles.length + pdfFiles.length;
+      if (totalCount > 5) {
+        const availableCount = 5 - existingFiles.length;
+        if (availableCount <= 0) {
+          alert("최대 5개 파일까지만 업로드할 수 있습니다.");
+          event.target.value = "";
+          return;
+        }
+        alert(
+          `최대 5개까지만 업로드할 수 있습니다. (${availableCount}개만 추가됩니다)`
+        );
+        pdfFiles.length = availableCount;
+      }
+
+      if (pdfFiles.length > 0) {
+        // 중복 파일 체크
+        const existingNames = new Set(existingFiles.map((f) => f.name));
+        const filteredFiles = pdfFiles.filter((file) => {
+          if (existingNames.has(file.name)) {
+            alert(`이미 업로드된 파일명입니다: ${file.name}`);
+            return false;
+          }
+          return true;
+        });
+
+        if (filteredFiles.length === 0) {
+          // 모든 파일이 중복이면 input value 리셋하고 리턴
+          event.target.value = "";
+          return;
+        }
+
         // 파일을 리스트에 추가하고 바로 업로드 실행
-        addFilesToList(pdfFiles);
+        addFilesToList(filteredFiles);
         setIsUploading(true);
-        // 즉시 업로드 실행
-        uploadMultipleFiles(pdfFiles, recruitmentId, handleUploadProgress, 3)
+        uploadMultipleFiles(filteredFiles, 3, handleUploadProgress)
           .then((results) => {
             setUploadedFiles((prev) => [
               ...prev,
@@ -99,6 +129,8 @@ export default function FileUploadModal({
           .finally(() => setIsUploading(false));
       }
     }
+    // input value 리셋
+    event.target.value = "";
   };
 
   const addFilesToList = (files: File[]) => {
@@ -137,10 +169,40 @@ export default function FileUploadModal({
       if (nonPdfFiles.length > 0) {
         alert("PDF 파일만 업로드 가능합니다.");
       }
-      if (pdfFiles.length > 0 && recruitmentId) {
-        addFilesToList(pdfFiles);
+
+      // 최대 5개 제한 체크
+      const totalCount = existingFiles.length + pdfFiles.length;
+      if (totalCount > 5) {
+        const availableCount = 5 - existingFiles.length;
+        if (availableCount <= 0) {
+          alert("최대 5개 파일까지만 업로드할 수 있습니다.");
+          return;
+        }
+        alert(
+          `최대 5개까지만 업로드할 수 있습니다. (${availableCount}개만 추가됩니다)`
+        );
+        pdfFiles.length = availableCount;
+      }
+
+      if (pdfFiles.length > 0) {
+        // 중복 파일 체크
+        const existingNames = new Set(existingFiles.map((f) => f.name));
+        const filteredFiles = pdfFiles.filter((file) => {
+          if (existingNames.has(file.name)) {
+            alert(`이미 업로드된 파일명입니다: ${file.name}`);
+            return false;
+          }
+          return true;
+        });
+
+        if (filteredFiles.length === 0) {
+          // 모든 파일이 중복이면 리턴
+          return;
+        }
+
+        addFilesToList(filteredFiles);
         setIsUploading(true);
-        uploadMultipleFiles(pdfFiles, recruitmentId, handleUploadProgress, 3)
+        uploadMultipleFiles(filteredFiles, 3, handleUploadProgress)
           .then((results) => {
             setUploadedFiles((prev) => [
               ...prev,

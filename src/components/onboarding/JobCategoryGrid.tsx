@@ -21,9 +21,7 @@ export default function JobCategoryGrid(props: JobCategoryGridProps) {
   const { jobList, setJobList, isUndecided, setIsUndecided } = props;
 
   const jobCategoriesData = JOB_CATEGORIES;
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(
-    jobCategoriesData.length > 0 ? jobCategoriesData[0].name : null
-  );
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   // 직군별 선택된 직무를 저장하는 객체
   const [selectedRoles, setSelectedRoles] = useState<{
     [jobFamily: string]: Set<string>;
@@ -126,12 +124,14 @@ export default function JobCategoryGrid(props: JobCategoryGridProps) {
                       key={category.name}
                       onClick={() => handleCategoryClick(category.name)}
                       className={`flex h-[40px] w-full items-center justify-between rounded-lg py-2 pr-4 pl-5 text-left transition-colors ${
-                        isSelectedCategory
-                          ? "bg-bg-info text-text-info text-16-600"
-                          : hasSelectedRoles
-                            ? "text-text-primary text-16-600 hover:bg-bg-base-hovered"
-                            : "text-text-tertiary text-16-500 hover:bg-bg-base-hovered"
-                      }`}
+                        isUndecided
+                          ? "text-text-disabled bg-transparent"
+                          : isSelectedCategory
+                            ? "bg-bg-info text-text-info text-16-600"
+                            : hasSelectedRoles
+                              ? "text-text-primary text-16-600 hover:bg-bg-base-hovered"
+                              : "text-text-tertiary text-16-500 hover:bg-bg-base-hovered"
+                      } `}
                       disabled={isUndecided}
                     >
                       <span>{category.name}</span>
@@ -164,9 +164,11 @@ export default function JobCategoryGrid(props: JobCategoryGridProps) {
                           key={role.name}
                           onClick={() => handleRoleClick(role.name)}
                           className={`flex h-10 items-center gap-2 rounded-lg py-2 pr-4 pl-5 text-left transition-colors ${
-                            isSelected
-                              ? "bg-bg-info text-text-info text-16-600"
-                              : "text-text-tertiary hover:bg-bg-base-hovered text-16-500"
+                            isUndecided
+                              ? "text-text-disabled bg-transparent"
+                              : isSelected
+                                ? "bg-bg-info text-text-info text-16-600"
+                                : "text-text-tertiary hover:bg-bg-base-hovered text-16-500"
                           } `}
                           disabled={isUndecided}
                         >
