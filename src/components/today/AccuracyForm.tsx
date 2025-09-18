@@ -52,9 +52,9 @@ function AccuracyForm({ onSave, onCancel }: AccuracyFormProps) {
         userAccuracy.question5 || [],
         userAccuracy.question6 || [],
         userAccuracy.question7 || [],
-        [], // question8, question9, question10은 UserAccuracy 타입에 없으므로 빈 배열
-        [],
-        [],
+        userAccuracy.question8 || [],
+        userAccuracy.question9 || [],
+        userAccuracy.question10 || [],
       ];
       setAllSelections(initialSelections);
       setHasExistingData(true);
@@ -90,6 +90,14 @@ function AccuracyForm({ onSave, onCancel }: AccuracyFormProps) {
     setAllSelections(newSelections);
   };
 
+  const resetForm = () => {
+    if (hasExistingData) {
+      return;
+    }
+    setAllSelections(Array(10).fill([]));
+    setCurrentStep(0);
+  };
+
   const handleCancel = () => {
     // 선택된 항목들 초기화
     setAllSelections(Array(10).fill([]));
@@ -107,7 +115,12 @@ function AccuracyForm({ onSave, onCancel }: AccuracyFormProps) {
   };
 
   return (
-    <DialogContent className="flex min-h-[620px] min-w-[1000px] flex-col bg-white p-0">
+    <DialogContent
+      className="flex min-h-[620px] min-w-[1000px] flex-col bg-white p-0"
+      onOpenAutoFocus={() => {
+        resetForm();
+      }}
+    >
       <DialogHeader className="border-border-line w-full border-b px-11 pt-11 pb-6 text-center">
         <DialogTitle className="!text-32-700 text-text-secondary text-center">
           {getUserName()}님의 공고의 정확도를 올려드릴게요!
@@ -153,6 +166,9 @@ function AccuracyForm({ onSave, onCancel }: AccuracyFormProps) {
             size="lg"
             className="w-[320px]"
             onClick={handlePostUserAccuracy}
+            disabled={allSelections.some(
+              (selections) => selections.length === 0
+            )}
           >
             저장하기
           </Button>

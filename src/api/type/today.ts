@@ -42,4 +42,7 @@ export interface UserAccuracy {
   question5: string[];
   question6: string[];
   question7: string[];
+  question8: string[];
+  question9: string[];
+  question10: string[];
 }

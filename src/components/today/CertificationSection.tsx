@@ -35,6 +35,7 @@ function CertificationSection({
             onClick={() => handleToggle(option)}
             selected={selectedValues.includes(option)}
             className="h-[55px]"
+            tabIndex={-1}
           >
             {option}
           </FilterButton>
