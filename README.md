@@ -57,13 +57,19 @@
 
 우리는 이 문제를 해결하기 위해 **‘오늘의 지원’ 기능**을 설계했습니다.
 
-* 하루 목표 지원 개수를 세우고, 맞춤형 공고를 리스트업
+* 하루 목표 지원 개수를 세우고, 맞춤형🔎공고를 리스트업
 * 지원 여부를 체크하고, 결과를 기록
 * 합불 데이터를 기반으로 주간 리포트 제공 (지원 패턴, 강점·약점 분석)
 
 결과적으로 사용자는 **단순 탐색을 넘어 실제 지원으로 이어지는 루틴을 형성**할 수 있고, 플랫폼은 자연스럽게 **전환율을 끌어올릴 수 있습니다.**
 
 ---
-# 서비스 아키텍처
+# 🔎 서비스 아키텍처
+<img width="909" height="544" alt="스크린샷 2025-10-18 오후 10 04 42" src="https://github.com/user-attachments/assets/64991c73-ba93-4051-b11f-386e47bc3dd5" />
 
-<img width="1218" height="844" alt="image 1372" src="https://github.com/user-attachments/assets/87ea4f25-1b7a-4ee8-b80d-f953033c1259" />
+# 🎨 디자인 시스템
+<img width="944" height="506" alt="스크린샷 2025-10-18 오후 10 04 19" src="https://github.com/user-attachments/assets/1d7cd616-6195-4517-a1a1-9182c119052e" />
+<img width="929" height="506" alt="스크린샷 2025-10-18 오후 10 04 50" src="https://github.com/user-attachments/assets/47aac4e3-8930-4b57-abef-9a82c82ab4ce" />
+
+
+
