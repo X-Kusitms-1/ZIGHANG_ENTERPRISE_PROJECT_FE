@@ -70,6 +70,6 @@
 결과적으로 사용자는 **단순 탐색을 넘어 실제 지원으로 이어지는 루틴을 형성**할 수 있고, 플랫폼은 자연스럽게 **전환율을 끌어올릴 수 있습니다.**
 
 ---
-#서비스 아키텍처
+# 서비스 아키텍처
 
 <img width="1218" height="844" alt="image 1372" src="https://github.com/user-attachments/assets/87ea4f25-1b7a-4ee8-b80d-f953033c1259" />
